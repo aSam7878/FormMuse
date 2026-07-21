@@ -1,0 +1,13 @@
+# Plan launch templates with stable internal IDs
+
+FormMuse assigns every slot in the V1 Launch Collection a permanent repository-side Template Planning ID: `C01`–`C10` for contact, `N01`–`N05` for newsletter, and `Q01`–`Q05` for quote request. The IDs define stable capacity and assignment slots; they do not pre-assign a mandatory visual roster. The project owner chooses each actual concept according to their taste when that template is ready to begin, then attaches a directional Launch Brief to the selected ID. The ID remains stable while a draft concept, title, or candidate slug evolves, preventing planning references from breaking or two agents from accidentally building the same slot.
+
+Every brief records purpose and intended audience, visual concept, layout, core fields, primary interaction or animation, objective appearance mode, differentiation from the other 19 templates, and notable technical or asset requirements. Briefs remain directional rather than prescribing every visual detail so implementation can still produce original, premium work instead of mechanically reproducing an over-specified design.
+
+Layout may remain a natural-language composition description during planning. FormMuse will not assign a speculative roster-wide layout taxonomy before the designs exist. An implementation-ready template maps its actual composition to the validated metadata vocabulary, adding a controlled value only when a real publishable design requires it.
+
+Template Planning IDs are not public identities and will not appear as registry names, installation aliases, catalog labels, documentation routes, or generated registry URLs. A public title and candidate slug are finalized when a brief is implementation-ready and its source and Registry Record are created. Draft slugs may still change deliberately; the canonical slug becomes immutable when the template is published under the existing slug policy.
+
+Concept lists produced during planning are non-binding inspiration only. An agent must not treat an example, provisional name, or suggested visual metaphor as assigned work. Only explicit project-owner selection activates a concept for a Template Planning ID. Concepts may otherwise be invented or replaced freely, subject to the fixed category counts, Interaction Depth distribution, broad reusability rule, originality standard, shared template contract, and publication quality gate.
+
+The remaining architecture grill is bounded to decisions that materially affect shared architecture, launch quality, or the template contract. Choices that depend on actual rendering, integration, or measured behavior will be resolved through the Hanging Gifts vertical slice rather than prolonged speculative questioning.

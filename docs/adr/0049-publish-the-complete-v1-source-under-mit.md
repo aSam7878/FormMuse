@@ -1,0 +1,9 @@
+# Publish the complete V1 source under MIT
+
+FormMuse will publish its complete owner-maintained V1 repository under the root MIT License: the static Next.js website, original layouts, documentation system, registry source and generators, Form Templates, examples, tests, compatibility fixtures, CI configuration, and build scripts. Secrets, deployment credentials, private vulnerability reports, and unpublished business material will never be committed. Third-party Redistribution-safe Assets retain any required separate notices.
+
+The FormMuse name, logo, domain, and specifically designated Brand Assets are not licensed as software. The standard root `LICENSE` remains unchanged. Before public launch, a root `TRADEMARKS.md` will govern name, logo, affiliation, and endorsement use, while `public/brand/README.md` will enumerate the exact asset files excluded from MIT and their permitted uses. Both the root README and the brand-assets README will carry the approved software/brand boundary statement.
+
+The policy must allow truthful, non-misleading references such as “built with FormMuse,” “compatible with FormMuse,” and “forked from FormMuse.” It may prohibit impersonation and false sponsorship, endorsement, or official affiliation, but it will not claim an undefined visual identity wholesale, pretend that a notice registers a trademark, or narrow recipients' MIT rights in covered source. Qualified legal review in the relevant jurisdictions is required before publishing final legal wording.
+
+This follows Magic UI's transparent public-source and adopter-ownership model without copying its website design, branding, prose, or assets. Public source does not introduce community submissions or governance features: the official Curated Library remains owner-authored, and V1 still has no contribution workflow for new Form Templates, creator profiles, marketplace, public uploads, or moderation system.

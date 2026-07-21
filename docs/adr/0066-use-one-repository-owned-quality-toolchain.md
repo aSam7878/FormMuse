@@ -1,0 +1,9 @@
+# Use one repository-owned quality toolchain
+
+FormMuse V1 will use Vitest, React Testing Library, `user-event`, DOM matchers, Playwright, `@axe-core/playwright`, Playwright screenshot assertions, Lighthouse CI, Linkinator, and JSX accessibility linting. Exact verified versions will be recorded in `FormMuse Tech Stack.md` and the pnpm lockfile will remain the executable dependency record. FormMuse will not add Jest, Cypress, Storybook, Chromatic, Percy, or another overlapping runner or paid visual-regression dependency in V1.
+
+Vitest owns schemas, normalization, utilities, registry and documentation generation, metadata validation, and isolated state logic. Testing Library owns visitor-observable component behavior such as labels, typing, validation, focus, submission, failure, retry, success, and reset. Playwright owns real-browser and iframe integration, keyboard workflows, responsive and reduced-motion behavior, deterministic simulation, Reset and Replay, network and isolation checks, static-export navigation, compatibility fixtures, and engine coverage. Axe checks detectable rendered accessibility violations; Lighthouse CI audits representative exported pages; and Linkinator crawls the served static output.
+
+Official Playwright screenshot baselines and comparisons run in one pinned Visual Baseline Environment with controlled OS/container, browser versions, fonts, locale, timezone, viewport, device scale, color scheme, motion setting, and animation timing. Local screenshots may aid review but cannot silently replace authoritative baselines because another machine renders differently.
+
+Tests will live at the cheapest faithful layer rather than being duplicated across Vitest and Playwright. Automated accessibility linting and axe results are safeguards, not certification. Every publication still requires recorded manual keyboard, focus, zoom/reflow, screen-reader, touch, motion, and applicable real-device review.

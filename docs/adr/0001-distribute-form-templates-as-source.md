@@ -1,0 +1,5 @@
+# Distribute Form Templates as source
+
+FormMuse will distribute Form Templates as adopter-owned source code through two primary installation paths: CLI Installation through a shadcn-compatible FormMuse registry, with commands for pnpm, npm, Yarn, and Bun; and Manual Installation containing every required source file, dependency command, CSS or animation change, import-path instruction, and a final usage example. FormMuse will not publish a traditional imported component package in V1 because source distribution is more transparent, customizable, and straightforward for both developers and coding agents to integrate with an adopter's backend.
+
+V1 CLI Installation will use a one-step direct HTTPS registry-item URL in the form `https://<canonical-domain>/r/<canonical-slug>.json` for all four package-manager command variants. It will not require adopters to configure a FormMuse namespace. A future `@formmuse/<slug>` address may be added as an additional convenience without replacing or changing the original direct URL.

@@ -1,0 +1,7 @@
+# Distribute telemetry-free Form Templates
+
+Every FormMuse V1 Template Block will be Telemetry-free. Distributed source and dependencies will contain no analytics or telemetry SDK, tracking pixel, hidden image, beacon, fingerprinting, visitor identifier, analytics-specific prop, automatic analytics event, or FormMuse-owned network request. Internal handlers remain limited to visible functional behavior such as validation, step navigation, reset, and the universal Submission Connection. Installing or rendering a template will never contact FormMuse.
+
+Adopters may add analytics inside `onSubmit` or their surrounding application. Optional analytics must isolate both synchronous and asynchronous failures so a tracking error after a successful backend request cannot reject `onSubmit` and falsely show FormMuse's failure state. Submitted field values must not be copied into analytics by default; doing so is a separate adopter-owned privacy and data-governance decision. Analytics integration is application behavior rather than part of the template API.
+
+Production-only Site Analytics used by the FormMuse catalog website follow a separate provider-agnostic privacy policy. Website-only analytics must never enter `registry/base`, generated registry items, Manual Installation source, compatibility fixtures, or preview iframes. Publication checks inspect both source and declared dependencies and retain the existing zero-network preview requirement.

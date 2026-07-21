@@ -1,0 +1,5 @@
+# Launch with twenty Form Templates
+
+FormMuse V1 will launch publicly only after the Curated Library contains 20 Published Templates: ten contact Form Templates, five newsletter Form Templates, and five quote-request Form Templates. The existing Hanging Gifts contact form is the creative reference and starting material for one contact template, leaving nine contact, five newsletter, and five quote-request templates to create. FormMuse will not use a separate three-template internal-alpha milestone because the project owner and coding agents are the only builders.
+
+The numeric target does not relax the publication standard. Every launch template must be visually distinct, complete, documented, portable, accessible, and independently pass the full quality gate. Recolors, copy changes, minor field rearrangements, or animation swaps do not count as unique Form Templates. Other locked public-facing categories remain valid future catalog categories but are not required for the V1 Launch Collection.

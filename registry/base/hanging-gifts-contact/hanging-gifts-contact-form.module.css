@@ -1,0 +1,476 @@
+.root {
+  --hgc-forest: #114b35;
+  --hgc-forest-deep: #0c3025;
+  --hgc-forest-soft: #16423c;
+  --hgc-ember: #c45a16;
+  --hgc-ember-bright: #e57e31;
+  --hgc-ember-text: #a74612;
+  --hgc-paper: #f9f7f4;
+  --hgc-paper-deep: #eee9e2;
+  --hgc-ink: #1f2937;
+  --hgc-muted: #4b5563;
+  --hgc-error: #a12f31;
+  container-name: hanging-gifts-contact;
+  container-type: inline-size;
+  color-scheme: light;
+  font-family: "Mulish Variable", Mulish, ui-sans-serif, system-ui, sans-serif;
+  isolation: isolate;
+}
+
+.heroTitle {
+  font-size: 3rem;
+}
+
+.heroDescription {
+  font-size: 1.25rem;
+}
+
+.formSection {
+  border-radius: 3rem 3rem 0 0;
+}
+
+.form {
+  position: relative;
+}
+
+.requirementNote {
+  position: absolute;
+  top: -1.8rem;
+  left: 0;
+  color: var(--hgc-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1rem;
+}
+
+.fieldShell {
+  position: relative;
+}
+
+.fieldLabel {
+  position: absolute;
+  top: -0.42rem;
+  left: 1.05rem;
+  z-index: 2;
+  display: inline-flex;
+  min-height: 0;
+  align-items: center;
+  gap: 0.28rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 94%);
+  padding: 0 0.42rem;
+  color: var(--hgc-forest);
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.025em;
+  line-height: 0.9rem;
+  white-space: nowrap;
+}
+
+.optionalTag {
+  color: var(--hgc-muted);
+  font-size: 0.5625rem;
+  font-weight: 550;
+  letter-spacing: 0;
+}
+
+.contentGrid,
+.nameGrid,
+.contactCards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.contentGrid {
+  gap: clamp(3rem, 8cqi, 7rem);
+}
+
+.nameGrid,
+.contactCards {
+  gap: 1rem;
+}
+
+.nameGrid {
+  gap: 1.5rem;
+}
+
+.desktopNavigation,
+.giftCurtain {
+  display: none;
+}
+
+.menuButton {
+  display: inline-flex;
+}
+
+.navbar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 70;
+  padding-block: 1.5rem;
+  color: white;
+  transition:
+    padding 300ms,
+    background-color 300ms,
+    border-color 300ms,
+    box-shadow 300ms,
+    backdrop-filter 300ms;
+}
+
+.navbarScrolled {
+  border-bottom: 1px solid rgb(229 231 235 / 50%);
+  background: rgb(255 255 255 / 80%);
+  box-shadow: 0 10px 25px rgb(0 0 0 / 10%);
+  padding-block: 1rem;
+  backdrop-filter: blur(12px);
+}
+
+.navbarInner {
+  display: flex;
+  width: 100%;
+  max-width: 80rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.logoPlaceholder {
+  position: relative;
+  z-index: 70;
+  display: flex;
+  width: 12.5rem;
+  height: 3.5rem;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  transition:
+    color 300ms,
+    opacity 300ms,
+    width 300ms;
+}
+
+.logoScrolled {
+  width: 11.25rem;
+  color: var(--hgc-forest);
+}
+
+.logoHidden {
+  opacity: 0;
+}
+
+.desktopNavigation {
+  align-items: center;
+  gap: 2rem;
+  font-weight: 500;
+}
+
+.desktopNavigationItem {
+  border-bottom: 2px solid transparent;
+  color: white;
+  line-height: 2rem;
+  transition:
+    color 200ms,
+    border-color 200ms;
+}
+
+.desktopNavigationItem:hover {
+  color: var(--hgc-ember);
+}
+
+.desktopNavigationItemScrolled {
+  color: var(--hgc-forest);
+}
+
+.desktopNavigationCurrent {
+  border-bottom-color: var(--hgc-ember);
+}
+
+.menuButton {
+  position: relative;
+  z-index: 70;
+  height: 2.75rem;
+  width: 2.75rem;
+  flex-direction: column;
+  border-radius: 999px;
+  padding: 0;
+}
+
+.menuBar {
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  border-radius: 999px;
+  transform-origin: center;
+  transition: background-color 300ms;
+}
+
+.menuBarGap {
+  margin-top: 6px;
+}
+
+.menuBarLight {
+  background: white;
+}
+
+.menuBarDark {
+  background: var(--hgc-forest);
+}
+
+.mobileNavigationOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  visibility: hidden;
+  overflow: hidden;
+  background: var(--hgc-forest);
+  pointer-events: none;
+  transform: translateX(100%);
+  transition:
+    transform 500ms cubic-bezier(0.645, 0.045, 0.355, 1),
+    visibility 0s linear 500ms;
+}
+
+.mobileNavigationOpen {
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition:
+    transform 500ms cubic-bezier(0.645, 0.045, 0.355, 1),
+    visibility 0s linear 0s;
+}
+
+.mobileNavigationGlowTop,
+.mobileNavigationGlowBottom {
+  position: absolute;
+  border-radius: 999px;
+  background: rgb(196 90 22 / 8%);
+  filter: blur(70px);
+}
+
+.mobileNavigationGlowTop {
+  top: 15%;
+  right: -10%;
+  width: 18.75rem;
+  height: 18.75rem;
+}
+
+.mobileNavigationGlowBottom {
+  bottom: 10%;
+  left: -5%;
+  width: 15.625rem;
+  height: 15.625rem;
+}
+
+.mobileNavigationContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  padding: 7rem 2rem 2.5rem;
+}
+
+.mobileNavigationLinks {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobileNavigationLink {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  background: transparent;
+  padding-block: 1rem;
+  color: white;
+  text-align: left;
+}
+
+.mobileNavigationNumber {
+  color: rgb(229 126 49 / 45%);
+  font-family: ui-monospace, monospace;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+}
+
+.mobileNavigationLabel {
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.mobileNavigationArrow {
+  color: rgb(255 255 255 / 35%);
+  font-size: 1.5rem;
+}
+
+.mobileNavigationFooter {
+  color: rgb(255 255 255 / 60%);
+  font-size: 0.875rem;
+}
+
+.mobileNavigationCopyright {
+  margin-top: 1.25rem;
+  color: rgb(255 255 255 / 25%);
+  font-size: 0.75rem;
+}
+
+.sparkleA,
+.sparkleB,
+.sparkleC,
+.sparkleD {
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+  opacity: 0;
+}
+
+.sparkleA {
+  animation-name: hanging-gifts-contact-sparkle-a;
+}
+
+.sparkleB {
+  animation-name: hanging-gifts-contact-sparkle-b;
+}
+
+.sparkleC {
+  animation-name: hanging-gifts-contact-sparkle-c;
+}
+
+.sparkleD {
+  animation-name: hanging-gifts-contact-sparkle-d;
+}
+
+@container hanging-gifts-contact (min-width: 48rem) {
+  .heroTitle {
+    font-size: 4.5rem;
+  }
+
+  .heroDescription {
+    font-size: 1.5rem;
+  }
+  .desktopNavigation,
+  .giftCurtain {
+    display: flex;
+  }
+
+  .menuButton {
+    display: none;
+  }
+
+  .nameGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contactCards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .navbarInner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@container hanging-gifts-contact (min-width: 64rem) {
+  .heroTitle {
+    font-size: 6rem;
+  }
+
+  .contentGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 6rem;
+  }
+}
+
+@keyframes hanging-gifts-contact-sparkle-a {
+  0% {
+    opacity: 0;
+    transform: translate(-0.5rem, 0) scale(0);
+  }
+  10% {
+    opacity: 0.9;
+    transform: translate(-0.75rem, 1.3rem) scale(1.2);
+  }
+  25%,
+  100% {
+    opacity: 0;
+    transform: translate(-0.25rem, 4.4rem) scale(0);
+  }
+}
+
+@keyframes hanging-gifts-contact-sparkle-b {
+  0% {
+    opacity: 0;
+    transform: translate(0.6rem, 0.6rem) scale(0);
+  }
+  12% {
+    opacity: 0.7;
+    transform: translate(1rem, 2.1rem) scale(0.9);
+  }
+  30%,
+  100% {
+    opacity: 0;
+    transform: translate(0.4rem, 5rem) scale(0);
+  }
+}
+
+@keyframes hanging-gifts-contact-sparkle-c {
+  0% {
+    opacity: 0;
+    transform: translate(0.1rem, 0.3rem) scale(0);
+  }
+  10% {
+    opacity: 0.85;
+    transform: translate(-0.4rem, 2rem) scale(1);
+  }
+  28%,
+  100% {
+    opacity: 0;
+    transform: translate(0.25rem, 5.9rem) scale(0);
+  }
+}
+
+@keyframes hanging-gifts-contact-sparkle-d {
+  0% {
+    opacity: 0;
+    transform: translate(-0.75rem, 1.25rem) scale(0);
+  }
+  14% {
+    opacity: 0.6;
+    transform: translate(-0.4rem, 3rem) scale(0.7);
+  }
+  32%,
+  100% {
+    opacity: 0;
+    transform: translate(-0.6rem, 6.9rem) scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .logoPlaceholder,
+  .desktopNavigationItem,
+  .menuBar,
+  .mobileNavigationOverlay,
+  .mobileNavigationOpen {
+    transition: none;
+  }
+
+  .sparkleA,
+  .sparkleB,
+  .sparkleC,
+  .sparkleD {
+    animation: none;
+    opacity: 0;
+  }
+}

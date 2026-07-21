@@ -1,0 +1,28 @@
+# dependencies
+/node_modules/
+
+# Next.js and static output
+/.next/
+/out/
+
+# generated registry and documentation output
+/public/r/
+/.source/
+/coverage/
+/playwright-report/
+/test-results/
+/.lighthouseci/
+
+# local environment files
+.env*
+!.env.example
+
+# logs and caches
+*.log
+*.tsbuildinfo
+.eslintcache
+
+# editor and operating-system files
+.DS_Store
+.idea/
+.vscode/

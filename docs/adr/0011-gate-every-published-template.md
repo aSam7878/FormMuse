@@ -1,0 +1,5 @@
+# Gate every Published Template
+
+A Form Template may become a Published Template only after automated checks pass for TypeScript, ESLint, registry generation, static export, Next.js and Vite compatibility builds, validation and submission behavior, keyboard interaction, accessibility, responsive visual regression, reduced motion, and the absence of network requests from demo previews. FormMuse will treat publication as a verified state rather than merely listing source code, accepting the additional test maintenance in exchange for dependable adopter-owned templates.
+
+Normal pull requests will run registry and installation checks with FormMuse's exact pinned shadcn CLI version. A scheduled compatibility workflow will smoke-test the public commands with `shadcn@latest` without allowing an unreviewed upstream release to block unrelated pull requests. Publishing any Form Template or FormMuse release requires a fresh passing `shadcn@latest` installation smoke test. The internal pin is upgraded deliberately after upstream changes are reviewed.

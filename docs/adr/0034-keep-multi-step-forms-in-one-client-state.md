@@ -1,0 +1,7 @@
+# Keep multi-step forms in one client state
+
+FormMuse may publish multi-step Form Templates using one Zod schema, one exported values type, and one React Hook Form instance configured to retain unmounted fields with `shouldUnregister: false`. Forward and backward navigation preserves all entered values. “Next” validates only the current step and focuses its first invalid field; “Back” does not validate or discard values. Only a valid final step invokes `onSubmit`, and it does so once.
+
+Final submission validates the complete schema, including cross-field and cross-step rules. If an error belongs to an earlier step, the template returns to the earliest affected step and focuses its first invalid field. A known-step progress indicator will use an ordered structure with named steps, visible “Step N of M” context, and `aria-current="step"`; focus moves to the newly rendered step heading. Step transitions support reduced motion and never delay semantic or focus updates.
+
+Intermediate Enter submission will follow the same step-aware form submit handler as activating “Next”: it validates and advances the current step but cannot call the final Submission Connection. FormMuse will not install a global Enter key handler; textareas and composite controls retain their native Enter behavior. Multi-step state remains entirely client-side and does not use routing, URL synchronization, server state, or a separate form instance per step.

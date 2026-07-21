@@ -1,0 +1,7 @@
+# Keep legal copy template-specific and honest
+
+FormMuse V1 will not add a universal privacy checkbox, consent field, legal disclaimer, Terms acknowledgement, or policy link to every Form Template. Contact and quote-request templates remain free of unnecessary consent controls by default. Legal Copy or a consent field may appear only when integral to one template's Form Shape and dominant visitor intent.
+
+Any included Legal Copy is placeholder content that adopters must review and replace for their own jurisdiction, processing purpose, organization, backend, and retention practices. FormMuse does not provide legal advice or claim compliance. Consent is never pre-checked; when affirmative consent is required, the visible wording, semantic state, Zod validation, default, error message, and Submitted Values must agree. Templates will not ship fake `#` links, FormMuse policy URLs, or framework-specific legal navigation. A justified template may use a small documented URL prop or an obvious source placeholder, while its preview remains local and makes no network request.
+
+Because FormMuse provides no backend, default copy will not promise “No spam,” “Unsubscribe anytime,” response times, delivery frequency, confidentiality, deletion, or other provider behavior it cannot enforce. Newsletter templates may use polished neutral wording, and adopters may add assurances they can actually honor. This keeps the universal API small and avoids turning decorative sample copy into an accidental operational or legal claim.

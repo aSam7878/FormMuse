@@ -1,0 +1,5 @@
+# Generate Template Pages from Registry Records
+
+FormMuse V1 will render every Template Page through one shared static page layout populated by its Registry Record, Distributed Template Source, Template Preview route, and referenced type-checked example files. It will not create a separate per-template MDX document. The page will derive its title, description, CLI commands, Manual Installation files, Props table, examples, version, category, fields, dependencies, and other template-specific presentation from those structured sources.
+
+Template documentation in `meta.formmuse` will remain concise and structured through fields such as props, examples, usage notes, and accessibility notes. Large narrative content will not be embedded in `registry.json`. Longer cross-template guides—including connecting a backend, customizing templates, and using FormMuse with coding agents—may use ordinary documentation pages because they are not duplicate descriptions of one Registry Record. This prevents per-template documentation drift while keeping authored guidance readable and type-checked code examples executable.

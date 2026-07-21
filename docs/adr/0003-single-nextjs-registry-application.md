@@ -1,0 +1,9 @@
+# Keep FormMuse in one Next.js registry application
+
+FormMuse V1 will use one repository containing one Next.js application for the catalog website, documentation, Form Template source, registry configuration, and generated registry files. The baseline is Next.js 16.2.10, React 19.2.7, TypeScript 6.0.3, Tailwind CSS 4.3.3, shadcn 4.13.1, and pnpm for repository development; user-facing CLI Installation will still show pnpm, npm, Yarn, and Bun commands. FormMuse will use `shadcn build` to produce static registry files and will not add a monorepo, database, CMS, or custom registry server in V1 because a single static registry application covers the Curated Library without additional infrastructure.
+
+FormMuse will pin `shadcn` exactly at 4.13.1 in `package.json` and `pnpm-lock.yaml` for deterministic development, validation, and registry generation. Updating that pin is a deliberate reviewed change rather than an automatic dependency update.
+
+The App Router will use a minimal `app/layout.tsx` containing only the shared document shell, an explicit `app/(site)/layout.tsx` for navigation, footer, and website styling, and an explicit `app/(preview)/layout.tsx` for the isolated preview environment. The root layout will not introduce the FormMuse site shell or site-specific styling into preview routes. A single root `registry.json` will remain the authored registry manifest, with Base UI template sources under `registry/base/<template-slug>/`, generated registry JSON under `public/r/`, and static export output under `out/`.
+
+`public/r/` and `out/` are Generated Output and will be recreated by the build pipeline rather than edited manually. `out/` will not be committed. Repository fixtures used to verify Next.js and Vite compatibility are test inputs rather than pnpm workspace packages or separately maintained applications, preserving the one-application architecture.
