@@ -893,7 +893,9 @@ Use this Template Asset priority:
 3. Lucide icons when the template genuinely needs them.
 4. An optimized local raster image only when concept-essential.
 
-Never depend on `next/image`, remote URLs, external CDNs, large base64 data URLs, or a framework-specific SVG loader. Every asset rendered inside the Template Preview iframe must be included in the Template Block; FormMuse's preview controls outside the iframe are not distributed template assets. Record provenance and licence terms repository-side, and verify every local asset in both Next.js and Vite.
+Never depend on `next/image`, remote URLs, external CDNs, large base64 data URLs outside the narrow registry transport exception below, or a framework-specific SVG loader. Every asset rendered inside the Template Preview iframe must be included in the Template Block; FormMuse's preview controls outside the iframe are not distributed template assets. Record provenance and licence terms repository-side, and verify every local asset in both Next.js and Vite.
+
+The narrow registry transport exception applies only when the pinned shadcn builder cannot preserve an approved local raster's binary bytes. FormMuse may encode that exact raster as a Base64 data URI inside one standalone, template-owned SVG `registry:file` installed beneath `~/public/formmuse/<canonical-slug>/`. The SVG must remain a local public asset referenced through the template's normal `assetBaseUrl`; never place the payload in TypeScript, TSX, JavaScript, JSX, CSS, or HTML. The registry generator must prove deterministic output, decode the embedded payload and match the approved source byte length and SHA-256, enforce the reviewed size cost, and exercise Next.js, Vite, automated browser-engine, restrictive-CSP, locality, and zero-external-request checks. The normal branded-browser, real-device, provenance, licence, accessibility, and publication gates still apply.
 
 Meaningful images require useful `alt` text. Pure decoration uses empty alternative text or `aria-hidden="true"` as appropriate. Preview tests must confirm zero external asset requests.
 
@@ -906,6 +908,8 @@ When a template genuinely requires raster assets:
 - Accept a root-relative path, deployment subpath, or adopter-controlled absolute CDN URL.
 - Use standard `<img>` with explicit width and height plus correct meaningful or decorative accessibility attributes.
 - Document every file and the optional prop in Manual Installation and the Props table.
+
+A validated SVG transport wrapper counts as the installed local raster asset for these rules; it does not make the template asset-free or remove `assetBaseUrl`.
 
 FormMuse previews must use the packaged local default and make no external requests. Templates without raster assets must not expose `assetBaseUrl`.
 
