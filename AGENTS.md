@@ -6,6 +6,12 @@ ADRs, `reference.md`, `CONTEXT.md`, and `FormMuse Tech Stack.md` remain the arch
 
 Never guess when any requirement, intent, ownership question, design choice, implementation direction, security implication, deployment detail, or other material fact is uncertain. Stop before making the affected decision or change, explain the doubt clearly, and ask the project owner for clarification. Continue only after the owner answers. This rule applies throughout the entire FormMuse project, even when an agent believes an assumption would probably be reasonable.
 
+## Architect-authored delegated implementation
+
+Delegating implementation does not delegate code authorship. The architect must design and provide the exact patch, replacement content, or complete new-file content for every delegated change. The implementation worker is an execution-only agent: it may apply the supplied code, inspect only what the brief authorizes, run the exact prescribed checks, and report the results, but it must not invent, generate, refactor, broaden, or independently repair implementation code.
+
+Every worker brief and correction brief must contain the exact architect-authored code change. If that code cannot be applied exactly, conflicts with the current worktree, fails a check in a way that requires a code change not already supplied, or exposes another material uncertainty, the worker must stop and report the mismatch. It must never improvise a solution. The architect then inspects the evidence, authors any correction, and independently reviews the final diff and verification results before accepting it.
+
 ## GitHub operating model
 
 Use a hybrid approach, in this priority order:
