@@ -22,7 +22,6 @@
 *.tsbuildinfo
 .eslintcache
 
-# editor and operating-system files
-.DS_Store
+# editor files
 .idea/
 .vscode/
