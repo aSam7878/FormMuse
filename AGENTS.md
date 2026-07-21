@@ -29,3 +29,7 @@ Use the standard FormMuse triage states. See `docs/agents/triage-labels.md`.
 ### Domain docs
 
 FormMuse uses one root domain context. See `docs/agents/domain.md`.
+
+### Architect and worker workflow
+
+Implementation may be delegated to an isolated worker agent, but delegation never transfers architectural authority or approval. See `docs/agents/worker-orchestration.md`.
