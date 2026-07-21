@@ -1,0 +1,9 @@
+# Use Cloudflare Web Analytics for launch
+
+FormMuse will use Cloudflare Web Analytics as its replaceable Launch Analytics Provider while the production static site is initially hosted on Hostinger Premium. This is a reversible site-infrastructure implementation behind the provider-agnostic Site Analytics boundary, not a permanent architecture, hosting, registry, documentation-generation, URL, or Form Template dependency.
+
+The manual Cloudflare beacon loads only for `FORMMUSE_DEPLOY_ENV=production`, only from the `(site)` route group, and only when its public site token is configured. It remains absent from development, branch and pull-request previews, the root and preview layouts, Template Preview routes and iframes, registry source and generated items, compatibility fixtures, Manual Installation, and distributed templates. Blocking or failing the beacon cannot impair website or registry behavior.
+
+Its launch purpose is limited to aggregate page traffic, visitor estimates, referrers, broad environment context, coarse geography, and performance. FormMuse will not attempt to recreate missing custom events, UTM attribution, funnels, or campaign tracking by capturing query strings, emitting custom requests, or adding another tracker. The production privacy notice will identify Cloudflare and accurately document the current data behavior and retention.
+
+For the initial Hostinger deployment, the production CSP will allow only the reviewed beacon script origin and reporting origin, currently `https://static.cloudflareinsights.com` and `https://cloudflareinsights.com`, without broad Cloudflare wildcards. Cloudflare's manual beacon is not version-pinned and currently cannot use SRI, so FormMuse records this supply-chain exception, monitors changes, and reconfirms the free tier, privacy characteristics, endpoints, retention, and product limitations before launch and after relevant provider updates.

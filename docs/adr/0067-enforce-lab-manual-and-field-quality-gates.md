@@ -1,0 +1,11 @@
+# Enforce separate laboratory, manual, and field quality gates
+
+FormMuse V1 will apply a Whole-site Quality Gate to the static website, documentation, catalog, Template Pages, and Template Previews. Lighthouse CI will audit representative routes from the served static export. Indexable site routes must score at least 90 for Performance and exactly 100 for Accessibility, Best Practices, and SEO. Intentionally `noindex` Template Preview routes are exempt from the SEO score but must meet the other applicable thresholds. A verified tool false positive requires a narrow documented exception; ordinary failures do not.
+
+Every tested route must also have no unhandled page errors, unhandled promise rejections, hydration warnings, broken internal links, unexpected Template Preview network requests, or serious or critical axe violations. These automated laboratory checks supplement rather than replace the existing publication tests and manual review.
+
+A Lighthouse Accessibility score of 100 is an automated safeguard, not evidence by itself that FormMuse conforms to WCAG 2.2 Level AA. Applicable Level A and AA success criteria remain the accessibility standard. Recorded manual keyboard, focus, zoom and reflow, screen-reader, touch, reduced-motion, responsive, and real-device checks remain mandatory before publication.
+
+Production field data will be evaluated against the Core Web Vitals “good” thresholds once enough representative traffic exists: Largest Contentful Paint at or below 2.5 seconds, Interaction to Next Paint at or below 200 milliseconds, and Cumulative Layout Shift at or below 0.1 at the 75th percentile, assessed separately for mobile and desktop. Before sufficient field data exists, pinned Lighthouse CI, Playwright evidence, and measurements from the Hanging Gifts vertical slice are the available performance evidence; laboratory results must not be presented as real-user measurements.
+
+FormMuse will not invent JavaScript, image, or total-transfer budgets before the complete Hanging Gifts vertical slice is measured. That slice will establish evidence-based baselines and review thresholds before the catalog scales. Later templates and shared-site changes must not silently regress those budgets; changing a baseline requires an explicit reviewed decision rather than merely updating expected output.

@@ -1,0 +1,3 @@
+# Layer animation dependencies by need
+
+FormMuse will use CSS and Tailwind transitions or keyframes for simple animation, Motion 12.42.2 as the default JavaScript animation library, and GSAP 3.15.0 with `@gsap/react` 2.1.2 only when a Form Template genuinely requires complex timelines, coordinated sequences, SVG control, or scroll-driven animation. Each Form Template must declare and install only its own required dependencies, support `prefers-reduced-motion`, and prioritize transform and opacity animation over layout-heavy properties. This keeps common templates lightweight without preventing more ambitious templates from using stronger animation tools when their design justifies the added dependency.

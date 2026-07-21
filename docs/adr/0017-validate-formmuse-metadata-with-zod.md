@@ -1,0 +1,7 @@
+# Validate FormMuse Metadata with Zod
+
+FormMuse will define `FormMuseMetaSchema` as the sole runtime and TypeScript definition for `meta.formmuse`. The website, registry builder, generated Template Pages, search, filters, and quality checks will consume the type inferred from this schema; FormMuse will not maintain a separate handwritten interface.
+
+The schema will reject unknown keys, use closed enums for controlled catalog values, and use reusable validators for semantic Template Versions and ISO `YYYY-MM-DD` updated dates. Registry generation will validate both the standard shadcn fields and FormMuse Metadata and will fail locally and in CI when either is invalid. The complete schema will include all locked FormMuse categories and structured documentation fields; abbreviated examples in planning documents are not the authoritative vocabulary.
+
+Closed Controlled Vocabularies will cover Primary Category, layout, animation technology, Publication Status, and objective appearance mode. Appearance mode will begin with `light`, `dark`, and `adaptive`; subjective design traits such as `playful`, `minimal`, `luxury`, `editorial`, and `colorful` belong in tags instead. `meta.formmuse.tags` and `meta.formmuse.fields` will accept unique, normalized lowercase kebab-case slugs rather than closed enums. FormMuse will define initial enum values from the actual launch templates and add values only when a Published Template genuinely requires them, avoiding speculative catalog filters.

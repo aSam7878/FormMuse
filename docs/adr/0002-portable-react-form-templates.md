@@ -1,0 +1,3 @@
+# Keep Form Templates portable across React applications
+
+V1 Form Templates will use React, TypeScript, and Tailwind CSS 4 as their compatibility baseline and must work in both Next.js and Vite React projects. Distributed template code will avoid framework-specific APIs such as `next/image`, `next/link`, Server Actions, and Next.js routing; the FormMuse website may still use Next.js. This gives adopters ownership of portable source code and follows Aceternity UI and Magic UI as the reference standard for compatibility, installation, documentation, presentation, and code ownership, at the cost of not using framework-specific conveniences inside templates.

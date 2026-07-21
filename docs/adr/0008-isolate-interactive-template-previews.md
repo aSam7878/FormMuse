@@ -1,0 +1,3 @@
+# Isolate interactive Template Previews
+
+Each Form Template will render in its own build-time static iframe route so the FormMuse website cannot leak styles into the Template Preview. Template Pages will provide desktop, tablet, and mobile viewport controls, working validation and simulated submission Form States, and Reset and Replay Animation controls; previews will make no network requests. The Code tab will remain outside the iframe and show every distributed file. FormMuse will not operate a runtime sandbox service in V1 because static isolated routes provide the Magic UI-style presentation and interaction needed by the Curated Library without runtime infrastructure.

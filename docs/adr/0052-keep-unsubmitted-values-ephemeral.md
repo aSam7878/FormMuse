@@ -1,0 +1,7 @@
+# Keep unsubmitted values ephemeral
+
+V1 Form Templates will hold unsubmitted visitor values only in the mounted React Hook Form instance. They will not persist or recover drafts through `localStorage`, `sessionStorage`, IndexedDB, cookies, Cache Storage, service workers, browser history state, query parameters, URL fragments, unload beacons, or cross-tab synchronization. FormMuse-owned draft state ends when the template unmounts or its document reloads.
+
+This policy prevents silent retention of personal, contact, and project information and avoids introducing consent, retention, expiry, migration, synchronization, and security contracts into ready-to-paste templates. Persistence is not a universal prop, utility, dependency, preview feature, or default agent modification in V1. An adopter may add it deliberately to the copied source and then owns the resulting privacy and security obligations.
+
+Browser-managed autofill, restoration, and password-manager behavior are outside the template's storage control and remain compatible with FormMuse's semantic autocomplete policy. Documentation will say that FormMuse does not programmatically persist drafts rather than claiming that a browser can never retain or suggest a value. Publication tests instrument storage, history, URL, cookie, service-worker, and unload-request surfaces to verify the template itself does not persist form values.

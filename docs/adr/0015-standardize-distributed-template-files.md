@@ -1,0 +1,11 @@
+# Standardize distributed template files
+
+Every Form Template will have a predictable Distributed Template Source consisting of a main Form Template component and a separate schema module that exports both the Zod schema and its inferred values type. A template may add supporting component files when its visual or interaction design genuinely benefits from them, but simple templates will not be split into unnecessary files.
+
+Tests, preview wrappers, documentation, and per-template changelogs will remain inside the FormMuse repository and will not be installed into adopters' projects. The registry item and Manual Installation will expose exactly the same distributed files. This gives developers and coding agents stable places to find the public component and submission contract while keeping copied implementations focused on production source.
+
+Each registry item will install its Distributed Template Source as a self-contained folder under `@components/formmuse/<template-slug>/`, using shadcn's `@components/` target placeholder so the adopter's `components.json` determines the physical component directory. Template-owned files will import one another with relative paths, while imports of local shadcn Control Primitives will continue to use the adopter's configured UI paths. This avoids coupling internal template modules to an adopter's alias while preserving normal shadcn component ownership.
+
+Every Form Template registry item will use the top-level type `registry:block`. Template-owned React components will use `registry:component`, schemas and utilities will use `registry:lib`, and genuinely necessary custom hooks will use `registry:hook`; every file will have an explicit target inside the same self-contained installation directory. Local shadcn controls belong in `registryDependencies`, while npm packages belong in `dependencies`. Repository-only tests, previews, examples, documentation, changelogs, and visual snapshots will never appear in the block's installable `files`.
+
+Templates will prefer locally scoped styles. Registry-level `css` or `cssVars` may be used only when the design genuinely requires a shared keyframe, utility, or variable that cannot remain local, because those mechanisms modify the adopter's global CSS. Any such addition must be explicit in Manual Installation and scoped to the Canonical Slug.
