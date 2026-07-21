@@ -961,6 +961,8 @@ Objective appearance values are `light`, `dark`, and `adaptive`. Subjective desc
 
 Controlled vocabularies begin with values used by real launch templates and grow only when a Published Template needs a new value.
 
+ADR 0074 defines the initial strict wire contract derived from Hanging Gifts: `page` is the only initial layout value; `animation` is a unique non-empty array over `css`, `motion`, and `gsap`; documentation records use the locked structured props, examples, usage-note, and accessibility-note shapes; lifecycle-specific deprecation data controls deprecated installability; and V1 Template Versions use stable `major.minor.patch` form only. The schema implementation and ADR must remain aligned when evidence from a real later template requires the vocabulary to grow.
+
 ## Canonical slug and public routes
 
 Every Form Template has one lowercase kebab-case Canonical Slug. The same value must be used everywhere:
