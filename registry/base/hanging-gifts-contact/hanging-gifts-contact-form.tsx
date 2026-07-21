@@ -309,7 +309,7 @@ export function HangingGiftsContactForm({
           {/* Distributed templates must use a framework-neutral image element. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`${normalizedAssetBaseUrl}/hanging-gifts-hero.webp`}
+            src={`${normalizedAssetBaseUrl}/hanging-gifts-hero.svg`}
             alt=""
             width={1536}
             height={1024}
