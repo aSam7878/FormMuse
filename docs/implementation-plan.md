@@ -267,7 +267,9 @@ Completed on 2026-07-22 at merge commit `7f03970`. A clean clone installed the f
 
 # Stage 2 — Complete Hanging Gifts as the distributed vertical slice
 
-**Stage status:** Partial.
+**Stage status:** Complete.
+
+Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hanging Gifts remained a draft while its exact Registry Record, Manual parity, clean Next.js and Vite installed-source builds and renders, formatting, typecheck, lint, 203 unit tests, static export, and 54 Chromium/Firefox/WebKit behavior, accessibility, responsive, reduced-motion, and zero-external-request checks passed. The owner-approved visual composition remained unchanged.
 
 **Outcome:** The approved Hanging Gifts composition becomes a complete, portable, installable Template Block with a stable source contract and repository-only documentation/test support.
 
