@@ -190,6 +190,7 @@ describe("authored registry validation", () => {
   it.each([
     "registry/base/hanging-gifts-contact/preview.tsx",
     "registry/base/hanging-gifts-contact/hanging-gifts-contact.example.tsx",
+    "registry/base/hanging-gifts-contact/hanging-gifts-contact.documentation.ts",
     "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.schema.test.ts",
     "registry/base/hanging-gifts-contact/asset-provenance.md",
     "registry/base/hanging-gifts-contact/portability-audit.md",

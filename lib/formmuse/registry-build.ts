@@ -63,6 +63,7 @@ const FORBIDDEN_DISTRIBUTED_MARKERS = [
 const REPOSITORY_ONLY_PATTERNS = [
   /(?:^|\/)preview\.tsx$/,
   /\.example\.tsx$/,
+  /\.documentation\.ts$/,
   /\.(?:test|spec)\.(?:ts|tsx)$/,
   /\.mdx?$/i,
 ];
