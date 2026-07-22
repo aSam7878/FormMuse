@@ -7,6 +7,8 @@ export const metadata = {
   },
 };
 
-export default function PreviewLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function PreviewLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   return <>{children}</>;
 }
