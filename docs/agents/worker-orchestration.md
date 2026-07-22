@@ -93,3 +93,91 @@ Every worker response ends with these headings:
 6. `Suggested next action`
 
 An empty blocker section must say `None`; it must never be omitted.
+
+## V4 lean execution profile
+
+V4 is an owner-selected, lower-overhead profile for a bounded stage or other
+explicitly approved sequence of related work packages. It preserves the role,
+authority, clarification, exact-authorship, isolation, review, and owner-gate
+rules above. V3 remains available and unchanged as the high-assurance profile.
+Selecting V4 does not convert product, architecture, security, visual, legal,
+credential, publication, or scope decisions into worker decisions.
+
+### Activation and boundaries
+
+- The project owner must explicitly select V4 before it is used. The selection
+  names the stage or bounded sequence, baseline, cumulative branch, expected
+  package order, final pull-request target, and any pre-approved merge action.
+- One isolated cumulative branch and worktree may serve the selected sequence.
+  Each work package still has its own issue, exact brief, focused checks,
+  commit, and completion entry, and packages remain linear.
+- The architect resolves every material question before dispatch. A package
+  with an unresolved owner decision is not dispatched.
+- The worker reads `AGENTS.md`, the issue, the exact brief, and only the
+  authority sections or exact excerpts named by the architect. A document path
+  is a retrieval pointer, not permission to load an entire document when only a
+  named section is relevant.
+- V4 does not use V3 task schemas, hash manifests, supervisor passes,
+  duplicated check profiles, replay benchmarks, or per-package pull requests.
+  V3 files and evidence remain untouched.
+
+### Lean package cycle
+
+1. The architect selects the next unblocked package, reads only its directly
+   relevant authority, and authors the complete exact patch.
+2. The architect supplies one compact brief containing the issue, baseline,
+   permitted paths, exact patch, literal focused checks, exact Git actions,
+   exclusions, and stop conditions.
+3. The worker applies the patch exactly, runs the listed focused checks once,
+   and stops on the first patch mismatch, failed check, uncertainty, unexpected
+   path, or need for unsupplied code.
+4. On success, the worker may perform only the brief's literal Git actions for
+   that package, normally explicit-path staging and one commit. The worker does
+   not choose commit contents, messages, branches, merge methods, or targets.
+5. The architect inspects the actual diff and compact evidence before accepting
+   the package. Passing checks do not replace this review. The architect does
+   not repeat successful checks by default; it reruns only the smallest
+   proportionate check needed to investigate an anomaly or review a high-risk
+   boundary.
+6. Any correction is a new exact architect-authored patch and literal command
+   list. The worker never invents a repair.
+7. After the package is accepted, the next package may begin on the cumulative
+   branch. A known failure is never carried forward.
+
+### Verification and evidence economy
+
+- Run the package's smallest meaningful focused checks immediately after its
+  patch. Do not run the complete repository, browser, security, portability, or
+  compatibility gate after every package unless that package directly changes
+  the corresponding boundary or the implementation plan explicitly requires
+  it.
+- Run the complete stage exit gate once after the final package. Run the final
+  GitHub CI and review cycle once on the consolidated stage pull request.
+- Reuse still-valid visual approval when rendered composition is unchanged.
+  Group new visual review into the fewest meaningful owner checkpoints that
+  still expose real design decisions.
+- Successful evidence is compact: package and issue, commit, changed paths,
+  literal checks with pass/fail results, owner decisions, and blockers. Do not
+  duplicate raw logs, source text, authority prose, or already recorded test
+  output. Preserve only the relevant failure excerpt when a command fails.
+- The six completion-report headings remain required, but each may be one terse
+  line. `Unresolved blockers` must still say `None` when empty.
+
+### Narrow Git and GitHub exception
+
+The general worker prohibitions above continue to govern V3 and any task that
+does not explicitly select V4. Under an active V4 brief, the worker may execute
+only the literal, architect-supplied Git and GitHub commands listed in that
+brief. Permitted actions may include status inspection, explicit-path staging,
+committing with an exact message, pushing the selected cumulative branch,
+opening or updating the selected pull request, observing its checks, posting
+compact issue evidence, and closing linked issues. A merge is permitted only
+when the owner has pre-approved it, the architect provides the exact target and
+merge method, every required check has passed, and no owner gate remains.
+
+This exception never permits the worker to expose credentials, alter repository
+settings, change workflow permissions, bypass branch protection, force-push,
+rewrite history, use destructive Git commands, merge a different target, or
+perform an unlisted network or GitHub action. The architect independently
+verifies the resulting branch, pull request, checks, merge commit, issue state,
+and preserved local changes before declaring the sequence complete.
