@@ -10,7 +10,7 @@ Never guess when any requirement, intent, ownership question, design choice, imp
 
 Delegating implementation does not delegate code authorship. The architect must design and provide the exact patch, replacement content, or complete new-file content for every delegated change. The implementation worker is an execution-only agent: it may apply the supplied code, inspect only what the brief authorizes, run the exact prescribed checks, and report the results, but it must not invent, generate, refactor, broaden, or independently repair implementation code.
 
-Every worker brief and correction brief must contain the exact architect-authored code change. If that code cannot be applied exactly, conflicts with the current worktree, fails a check in a way that requires a code change not already supplied, or exposes another material uncertainty, the worker must stop and report the mismatch. It must never improvise a solution. The architect then inspects the evidence, authors any correction, and independently reviews the final diff and verification results before accepting it.
+Every worker brief and correction brief must reference the separate exact architect-authored patch. If that code cannot be applied exactly, conflicts with the current worktree, fails a check in a way that requires a code change not already supplied, or exposes another material uncertainty, the worker must stop and report the mismatch. It must never improvise a solution. The architect reviews the exact diff before dispatch, authors any correction, and accepts the final tree only after deterministic patch-identity, scope, and verification evidence passes. Successful raw logs and already-reviewed code are reopened only when the evidence reports an anomaly.
 
 ## GitHub operating model
 
