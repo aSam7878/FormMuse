@@ -22,6 +22,8 @@
     "test:coverage": "vitest run --coverage",
     "test:browser": "playwright test",
     "guides:build": "fumadocs-mdx",
+    "static-data:build": "node --import tsx scripts/build-static-data.mts",
+    "static-data:fixture": "node --import tsx scripts/build-static-data.mts --fixture",
     "registry:build": "node --import tsx scripts/build-registry.ts",
     "postinstall": "fumadocs-mdx"
   },
