@@ -40,3 +40,11 @@ If a named feature is unavailable, retain the source control, document the obser
 ## Evidence and review
 
 Record the date, owner, observed setting, required-check names, and any plan limitation when the owner completes the account checkpoint. Repository settings are operational evidence, not architectural source, and credentials or private security details must never be copied into this public file or an issue.
+
+### Stage 1 owner checkpoint — 2026-07-22
+
+- The owner explicitly approved enabling Dependency Graph for `aSam7878/FormMuse`. The repository settings page then showed Dependency Graph enabled, and the `Dependency review` job passed on pull request #27.
+- The committed CodeQL advanced setup completed successfully on pull request #27 as both the `JavaScript and TypeScript` analysis job and GitHub's `CodeQL` check.
+- The repository settings page showed Secret Protection and push protection enabled.
+- Dependabot alerts, Dependabot security updates, and grouped security updates remained disabled and were not changed. The committed `.github/dependabot.yml` supplies review-only version-update proposals without auto-merge.
+- Branch protection/ruleset requirements and the repository Actions default token permission were not changed or claimed complete in Stage 1; they remain explicit owner actions before they can be treated as enforced controls.
