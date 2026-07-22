@@ -281,13 +281,61 @@ describe("HangingGiftsContactForm", () => {
       />,
     );
     const root = container.querySelector("[data-formmuse-template]");
+    const hero = root?.querySelector("img");
 
     expect(root).toHaveClass("adopter-placement");
     expect(root?.querySelectorAll(".adopter-placement")).toHaveLength(0);
-    expect(root?.querySelector("img")).toHaveAttribute(
+    expect(hero).toHaveAttribute(
       "src",
       "/tenant/assets/hanging-gifts-hero.svg",
     );
+    expect(hero).toHaveAttribute("alt", "");
+    expect(hero).toHaveAttribute("width", "1536");
+    expect(hero).toHaveAttribute("height", "1024");
+  });
+
+  it("uses generic Lucide social placeholders without changing the phone icon", () => {
+    render(
+      <HangingGiftsContactForm
+        defaultValues={completeDefaults}
+        onSubmit={async () => undefined}
+      />,
+    );
+
+    expect(
+      screen
+        .getByRole("img", { name: "Social sharing placeholder" })
+        .querySelector("svg"),
+    ).toHaveClass("lucide-share-2");
+    expect(
+      screen
+        .getByRole("img", { name: "Photo sharing placeholder" })
+        .querySelector("svg"),
+    ).toHaveClass("lucide-camera");
+    expect(
+      screen
+        .getByRole("img", { name: "Phone placeholder" })
+        .querySelector("svg"),
+    ).toHaveClass("lucide-phone");
+
+    for (const label of [
+      "Social sharing placeholder",
+      "Photo sharing placeholder",
+      "Phone placeholder",
+    ]) {
+      expect(screen.getByRole("img", { name: label })).toHaveClass(
+        "flex",
+        "size-14",
+        "items-center",
+        "justify-center",
+        "rounded-full",
+        "border",
+        "bg-white",
+        "transition-all",
+        "duration-300",
+        "hover:scale-110",
+      );
+    }
   });
 
   it("uses unique field and mobile-navigation IDs across two instances", () => {

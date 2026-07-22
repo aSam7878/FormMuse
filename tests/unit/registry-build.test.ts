@@ -256,6 +256,35 @@ describe("authored registry validation", () => {
       },
     ]);
   });
+
+  it("keeps visible asset sources local, declared, and repository-documented", () => {
+    const formSource = readFileSync(
+      join(
+        projectRoot,
+        "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.tsx",
+      ),
+      "utf8",
+    );
+    const provenance = readFileSync(
+      join(
+        projectRoot,
+        "registry/base/hanging-gifts-contact/asset-provenance.md",
+      ),
+      "utf8",
+    );
+
+    expect(formSource).not.toMatch(/FacebookIcon|InstagramIcon|https?:\/\//);
+    expect(formSource).not.toMatch(
+      /Facebook placeholder|Instagram placeholder/,
+    );
+    expect(formSource).toContain("[Share2, Camera, Phone]");
+    expect(registry.items[0].dependencies).toContain("lucide-react@1.25.0");
+    expect(provenance).toContain("Lucide package: `lucide-react@1.25.0`");
+    expect(provenance).toContain("Licence: ISC");
+    expect(provenance).toContain("Licence: SIL Open Font License 1.1");
+    expect(provenance).toContain("no external file or runtime request");
+    expect(provenance).toContain("no external asset file or remote request");
+  });
 });
 
 describe("publication lifecycle selection", () => {

@@ -333,7 +333,7 @@ Completed on 2026-07-22 at merge commit `7f03970`. A clean clone installed the f
 
 ## 2.5 Complete asset packaging and provenance
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 

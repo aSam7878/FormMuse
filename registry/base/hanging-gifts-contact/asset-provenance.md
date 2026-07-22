@@ -20,6 +20,27 @@
 
 The two other PNG files in the local source directory are unused and are not part of this template.
 
+## Hanging gifts and sparkles
+
+- Source: inline JSX SVG artwork in `registry/base/hanging-gifts-contact/hanging-gifts.tsx`
+- Purpose: decorative hanging gift boxes and sparkles
+- Runtime behaviour: distributed with the template source; no external asset file or remote request
+- Accessibility treatment: every gift and sparkle SVG is hidden from assistive technology and the complete curtain is non-interactive
+- Separate notice: none; the artwork is part of the FormMuse template implementation
+
+## Contact and social-placeholder icons
+
+- Lucide package: `lucide-react@1.25.0`
+- Lucide icons: `ArrowRight`, `Camera`, `Check`, `Phone`, and `Share2`
+- Purpose: submit/status controls and generic social, photo-sharing, and phone placeholders
+- Visual treatment: the generic placeholders retain the approved circles, dimensions, spacing, colours, hover behaviour, and row layout
+- Licence: ISC
+- Distribution requirement: install the declared package and preserve the licence included with it
+- Brand treatment: no Facebook, Instagram, Cedar, or other third-party identity mark is embedded
+- Animated contact icons: distributed TSX source in `registry/base/hanging-gifts-contact/animated-icons.tsx`, rendered through the declared `motion@12.42.2` dependency, with no external file or runtime request
+- Accessibility treatment: the icon artwork is hidden from assistive technology; visible controls and placeholder containers supply their own accessible names
+- Separate notice for animated icons: none; they are part of the FormMuse template implementation
+
 ## Mulish variable font
 
 - Package: `@fontsource-variable/mulish@5.3.0`
@@ -27,4 +48,4 @@ The two other PNG files in the local source directory are unused and are not par
 - Upstream project: [googlefonts/mulish](https://github.com/googlefonts/mulish)
 - Licence: SIL Open Font License 1.1
 - Runtime behaviour: bundled locally by the adopter's build; no remote font request
-- Distribution requirement: install the package with this template and preserve its included OFL licence
+- Distribution requirement: install the declared package with this template and preserve its included OFL licence and copyright notice
