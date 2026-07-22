@@ -51,6 +51,9 @@ jobs:
       - name: Generate the registry
         run: pnpm registry:build
 
+      - name: Prove Next.js and Vite registry installation
+        run: pnpm test:registry-install
+
       - name: Compile guide sources
         run: pnpm guides:build
 

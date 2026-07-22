@@ -105,6 +105,12 @@
               "required": false,
               "description": "Overrides the base URL or path containing the packaged template asset.",
               "default": "/formmuse/hanging-gifts-contact"
+            },
+            {
+              "name": "animationReplayKey",
+              "type": "number",
+              "required": false,
+              "description": "Restarts only the scoped replayable animation sequence when the value changes, without resetting form or component state."
             }
           ],
           "examples": [
@@ -112,13 +118,21 @@
               "title": "Basic usage",
               "description": "Connects validated values to an asynchronous adopter-owned submit handler.",
               "path": "registry/base/hanging-gifts-contact/hanging-gifts-contact.example.tsx"
+            },
+            {
+              "title": "Connect a backend",
+              "description": "Sends typed parsed values to an adopter-owned JSON endpoint and rejects safely when the endpoint fails.",
+              "path": "registry/base/hanging-gifts-contact/hanging-gifts-contact.backend.example.tsx"
             }
           ],
           "usageNotes": [
             "Replace the example submit handler with an adopter-owned asynchronous backend integration.",
             "defaultValues are read only when the template first mounts; remount the component to apply a new initial set.",
+            "firstName, lastName, requirement, and email are trimmed by the exported schema; message preserves visitor formatting while requiring meaningful non-whitespace content.",
             "Use className only for the outer root; edit the distributed source for internal visual changes.",
-            "Keep the packaged SVG asset under the default public directory or pass assetBaseUrl when deploying it elsewhere."
+            "Keep the packaged decorative SVG asset under the default public directory or pass assetBaseUrl when deploying it elsewhere.",
+            "Keep the declared GSAP, Motion, React Hook Form, Zod, Lucide, and local Mulish dependencies; the template makes no FormMuse-owned or remote runtime request.",
+            "Changing animationReplayKey replays only the scoped entrance sequence; omit it for normal use, and use a full component remount only when a complete reset is intended."
           ],
           "accessibilityNotes": [
             "Preserve the programmatic labels, descriptions, error associations, and focus movement when editing fields or submission states.",
