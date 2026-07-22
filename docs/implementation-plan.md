@@ -288,7 +288,7 @@ Completed on 2026-07-22 at merge commit `7f03970`. A clean clone installed the f
 
 ## 2.2 Declare the exact distributed and repository-only boundaries
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 

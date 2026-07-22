@@ -14,6 +14,7 @@ import type { RegistryItem } from "shadcn/schema";
 
 import {
   buildRegistry,
+  createRegistryFileInventory,
   itemIsGeneratedForEnvironment,
   loadAuthoredRegistry,
   validateAuthoredRegistry,
@@ -135,6 +136,75 @@ describe("authored registry validation", () => {
       "invalid explicit target",
     );
   });
+
+  it.each([
+    "registry/base/hanging-gifts-contact/preview.tsx",
+    "registry/base/hanging-gifts-contact/hanging-gifts-contact.example.tsx",
+    "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.schema.test.ts",
+    "registry/base/hanging-gifts-contact/asset-provenance.md",
+    "registry/base/hanging-gifts-contact/changelog.md",
+  ])("rejects declared repository-only file %s", (path) => {
+    const invalid = JSON.parse(
+      readFileSync(join(projectRoot, "registry.json"), "utf8"),
+    );
+    invalid.items[0].files[0].path = path;
+
+    expect(() => validateAuthoredRegistry(invalid, projectRoot)).toThrow(
+      "must not distribute repository-only file",
+    );
+  });
+
+  it("derives the exact distributed inventory from the Registry Record", () => {
+    expect(createRegistryFileInventory(registry.items)).toEqual([
+      {
+        itemName: "hanging-gifts-contact",
+        files: [
+          {
+            path: "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.tsx",
+            target:
+              "@components/formmuse/hanging-gifts-contact/hanging-gifts-contact-form.tsx",
+            type: "registry:component",
+          },
+          {
+            path: "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.schema.ts",
+            target:
+              "@components/formmuse/hanging-gifts-contact/hanging-gifts-contact-form.schema.ts",
+            type: "registry:lib",
+          },
+          {
+            path: "registry/base/hanging-gifts-contact/animated-icons.tsx",
+            target:
+              "@components/formmuse/hanging-gifts-contact/animated-icons.tsx",
+            type: "registry:component",
+          },
+          {
+            path: "registry/base/hanging-gifts-contact/hanging-gifts.tsx",
+            target:
+              "@components/formmuse/hanging-gifts-contact/hanging-gifts.tsx",
+            type: "registry:component",
+          },
+          {
+            path: "registry/base/hanging-gifts-contact/template-navbar.tsx",
+            target:
+              "@components/formmuse/hanging-gifts-contact/template-navbar.tsx",
+            type: "registry:component",
+          },
+          {
+            path: "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.module.css",
+            target:
+              "@components/formmuse/hanging-gifts-contact/hanging-gifts-contact-form.module.css",
+            type: "registry:file",
+          },
+          {
+            path: "public/formmuse/hanging-gifts-contact/hanging-gifts-hero.svg",
+            target:
+              "~/public/formmuse/hanging-gifts-contact/hanging-gifts-hero.svg",
+            type: "registry:file",
+          },
+        ],
+      },
+    ]);
+  });
 });
 
 describe("publication lifecycle selection", () => {
@@ -181,6 +251,9 @@ describe("deterministic shadcn generation", () => {
     });
 
     expect(result.itemNames).toEqual(["hanging-gifts-contact"]);
+    expect(result.fileInventory).toEqual(
+      createRegistryFileInventory(registry.items),
+    );
     const item = JSON.parse(
       readFileSync(join(outputDirectory, "hanging-gifts-contact.json"), "utf8"),
     );

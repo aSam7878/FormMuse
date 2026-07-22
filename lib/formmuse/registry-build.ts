@@ -107,7 +107,19 @@ export type RegistryBuildOptions = Readonly<{
 export type RegistryBuildResult = Readonly<{
   outputDirectory: string;
   itemNames: string[];
+  fileInventory: RegistryItemFileInventory[];
   outputSha256: string;
+}>;
+
+export type RegistryItemFileInventory = Readonly<{
+  itemName: string;
+  files: ReadonlyArray<
+    Readonly<{
+      path: string;
+      target: string;
+      type: string;
+    }>
+  >;
 }>;
 
 export class RegistryBuildError extends Error {
@@ -306,6 +318,9 @@ function validateItemFiles(
   for (const file of files) {
     assertExactKeys(file, FILE_KEYS, `${slug} file`);
     assertSafeRelativePath(file.path, `${slug} file path`);
+    if (REPOSITORY_ONLY_PATTERNS.some((pattern) => pattern.test(file.path))) {
+      fail(`${slug} must not distribute repository-only file: ${file.path}`);
+    }
     if (typeof file.target !== "string") {
       fail(`${slug} files must have explicit targets.`);
     }
@@ -440,6 +455,25 @@ function validateItemFiles(
   }
 }
 
+export function createRegistryFileInventory(
+  items: readonly RegistryItem[],
+): RegistryItemFileInventory[] {
+  return items.map((item) => ({
+    itemName: item.name,
+    files: (item.files ?? []).map((file) => {
+      if (typeof file.target !== "string") {
+        fail(`${item.name} files must have explicit targets.`);
+      }
+
+      return {
+        path: file.path,
+        target: file.target,
+        type: file.type,
+      };
+    }),
+  }));
+}
+
 function validateItemBoundary(item: RegistryItem) {
   return validateFormMuseRegistryBoundary({
     categories: item.categories,
@@ -493,6 +527,7 @@ export function validateAuthoredRegistry(
     }
     names.add(item.name);
     const boundary = validateItemBoundary(item);
+    validateItemFiles(projectRoot, item, packageJson);
     for (const example of boundary.meta.formmuse.examples) {
       const examplePath = assertInsideProject(projectRoot, example.path);
       if (
@@ -504,7 +539,6 @@ export function validateAuthoredRegistry(
         fail(`${item.name} example references must be repository-only files.`);
       }
     }
-    validateItemFiles(projectRoot, item, packageJson);
     return item;
   });
 
@@ -755,6 +789,7 @@ export function buildRegistry(
     return {
       outputDirectory,
       itemNames: items.map((item) => item.name),
+      fileInventory: createRegistryFileInventory(items),
       outputSha256: sha256(
         [...first]
           .map(([path, bytes]) => `${path}\0${sha256(bytes)}`)
