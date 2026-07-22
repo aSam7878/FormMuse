@@ -63,10 +63,18 @@ const FORBIDDEN_DISTRIBUTED_MARKERS = [
 const REPOSITORY_ONLY_PATTERNS = [
   /(?:^|\/)preview\.tsx$/,
   /\.example\.tsx$/,
-  /\.test\.(?:ts|tsx)$/,
-  /(?:^|\/)asset-provenance\.md$/,
-  /(?:^|\/)changelog\.md$/i,
+  /\.(?:test|spec)\.(?:ts|tsx)$/,
+  /\.mdx?$/i,
 ];
+const FORBIDDEN_DISTRIBUTED_PACKAGES = new Set(["next"]);
+const FORBIDDEN_DISTRIBUTED_RUNTIME_PATTERNS = [
+  /\b(?:fetch|XMLHttpRequest|WebSocket|EventSource|sendBeacon)\b/,
+  /\b(?:src|href|action)\s*=\s*(?:["']|\{\s*["'`])https?:\/\//i,
+  /\bdangerouslySetInnerHTML\b/,
+  /\bcreateElement\s*\(\s*["'`]style["'`]/,
+];
+const FORBIDDEN_CSS_MODULE_GLOBAL_SELECTOR =
+  /(?:^|[},]\s*)(?::global|html\b|body\b|:root\b)/m;
 const SECRET_PATTERNS = [
   /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
   /(?:api[_-]?key|secret|token|password)\s*[:=]\s*["'][^"']{8,}["']/i,
@@ -247,6 +255,12 @@ function assertNoForbiddenContent(content: string, label: string): void {
       fail(`${label} contains secret-shaped data.`);
     }
   }
+
+  for (const pattern of FORBIDDEN_DISTRIBUTED_RUNTIME_PATTERNS) {
+    if (pattern.test(content)) {
+      fail(`${label} contains a forbidden remote or runtime boundary.`);
+    }
+  }
 }
 
 function listFiles(root: string, current = root): string[] {
@@ -361,6 +375,13 @@ function validateItemFiles(
     const content = readFileSync(absolutePath, "utf8");
     assertNoForbiddenContent(content, file.path);
 
+    if (
+      file.path.endsWith(".module.css") &&
+      FORBIDDEN_CSS_MODULE_GLOBAL_SELECTOR.test(content)
+    ) {
+      fail(`${file.path} contains a global CSS Module selector.`);
+    }
+
     if (file.path.endsWith(".svg")) {
       validateSvgTransport(file.path, content);
     } else if (content.includes(";base64,")) {
@@ -395,6 +416,9 @@ function validateItemFiles(
         fail(`${file.path} imports an unsupported adopter or Node module.`);
       } else {
         const packageName = packageNameFromSpecifier(specifier);
+        if (FORBIDDEN_DISTRIBUTED_PACKAGES.has(packageName)) {
+          fail(`${file.path} imports a forbidden framework package.`);
+        }
         if (packageName !== "react") {
           externalImports.add(packageName);
         }

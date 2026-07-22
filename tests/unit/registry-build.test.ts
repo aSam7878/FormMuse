@@ -30,6 +30,24 @@ function temporaryDirectory(label: string): string {
   return path;
 }
 
+function distributedFixture(label: string): string {
+  const fixtureRoot = temporaryDirectory(label);
+  mkdirSync(join(fixtureRoot, "registry/base"), { recursive: true });
+  mkdirSync(join(fixtureRoot, "public"), { recursive: true });
+  cpSync(
+    join(projectRoot, "registry/base/hanging-gifts-contact"),
+    join(fixtureRoot, "registry/base/hanging-gifts-contact"),
+    { recursive: true },
+  );
+  cpSync(
+    join(projectRoot, "public/formmuse"),
+    join(fixtureRoot, "public/formmuse"),
+    { recursive: true },
+  );
+  cpSync(join(projectRoot, "package.json"), join(fixtureRoot, "package.json"));
+  return fixtureRoot;
+}
+
 function itemWithLifecycle(
   status: "draft" | "published" | "deprecated",
   installable = false,
@@ -94,23 +112,7 @@ describe("authored registry validation", () => {
   });
 
   it("rejects direct Base UI imports even when the package is declared", () => {
-    const fixtureRoot = temporaryDirectory("direct-base-ui-import");
-    mkdirSync(join(fixtureRoot, "registry/base"), { recursive: true });
-    mkdirSync(join(fixtureRoot, "public"), { recursive: true });
-    cpSync(
-      join(projectRoot, "registry/base/hanging-gifts-contact"),
-      join(fixtureRoot, "registry/base/hanging-gifts-contact"),
-      { recursive: true },
-    );
-    cpSync(
-      join(projectRoot, "public/formmuse"),
-      join(fixtureRoot, "public/formmuse"),
-      { recursive: true },
-    );
-    cpSync(
-      join(projectRoot, "package.json"),
-      join(fixtureRoot, "package.json"),
-    );
+    const fixtureRoot = distributedFixture("direct-base-ui-import");
 
     const invalid = JSON.parse(
       readFileSync(join(projectRoot, "registry.json"), "utf8"),
@@ -122,6 +124,54 @@ describe("authored registry validation", () => {
 
     expect(() => validateAuthoredRegistry(invalid, fixtureRoot)).toThrow(
       "must import adopter-local shadcn controls instead of @base-ui/react",
+    );
+  });
+
+  it("rejects Next.js imports from distributed source", () => {
+    const fixtureRoot = distributedFixture("next-import");
+    const invalid = JSON.parse(
+      readFileSync(join(projectRoot, "registry.json"), "utf8"),
+    );
+    writeFileSync(
+      join(fixtureRoot, invalid.items[0].files[0].path),
+      'import Image from "next/image";\nexport { Image };\n',
+    );
+
+    expect(() => validateAuthoredRegistry(invalid, fixtureRoot)).toThrow(
+      "imports a forbidden framework package",
+    );
+  });
+
+  it("rejects remote runtime references from distributed source", () => {
+    const fixtureRoot = distributedFixture("remote-runtime-reference");
+    const invalid = JSON.parse(
+      readFileSync(join(projectRoot, "registry.json"), "utf8"),
+    );
+    writeFileSync(
+      join(fixtureRoot, invalid.items[0].files[0].path),
+      'export function RemoteAsset() { return <img alt="" src="https://example.com/asset.png" />; }\n',
+    );
+
+    expect(() => validateAuthoredRegistry(invalid, fixtureRoot)).toThrow(
+      "contains a forbidden remote or runtime boundary",
+    );
+  });
+
+  it("rejects global selectors from a distributed CSS Module", () => {
+    const fixtureRoot = distributedFixture("global-css-module");
+    const invalid = JSON.parse(
+      readFileSync(join(projectRoot, "registry.json"), "utf8"),
+    );
+    const stylesheet = invalid.items[0].files.find((file: { path: string }) =>
+      file.path.endsWith(".module.css"),
+    );
+    writeFileSync(
+      join(fixtureRoot, stylesheet.path),
+      ".root { color: black; }\nbody { margin: 0; }\n",
+    );
+
+    expect(() => validateAuthoredRegistry(invalid, fixtureRoot)).toThrow(
+      "contains a global CSS Module selector",
     );
   });
 
@@ -142,6 +192,7 @@ describe("authored registry validation", () => {
     "registry/base/hanging-gifts-contact/hanging-gifts-contact.example.tsx",
     "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.schema.test.ts",
     "registry/base/hanging-gifts-contact/asset-provenance.md",
+    "registry/base/hanging-gifts-contact/portability-audit.md",
     "registry/base/hanging-gifts-contact/changelog.md",
   ])("rejects declared repository-only file %s", (path) => {
     const invalid = JSON.parse(
