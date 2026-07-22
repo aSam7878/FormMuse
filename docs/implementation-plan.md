@@ -275,7 +275,7 @@ Completed on 2026-07-22 at merge commit `7f03970`. A clean clone installed the f
 
 ## 2.1 Formalize C01 and its draft identity
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
