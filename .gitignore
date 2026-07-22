@@ -7,6 +7,8 @@
 
 # generated registry and documentation output
 /public/r/
+/public/formmuse-search.json
+/public/formmuse-deployment.json
 /.source/
 /coverage/
 /playwright-report/
