@@ -5,7 +5,7 @@ allowBuilds:
 autoInstallPeers: true
 engineStrict: true
 minimumReleaseAgeExclude:
-  - '@testing-library/jest-dom@7.0.0'
+  - "@testing-library/jest-dom@7.0.0"
 overrides:
   postcss: 8.5.20
   tmp: 0.2.7
