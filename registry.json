@@ -1,0 +1,132 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "formmuse",
+  "homepage": "https://github.com/aSam7878/FormMuse",
+  "items": [
+    {
+      "name": "hanging-gifts-contact",
+      "type": "registry:block",
+      "title": "Hanging Gifts Contact Form",
+      "description": "A cinematic contact page with animated hanging gifts, a complete inquiry form, and accessible submission states.",
+      "dependencies": [
+        "@fontsource-variable/mulish@5.3.0",
+        "@gsap/react@2.1.2",
+        "@hookform/resolvers@5.4.0",
+        "gsap@3.15.0",
+        "lucide-react@1.25.0",
+        "motion@12.42.2",
+        "react-hook-form@7.82.0",
+        "zod@4.4.3"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "label",
+        "select",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.tsx",
+          "type": "registry:component",
+          "target": "@components/formmuse/hanging-gifts-contact/hanging-gifts-contact-form.tsx"
+        },
+        {
+          "path": "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.schema.ts",
+          "type": "registry:lib",
+          "target": "@components/formmuse/hanging-gifts-contact/hanging-gifts-contact-form.schema.ts"
+        },
+        {
+          "path": "registry/base/hanging-gifts-contact/animated-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/formmuse/hanging-gifts-contact/animated-icons.tsx"
+        },
+        {
+          "path": "registry/base/hanging-gifts-contact/hanging-gifts.tsx",
+          "type": "registry:component",
+          "target": "@components/formmuse/hanging-gifts-contact/hanging-gifts.tsx"
+        },
+        {
+          "path": "registry/base/hanging-gifts-contact/template-navbar.tsx",
+          "type": "registry:component",
+          "target": "@components/formmuse/hanging-gifts-contact/template-navbar.tsx"
+        },
+        {
+          "path": "registry/base/hanging-gifts-contact/hanging-gifts-contact-form.module.css",
+          "type": "registry:file",
+          "target": "@components/formmuse/hanging-gifts-contact/hanging-gifts-contact-form.module.css"
+        },
+        {
+          "path": "public/formmuse/hanging-gifts-contact/hanging-gifts-hero.svg",
+          "type": "registry:file",
+          "target": "~/public/formmuse/hanging-gifts-contact/hanging-gifts-hero.svg"
+        }
+      ],
+      "categories": ["contact"],
+      "meta": {
+        "formmuse": {
+          "layout": "page",
+          "animation": ["css", "motion", "gsap"],
+          "appearance": "light",
+          "fields": [
+            "first-name",
+            "last-name",
+            "requirement",
+            "email",
+            "message"
+          ],
+          "tags": ["cinematic", "gift-inspired", "single-step"],
+          "featured": false,
+          "status": "draft",
+          "version": "0.0.0",
+          "updated": "2026-07-22",
+          "props": [
+            {
+              "name": "onSubmit",
+              "type": "(values: HangingGiftsContactFormValues) => Promise<void>",
+              "required": true,
+              "description": "Receives validated values and connects submission to an adopter-owned backend."
+            },
+            {
+              "name": "defaultValues",
+              "type": "Partial<HangingGiftsContactFormValues>",
+              "required": false,
+              "description": "Sets the initial field values when the template mounts."
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Extends the outermost template root for adopter-controlled placement and sizing."
+            },
+            {
+              "name": "assetBaseUrl",
+              "type": "string",
+              "required": false,
+              "description": "Overrides the base URL or path containing the packaged template asset.",
+              "default": "/formmuse/hanging-gifts-contact"
+            }
+          ],
+          "examples": [
+            {
+              "title": "Basic usage",
+              "description": "Connects validated values to an asynchronous adopter-owned submit handler.",
+              "path": "registry/base/hanging-gifts-contact/hanging-gifts-contact.example.tsx"
+            }
+          ],
+          "usageNotes": [
+            "Replace the example submit handler with an adopter-owned asynchronous backend integration.",
+            "defaultValues are read only when the template first mounts; remount the component to apply a new initial set.",
+            "Use className only for the outer root; edit the distributed source for internal visual changes.",
+            "Keep the packaged SVG asset under the default public directory or pass assetBaseUrl when deploying it elsewhere."
+          ],
+          "accessibilityNotes": [
+            "Preserve the programmatic labels, descriptions, error associations, and focus movement when editing fields or submission states.",
+            "Keep reduced-motion behavior and decorative artwork hidden from assistive technologies.",
+            "Maintain keyboard operation and the existing interaction-target sizes when modifying controls."
+          ]
+        }
+      }
+    }
+  ]
+}

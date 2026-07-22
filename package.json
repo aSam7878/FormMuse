@@ -21,7 +21,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:browser": "playwright test",
-    "registry:build": "shadcn build",
+    "registry:build": "node --import tsx scripts/build-registry.ts",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {

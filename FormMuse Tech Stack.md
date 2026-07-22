@@ -151,6 +151,7 @@ The repository needs all packages required to build the site and published previ
 - CSS-only templates do not receive Motion or GSAP.
 - Motion templates do not receive GSAP.
 - Asset-free templates do not receive raster assets or `assetBaseUrl`.
+- If the pinned shadcn builder cannot preserve an approved raster's binary bytes, only a standalone template-owned SVG `registry:file` may carry that exact raster as Base64. It remains a local public asset, must pass deterministic decode/hash, size, CSP, Next.js, Vite, browser-engine, locality, and zero-external-request checks, and never authorizes Base64 in TypeScript, TSX, JavaScript, JSX, CSS, or HTML.
 - Tests, previews, examples, changelogs, Fumadocs, Next.js, and FormMuse website tooling are never distributed.
 
 Use relative imports between files inside `components/formmuse/<template-slug>/`. Use adopter-local shadcn aliases only for shared controls and utilities.
