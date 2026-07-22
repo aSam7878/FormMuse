@@ -372,7 +372,7 @@ Completed on 2026-07-22 at merge commit `7f03970`. A clean clone installed the f
 
 ## 2.8 Prove raw source portability before presentation work
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 

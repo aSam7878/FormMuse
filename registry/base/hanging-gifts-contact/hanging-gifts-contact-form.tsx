@@ -3,7 +3,7 @@
 import "@fontsource-variable/mulish";
 
 import { useGSAP } from "@gsap/react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Camera, Check, Phone, Share2 } from "lucide-react";
@@ -126,7 +126,7 @@ export function HangingGiftsContactForm({
   const normalizedAssetBaseUrl = assetBaseUrl.replace(/\/+$/, "");
 
   const form = useForm<HangingGiftsContactFormValues>({
-    resolver: zodResolver(hangingGiftsContactFormSchema),
+    resolver: standardSchemaResolver(hangingGiftsContactFormSchema),
     defaultValues: initialValues,
     mode: "onSubmit",
     reValidateMode: "onChange",
