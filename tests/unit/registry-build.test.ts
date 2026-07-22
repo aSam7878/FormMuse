@@ -1,4 +1,11 @@
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -82,6 +89,38 @@ describe("authored registry validation", () => {
 
     expect(() => validateAuthoredRegistry(invalid, projectRoot)).toThrow(
       "dependencies do not match distributed imports",
+    );
+  });
+
+  it("rejects direct Base UI imports even when the package is declared", () => {
+    const fixtureRoot = temporaryDirectory("direct-base-ui-import");
+    mkdirSync(join(fixtureRoot, "registry/base"), { recursive: true });
+    mkdirSync(join(fixtureRoot, "public"), { recursive: true });
+    cpSync(
+      join(projectRoot, "registry/base/hanging-gifts-contact"),
+      join(fixtureRoot, "registry/base/hanging-gifts-contact"),
+      { recursive: true },
+    );
+    cpSync(
+      join(projectRoot, "public/formmuse"),
+      join(fixtureRoot, "public/formmuse"),
+      { recursive: true },
+    );
+    cpSync(
+      join(projectRoot, "package.json"),
+      join(fixtureRoot, "package.json"),
+    );
+
+    const invalid = JSON.parse(
+      readFileSync(join(projectRoot, "registry.json"), "utf8"),
+    );
+    writeFileSync(
+      join(fixtureRoot, invalid.items[0].files[0].path),
+      'import { Button } from "@base-ui/react/button";\nexport { Button };\n',
+    );
+
+    expect(() => validateAuthoredRegistry(invalid, fixtureRoot)).toThrow(
+      "must import adopter-local shadcn controls instead of @base-ui/react",
     );
   });
 

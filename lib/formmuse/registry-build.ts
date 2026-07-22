@@ -369,6 +369,13 @@ function validateItemFiles(
         controlImports.add(specifier.split("/").at(-1) ?? "");
       } else if (specifier === "@/lib/utils") {
         continue;
+      } else if (
+        specifier === "@base-ui/react" ||
+        specifier.startsWith("@base-ui/react/")
+      ) {
+        fail(
+          `${file.path} must import adopter-local shadcn controls instead of @base-ui/react.`,
+        );
       } else if (specifier.startsWith("@/") || specifier.startsWith("node:")) {
         fail(`${file.path} imports an unsupported adopter or Node module.`);
       } else {
