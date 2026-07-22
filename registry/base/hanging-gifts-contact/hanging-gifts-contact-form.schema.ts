@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const hangingGiftsContactRequirementValues = [
+  "corporate",
+  "events",
+  "custom",
+] as const;
+
 export const hangingGiftsContactFormSchema = z.object({
   firstName: z
     .string()
@@ -10,8 +16,13 @@ export const hangingGiftsContactFormSchema = z.object({
   requirement: z
     .string()
     .trim()
-    .min(1, "Choose what you would like to discuss.")
-    .max(80, "Choose one of the available options."),
+    .refine(
+      (value) =>
+        hangingGiftsContactRequirementValues.includes(
+          value as (typeof hangingGiftsContactRequirementValues)[number],
+        ),
+      "Choose what you would like to discuss.",
+    ),
   email: z
     .string()
     .trim()

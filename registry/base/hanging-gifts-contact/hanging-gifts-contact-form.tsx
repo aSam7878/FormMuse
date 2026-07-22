@@ -40,6 +40,7 @@ import styles from "./hanging-gifts-contact-form.module.css";
 import {
   hangingGiftsContactFormDefaultValues,
   hangingGiftsContactFormSchema,
+  hangingGiftsContactRequirementValues,
   type HangingGiftsContactFormValues,
 } from "./hanging-gifts-contact-form.schema";
 import { HangingGifts } from "./hanging-gifts";
@@ -57,9 +58,18 @@ export interface HangingGiftsContactFormProps {
 }
 
 const requirementOptions = [
-  { value: "corporate", label: "Corporate & Business Gifting" },
-  { value: "events", label: "Events & Special Occasions" },
-  { value: "custom", label: "Custom Requirements" },
+  {
+    value: hangingGiftsContactRequirementValues[0],
+    label: "Corporate & Business Gifting",
+  },
+  {
+    value: hangingGiftsContactRequirementValues[1],
+    label: "Events & Special Occasions",
+  },
+  {
+    value: hangingGiftsContactRequirementValues[2],
+    label: "Custom Requirements",
+  },
 ] as const;
 
 const contactMethods = [
@@ -122,6 +132,7 @@ export function HangingGiftsContactForm({
   const formRef = useRef<HTMLFormElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const failureHeadingRef = useRef<HTMLHeadingElement>(null);
+  const submissionPendingRef = useRef(false);
   const phoneIconRef = useRef<AnimatedIconHandle>(null);
   const mailIconRef = useRef<AnimatedIconHandle>(null);
   const meetingIconRef = useRef<AnimatedIconHandle>(null);
@@ -263,22 +274,29 @@ export function HangingGiftsContactForm({
   };
 
   const handleValidSubmit = async (values: HangingGiftsContactFormValues) => {
-    if (isSubmitting) return;
+    if (submissionPendingRef.current) return;
 
+    submissionPendingRef.current = true;
     setSubmissionState("submitting");
 
     try {
       await onSubmit(values);
       setSubmissionState("success");
     } catch {
+      submissionPendingRef.current = false;
       setSubmissionState("failure");
     }
   };
 
   const handleSendAnother = () => {
+    submissionPendingRef.current = false;
     form.reset(initialValues);
     setSubmissionState("idle");
     requestAnimationFrame(() => form.setFocus("firstName"));
+  };
+
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    void form.handleSubmit(handleValidSubmit)(event);
   };
 
   const fieldIds = {
@@ -450,7 +468,7 @@ export function HangingGiftsContactForm({
                         className={styles.form}
                         aria-busy={isSubmitting}
                         aria-describedby={formDescriptionId}
-                        onSubmit={form.handleSubmit(handleValidSubmit)}
+                        onSubmit={handleFormSubmit}
                       >
                         <p
                           id={formDescriptionId}

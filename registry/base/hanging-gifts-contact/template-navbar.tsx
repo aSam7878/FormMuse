@@ -2,7 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,8 @@ import styles from "./hanging-gifts-contact-form.module.css";
 const navLabels = ["Home", "About Us", "Our Products", "Contact Us"] as const;
 
 export function TemplateNavbar() {
+  const reactId = useId();
+  const mobileNavigationId = `hanging-gifts-mobile-navigation-${reactId.replaceAll(":", "")}`;
   const rootRef = useRef<HTMLElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const topBarRef = useRef<HTMLSpanElement>(null);
@@ -138,7 +140,7 @@ export function TemplateNavbar() {
             className={styles.menuButton}
             aria-label={menuOpen ? "Close navigation" : "Open navigation"}
             aria-expanded={menuOpen}
-            aria-controls="hanging-gifts-mobile-navigation"
+            aria-controls={mobileNavigationId}
             onClick={toggleMenu}
           >
             <span
@@ -159,7 +161,7 @@ export function TemplateNavbar() {
 
       <div
         ref={overlayRef}
-        id="hanging-gifts-mobile-navigation"
+        id={mobileNavigationId}
         className={`${styles.mobileNavigationOverlay} ${menuOpen ? styles.mobileNavigationOpen : ""}`}
         aria-hidden={!menuOpen}
       >
