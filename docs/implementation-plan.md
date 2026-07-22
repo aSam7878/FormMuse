@@ -32,23 +32,23 @@ The project-wide clarification rule in `AGENTS.md` applies throughout this plan:
 
 ## Current verified baseline — 2026-07-21
 
-The public checkpoint is commit `f41518f` on `codex/foundation-hanging-gifts`, represented by draft pull request #8.
+The current public checkpoint is merge commit `7f03970` on `main`, represented by pull request #27 and the completed Stage 1 exit gate.
 
 | Area                            | Status      | Verified reality                                                                                                                  | Important remaining work                                                                                                                                                                     |
 | ------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Architecture and vocabulary     | Complete    | 73 ADRs, `CONTEXT.md`, `reference.md`, the tech stack, launch rules, and agent instructions exist                                 | Maintain consistency as implementation reveals evidence                                                                                                                                      |
-| Public repository checkpoint    | Complete    | Foundation and Hanging Gifts prototype are committed and pushed; private source references remain excluded                        | Review and merge the checkpoint before parallel feature work                                                                                                                                 |
-| Local Build Toolchain           | Complete    | Fresh workspace shells resolve Node.js 24.18.0 and pnpm 11.15.1                                                                   | Pin the same versions in CI and preview hosting                                                                                                                                              |
-| Static Next.js shell            | Partial     | One App Router application, static export, minimal root layout, and separate site/preview layouts exist                           | Build-origin configuration, real site shell, routes, metadata, headers, search, and deployment outputs                                                                                       |
+| Public repository checkpoint    | Complete    | Stage 1 is merged on `main`; private source references remain excluded                                                            | Continue with the Stage 2 Hanging Gifts distributed vertical slice                                                                                                                           |
+| Local Build Toolchain           | Complete    | Local and GitHub CI resolve Node.js 24.18.0 and pnpm 11.15.1 with frozen installation                                             | Preserve the exact pins in preview hosting and reviewed dependency updates                                                                                                                   |
+| Static Next.js shell            | Partial     | One App Router application, validated Build Origin, static export, separate site/preview layouts, and deterministic static data exist | Build the real site shell, routes, metadata, headers, and search interface                                                                                                                   |
 | shadcn Base UI controls         | Partial     | Initial local Input, Textarea, Select, Field/Label, Button, and Separator exist                                                   | Registry installation validation, dependency ownership, accessibility and compatibility coverage                                                                                             |
-| Registry system                 | Not started | The package script exists                                                                                                         | `registry.json`, strict schemas, validation, generation, generated-file checks, installation fixtures, and lifecycle filtering                                                               |
-| Headless guide pipeline         | Partial     | Fumadocs packages, source configuration, and one placeholder guide exist                                                          | Eight complete guides, FormMuse-owned layouts, static search data, and preview isolation from documentation code                                                                             |
+| Registry system                 | Partial     | Strict schemas, one draft Hanging Gifts record, deterministic generation, lifecycle filtering, and generated-file checks exist    | Complete installation fixtures, Template Pages, compatibility evidence, and publication gates                                                                                               |
+| Headless guide pipeline         | Complete    | Eight canonical MDX guides compile through headless Fumadocs data with preview isolation and deterministic search data             | Build the FormMuse-owned visual documentation experience in Stage 7                                                                                                                          |
 | Hanging Gifts composition       | Partial     | Approved page-scale visuals, local hero asset, navbar behavior, gifts, form states, reduced motion, and responsive behavior exist | Formal C01 brief, exact distributed boundary, registry block, examples, changelog, dependency/font justification, compatibility fixtures, and complete publication evidence                  |
 | Hanging Gifts automated checks  | Partial     | TypeScript and ESLint pass; 5 Vitest assertions pass; 39 Playwright project cases pass across Chromium, Firefox, and WebKit       | Testing Library, compatibility fixtures, visual baselines, storage/navigation/security checks, Lighthouse, Linkinator, branded-browser/manual-device evidence, and complete gate aggregation |
 | Template Page                   | Not started | No `/templates/[slug]` route exists                                                                                               | Shared generated page, Preview/Code, CLI/Manual, Props, examples, changelog, Agent Prompt                                                                                                    |
 | Full preview system             | Partial     | A direct static preview route and deterministic submission adapter exist                                                          | Parent iframe chrome, viewport controls, Reset/Replay protocol, sandbox, CSP, Permissions Policy, security evidence, and Catalog Teaser                                                      |
 | Website and public guides       | Not started | Current homepage is a temporary development entry point                                                                           | Complete information architecture, catalog, navigation, search, guides, policies, SEO, and 404                                                                                               |
-| Quality and security CI         | Not started | Tools are pinned locally                                                                                                          | GitHub Actions, compatibility matrix, screenshots, Lighthouse, links, CodeQL/dependency review/secret gates, and publication evidence                                                        |
+| Quality and security CI         | Partial     | Foundation CI, immutable action pins, Dependency Review, CodeQL, tracked-source formatting, and generated-output gates pass        | Add the Stage 4 compatibility matrix, screenshots, Lighthouse, links, browser/manual gates, and publication evidence                                                                        |
 | Preview and production delivery | Not started | Hosting choices are recorded                                                                                                      | Cloudflare preview proof, GitHub production artifact, Hostinger capability audit, safe promotion, rollback, headers, and analytics                                                           |
 | Remaining launch templates      | Not started | Nineteen permanent planning slots exist; example concepts remain non-binding                                                      | Owner-selected briefs and complete per-template publication pipeline                                                                                                                         |
 | V1 release                      | Not started | Release policy is recorded                                                                                                        | Permanent domain, 20 Published Templates, release matrix, verified artifact, tag, deployment, and rollback readiness                                                                         |
@@ -127,7 +127,9 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 # Stage 1 — Complete the shared foundation
 
-**Stage status:** Partial.
+**Stage status:** Complete.
+
+Completed on 2026-07-22 at merge commit `7f03970`. A clean clone installed the frozen dependency graph on Node.js 24.18.0 and pnpm 11.15.1; registry, guides, search data, deployment fixture, formatting, typecheck, lint, 153 unit tests, and static export passed. The exported search and deployment files were byte-identical to their generated inputs and contained no local, secret-shaped, preview-only, or undeclared source references. Pull request #27 then passed the Foundation source gate, Dependency Review, and CodeQL after the owner explicitly enabled Dependency Graph.
 
 **Outcome:** One reproducible static application can validate authored registry data, generate installable registry files, generate guide/search/deployment data, and build through the exact supported toolchain without runtime services.
 
@@ -135,7 +137,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.1 Normalize the canonical repository structure
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -149,7 +151,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.2 Implement validated Build Origin configuration
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -166,7 +168,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.3 Define strict registry and FormMuse metadata schemas
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -182,7 +184,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.4 Author the root registry and deterministic generator
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -197,7 +199,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.5 Prove Base UI and dependency ownership
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -212,7 +214,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.6 Complete the headless guide source pipeline
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -226,7 +228,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.7 Generate static search and deployment data contracts
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -240,7 +242,7 @@ If a later quality gate appears to require a visible change, stop and ask the ow
 
 ## 1.8 Establish the foundation CI and security baseline
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
