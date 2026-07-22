@@ -345,7 +345,7 @@ Completed on 2026-07-22 at merge commit `7f03970`. A clean clone installed the f
 
 ## 2.6 Finish responsive, keyboard, motion, and interaction behavior
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 

@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const previewPath = "/preview/hanging-gifts-contact/";
 
@@ -14,6 +14,24 @@ async function completeForm(page: import("@playwright/test").Page) {
   await page
     .getByLabel("Message")
     .fill("I would like to discuss a thoughtful new project.");
+}
+
+async function expectPrimaryTarget(locator: Locator) {
+  await locator.scrollIntoViewIfNeeded();
+  const box = await locator.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box?.width).toBeGreaterThanOrEqual(44);
+  expect(box?.height).toBeGreaterThanOrEqual(44);
+
+  const isUnobscured = await locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const topmost = document.elementFromPoint(
+      rect.left + rect.width / 2,
+      rect.top + rect.height / 2,
+    );
+    return topmost === element || element.contains(topmost);
+  });
+  expect(isUnobscured).toBe(true);
 }
 
 test("validates on submit and focuses the first invalid field", async ({
@@ -100,8 +118,11 @@ test("preserves entered values after failure and retries only explicitly", async
 
 for (const frame of [
   { name: "narrow", width: 320, height: 820 },
-  { name: "intermediate", width: 768, height: 900 },
-  { name: "wide", width: 1280, height: 900 },
+  { name: "below tablet", width: 767, height: 900 },
+  { name: "tablet", width: 768, height: 900 },
+  { name: "below wide", width: 1023, height: 900 },
+  { name: "wide boundary", width: 1024, height: 900 },
+  { name: "intended wide", width: 1440, height: 900 },
 ]) {
   test(`keeps the ${frame.name} responsive frame usable`, async ({ page }) => {
     await page.setViewportSize({ width: frame.width, height: frame.height });
@@ -122,6 +143,91 @@ for (const frame of [
     ).toBeVisible();
   });
 }
+
+test("keeps primary targets large, separated, and above decorative artwork", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 820 });
+  await page.goto(previewPath);
+
+  const targets = [
+    page.getByRole("button", { name: "Open navigation" }),
+    page.getByLabel("First name"),
+    page.getByLabel("Last name (optional)"),
+    page.getByRole("combobox", { name: "Requirement" }),
+    page.getByLabel("Email address"),
+    page.getByLabel("Message"),
+    page.getByRole("button", { name: "Submit" }),
+  ];
+
+  for (const target of targets) {
+    await expectPrimaryTarget(target);
+  }
+
+  const formTargetRects = await page
+    .locator('form input, form [role="combobox"], form textarea, form button')
+    .evaluateAll((elements) =>
+      elements.map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          bottom: rect.bottom,
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+        };
+      }),
+    );
+
+  for (let index = 0; index < formTargetRects.length; index += 1) {
+    for (let next = index + 1; next < formTargetRects.length; next += 1) {
+      const first = formTargetRects[index];
+      const second = formTargetRects[next];
+      const overlaps =
+        first.left < second.right &&
+        first.right > second.left &&
+        first.top < second.bottom &&
+        first.bottom > second.top;
+      expect(overlaps).toBe(false);
+    }
+  }
+});
+
+test("supports logical keyboard order and Escape-closing mobile navigation", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(previewPath);
+
+  const menuButton = page.getByRole("button", { name: "Open navigation" });
+  await page.keyboard.press("Tab");
+  await expect(menuButton).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("navigation", { name: "Template mobile navigation" }),
+  ).toBeVisible();
+
+  const firstNavigationLink = page.getByRole("button", { name: "01 Home" });
+  await expect(firstNavigationLink).toBeVisible();
+  await page.keyboard.press("Tab");
+  await expect(firstNavigationLink).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(menuButton).toBeFocused();
+  await expect(
+    page.getByRole("navigation", { name: "Template mobile navigation" }),
+  ).toBeHidden();
+
+  for (const control of [
+    page.getByLabel("First name"),
+    page.getByLabel("Last name (optional)"),
+    page.getByRole("combobox", { name: "Requirement" }),
+    page.getByLabel("Email address"),
+    page.getByLabel("Message"),
+    page.getByRole("button", { name: "Submit" }),
+  ]) {
+    await page.keyboard.press("Tab");
+    await expect(control).toBeFocused();
+  }
+});
 
 test("contains no automatically detectable accessibility violations", async ({
   page,
@@ -150,6 +256,21 @@ test("removes infinite decorative animation in reduced motion", async ({
   );
 
   expect(infiniteAnimations).toBe(0);
+  for (const selector of [
+    ".hgc-hero-overline",
+    ".hgc-hero-title",
+    ".hgc-hero-description",
+    ".hgc-form-section",
+  ]) {
+    const styles = await page.locator(selector).evaluate((element) => {
+      const computed = getComputedStyle(element);
+      return {
+        opacity: computed.opacity,
+        visibility: computed.visibility,
+      };
+    });
+    expect(styles).toEqual({ opacity: "1", visibility: "visible" });
+  }
 });
 
 test("preserves the original transparent-to-solid navbar transition", async ({

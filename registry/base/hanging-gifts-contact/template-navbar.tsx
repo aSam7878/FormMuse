@@ -14,6 +14,7 @@ export function TemplateNavbar() {
   const reactId = useId();
   const mobileNavigationId = `hanging-gifts-mobile-navigation-${reactId.replaceAll(":", "")}`;
   const rootRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const topBarRef = useRef<HTMLSpanElement>(null);
   const middleBarRef = useRef<HTMLSpanElement>(null);
@@ -105,6 +106,22 @@ export function TemplateNavbar() {
     animateMenuRef.current(nextOpen);
   };
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+
+      event.preventDefault();
+      setMenuOpen(false);
+      animateMenuRef.current(false);
+      requestAnimationFrame(() => menuButtonRef.current?.focus());
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
+
   return (
     <header ref={rootRef}>
       <div
@@ -134,6 +151,7 @@ export function TemplateNavbar() {
           </nav>
 
           <Button
+            ref={menuButtonRef}
             type="button"
             variant="ghost"
             size="icon"

@@ -55,6 +55,7 @@ export interface HangingGiftsContactFormProps {
   defaultValues?: Partial<HangingGiftsContactFormValues>;
   className?: string;
   assetBaseUrl?: string;
+  animationReplayKey?: number;
 }
 
 const requirementOptions = [
@@ -103,6 +104,7 @@ export function HangingGiftsContactForm({
   defaultValues,
   className,
   assetBaseUrl = "/formmuse/hanging-gifts-contact",
+  animationReplayKey,
 }: HangingGiftsContactFormProps) {
   const reactId = useId();
   const instanceId = `hanging-gifts-${reactId.replaceAll(":", "")}`;
@@ -142,8 +144,9 @@ export function HangingGiftsContactForm({
   const rotateX = useMotionTemplate`${springY}deg`;
   const rotateY = useMotionTemplate`${springX}deg`;
 
-  // GSAP is justified here by the coordinated, replayable hero sequence and
-  // the one-shot scroll choreography shared by the three supporting cards.
+  // GSAP is justified here by the coordinated, replayable hero sequence.
+  // A changed replay key reverts and recreates only this scoped intro context;
+  // React-owned form state, focus, and element identity remain untouched.
   useGSAP(
     () => {
       const media = gsap.matchMedia();
@@ -153,7 +156,7 @@ export function HangingGiftsContactForm({
         (context) => {
           if (context.conditions?.reduceMotion) {
             gsap.set(
-              ".hgc-hero-overline, .hgc-hero-title, .hgc-hero-description, .hgc-form-section, .hgc-connect-heading, .hgc-contact-card",
+              ".hgc-hero-overline, .hgc-hero-title, .hgc-hero-description, .hgc-form-section",
               { clearProps: "all" },
             );
             return;
@@ -190,6 +193,34 @@ export function HangingGiftsContactForm({
               { y: 0, autoAlpha: 1, duration: 1.2, ease: "power2.out" },
               0.3,
             );
+        },
+        rootRef,
+      );
+
+      return () => media.revert();
+    },
+    {
+      dependencies: [animationReplayKey],
+      revertOnUpdate: true,
+      scope: rootRef,
+    },
+  );
+
+  // Supporting-section reveals stay one-shot and are deliberately outside
+  // the replayable intro context.
+  useGSAP(
+    () => {
+      const media = gsap.matchMedia();
+
+      media.add(
+        { reduceMotion: "(prefers-reduced-motion: reduce)" },
+        (context) => {
+          if (context.conditions?.reduceMotion) {
+            gsap.set(".hgc-connect-heading, .hgc-contact-card", {
+              clearProps: "all",
+            });
+            return;
+          }
 
           gsap.from(".hgc-connect-heading", {
             y: 28,

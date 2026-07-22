@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -9,19 +10,77 @@ import {
   within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
 import { HangingGiftsContactForm } from "./hanging-gifts-contact-form";
 
-vi.mock("@gsap/react", () => ({
-  useGSAP: () => undefined,
+const gsapMocks = vi.hoisted(() => ({
+  from: vi.fn(),
+  fromTo: vi.fn(),
+  killTweensOf: vi.fn(),
+  matchMediaRevert: vi.fn(),
+  set: vi.fn(),
+  timeline: vi.fn(),
+  timelineFromTo: vi.fn(),
+  to: vi.fn(),
 }));
 
-vi.mock("gsap", () => ({
-  default: {
-    registerPlugin: () => undefined,
-  },
-}));
+vi.mock("@gsap/react", async () => {
+  const React = await import("react");
+
+  return {
+    useGSAP: (
+      callback: (...args: unknown[]) => void | (() => void),
+      config?: { dependencies?: unknown[] },
+    ) => {
+      // The mock intentionally mirrors useGSAP's caller-supplied dependency contract.
+      React.useEffect(
+        () => callback(undefined, (value: unknown) => value),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        config?.dependencies ?? [],
+      );
+    },
+  };
+});
+
+vi.mock("gsap", () => {
+  const timeline = {
+    fromTo: (...args: unknown[]) => {
+      gsapMocks.timelineFromTo(...args);
+      return timeline;
+    },
+  };
+  gsapMocks.timeline.mockImplementation(() => timeline);
+
+  return {
+    default: {
+      from: gsapMocks.from,
+      fromTo: gsapMocks.fromTo,
+      killTweensOf: gsapMocks.killTweensOf,
+      matchMedia: () => ({
+        add: (
+          _conditions: unknown,
+          callback: (context: {
+            conditions: { reduceMotion: boolean };
+          }) => void,
+        ) => callback({ conditions: { reduceMotion: false } }),
+        revert: gsapMocks.matchMediaRevert,
+      }),
+      registerPlugin: () => undefined,
+      set: gsapMocks.set,
+      timeline: gsapMocks.timeline,
+      to: gsapMocks.to,
+    },
+  };
+});
 
 vi.mock("gsap/ScrollTrigger", () => ({
   ScrollTrigger: {},
@@ -99,6 +158,10 @@ beforeAll(() => {
 
 afterEach(() => cleanup());
 
+beforeEach(() => {
+  Object.values(gsapMocks).forEach((mock) => mock.mockClear());
+});
+
 describe("HangingGiftsContactForm", () => {
   it("renders synchronized labels, requirement markers, and native limits", () => {
     render(
@@ -120,8 +183,11 @@ describe("HangingGiftsContactForm", () => {
     expect(email).toBeRequired();
     expect(message).toBeRequired();
     expect(firstName).toHaveAttribute("maxlength", "80");
+    expect(firstName).toHaveAttribute("autocomplete", "given-name");
     expect(lastName).toHaveAttribute("maxlength", "80");
+    expect(lastName).toHaveAttribute("autocomplete", "family-name");
     expect(email).toHaveAttribute("maxlength", "254");
+    expect(email).toHaveAttribute("autocomplete", "email");
     expect(message).toHaveAttribute("maxlength", "1200");
     expect(
       screen.getByText("All fields are required unless marked optional."),
@@ -336,6 +402,113 @@ describe("HangingGiftsContactForm", () => {
         "hover:scale-110",
       );
     }
+  });
+
+  it("replays only when the animation key changes without resetting validation or identity", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn(async () => undefined);
+    const { container, rerender } = render(
+      <HangingGiftsContactForm animationReplayKey={0} onSubmit={onSubmit} />,
+    );
+
+    await waitFor(() => expect(gsapMocks.timeline).toHaveBeenCalledTimes(1));
+    expect(gsapMocks.from).toHaveBeenCalledTimes(2);
+
+    const root = container.querySelector("[data-formmuse-template]");
+    const firstName = screen.getByLabelText("First name");
+    await user.click(submitButton());
+    expect(await screen.findByText("Enter your first name.")).toBeVisible();
+    expect(firstName).toHaveFocus();
+
+    rerender(
+      <HangingGiftsContactForm animationReplayKey={0} onSubmit={onSubmit} />,
+    );
+    expect(gsapMocks.timeline).toHaveBeenCalledTimes(1);
+    expect(gsapMocks.from).toHaveBeenCalledTimes(2);
+    expect(container.querySelector("[data-formmuse-template]")).toBe(root);
+    expect(screen.getByLabelText("First name")).toBe(firstName);
+    expect(screen.getByText("Enter your first name.")).toBeVisible();
+    expect(firstName).toHaveFocus();
+
+    rerender(
+      <HangingGiftsContactForm animationReplayKey={1} onSubmit={onSubmit} />,
+    );
+    await waitFor(() => expect(gsapMocks.timeline).toHaveBeenCalledTimes(2));
+    expect(gsapMocks.from).toHaveBeenCalledTimes(2);
+    expect(container.querySelector("[data-formmuse-template]")).toBe(root);
+    expect(screen.getByLabelText("First name")).toBe(firstName);
+    expect(screen.getByText("Enter your first name.")).toBeVisible();
+    expect(firstName).toHaveFocus();
+  });
+
+  it("preserves pending, failure, success, values, and focus across replay keys", async () => {
+    const user = userEvent.setup();
+    const pending = deferredPromise();
+    const onSubmit = vi
+      .fn<() => Promise<void>>()
+      .mockImplementationOnce(() => pending.promise)
+      .mockResolvedValueOnce(undefined);
+    const { container, rerender } = render(
+      <HangingGiftsContactForm
+        animationReplayKey={0}
+        defaultValues={completeDefaults}
+        onSubmit={onSubmit}
+      />,
+    );
+    const root = container.querySelector("[data-formmuse-template]");
+    const firstName = screen.getByLabelText("First name");
+    const form = submitButton().closest("form") as HTMLFormElement;
+
+    firstName.focus();
+    fireEvent.submit(form);
+    await waitFor(() => expect(form).toHaveAttribute("aria-busy", "true"));
+    rerender(
+      <HangingGiftsContactForm
+        animationReplayKey={1}
+        defaultValues={completeDefaults}
+        onSubmit={onSubmit}
+      />,
+    );
+    expect(container.querySelector("[data-formmuse-template]")).toBe(root);
+    expect(screen.getByLabelText("First name")).toBe(firstName);
+    expect(firstName).toHaveValue("Avery");
+    expect(form).toHaveAttribute("aria-busy", "true");
+    expect(firstName).toHaveFocus();
+
+    await act(async () => pending.reject(new Error("Preview failure")));
+    const failureHeading = await screen.findByRole("heading", {
+      name: "We could not send your message",
+    });
+    expect(failureHeading).toHaveFocus();
+    rerender(
+      <HangingGiftsContactForm
+        animationReplayKey={2}
+        defaultValues={completeDefaults}
+        onSubmit={onSubmit}
+      />,
+    );
+    expect(container.querySelector("[data-formmuse-template]")).toBe(root);
+    expect(screen.getByLabelText("First name")).toBe(firstName);
+    expect(firstName).toHaveValue("Avery");
+    expect(failureHeading).toHaveFocus();
+
+    await user.click(screen.getByRole("button", { name: "Try again" }));
+    const successHeading = await screen.findByRole("heading", {
+      name: "Message sent",
+    });
+    expect(successHeading).toHaveFocus();
+    rerender(
+      <HangingGiftsContactForm
+        animationReplayKey={3}
+        defaultValues={completeDefaults}
+        onSubmit={onSubmit}
+      />,
+    );
+    expect(container.querySelector("[data-formmuse-template]")).toBe(root);
+    expect(screen.getByRole("heading", { name: "Message sent" })).toBe(
+      successHeading,
+    );
+    expect(successHeading).toHaveFocus();
   });
 
   it("uses unique field and mobile-navigation IDs across two instances", () => {
