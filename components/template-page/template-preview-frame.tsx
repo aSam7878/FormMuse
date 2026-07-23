@@ -144,9 +144,7 @@ export function TemplatePreviewFrame({
             value={outcome}
             onChange={(event) => {
               const nextOutcome: PreviewOutcome =
-                event.currentTarget.value === "failure"
-                  ? "failure"
-                  : "success";
+                event.currentTarget.value === "failure" ? "failure" : "success";
               remountPreview(nextOutcome);
             }}
             className="min-h-11 rounded-xl border border-[#d8cfbf] bg-white px-3 text-sm font-semibold text-[#31534c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]"
