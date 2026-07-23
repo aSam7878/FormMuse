@@ -12,6 +12,10 @@ import {
   postPreviewMessage,
   previewChannelFromSearch,
 } from "@/lib/formmuse/preview-protocol";
+import {
+  parsePreviewMode,
+  TEASER_ADVANCE_DELAY_MS,
+} from "@/lib/formmuse/catalog-teaser";
 import { HangingGiftsContactForm } from "@/registry/base/hanging-gifts-contact/hanging-gifts-contact-form";
 
 function keepDemoDestinationsInert(event: MouseEvent<HTMLDivElement>): void {
@@ -34,6 +38,27 @@ export function HangingGiftsPreviewAdapter() {
       ? null
       : previewChannelFromSearch(window.location.search),
   );
+  const [mode] = useState(() =>
+    typeof window === "undefined"
+      ? "interactive"
+      : parsePreviewMode(window.location.search),
+  );
+
+  useEffect(() => {
+    if (mode !== "teaser") return;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reducedMotion) return;
+
+    const timer = window.setTimeout(() => {
+      document.forms.item(0)?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, TEASER_ADVANCE_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [mode]);
 
   useEffect(() => {
     if (!channel) return;
@@ -67,6 +92,9 @@ export function HangingGiftsPreviewAdapter() {
     <div
       data-formmuse-preview-adapter="hanging-gifts-contact"
       data-preview-outcome={outcome}
+      data-preview-mode={mode}
+      aria-hidden={mode === "teaser" ? "true" : undefined}
+      inert={mode === "teaser" ? true : undefined}
       onClickCapture={keepDemoDestinationsInert}
     >
       <HangingGiftsContactForm

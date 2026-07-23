@@ -495,11 +495,12 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 **Deliverables:**
 
-- Opening viewport only, non-interactive, pointer-inert, not focusable, not scrollable, and not the card's accessible name.
+- Begin at the opening viewport, play the template's entrance, and use a repository-only deterministic teaser controller to advance automatically to a representative later view without changing the distributed adopter source. Hanging Gifts advances from its hero to the form.
+- Remain non-interactive, pointer-inert, not focusable, not visitor-scrollable, and not the card's accessible name throughout the automated sequence.
 - Parent card always contains semantic title, description, and link.
 - Stable reserved space and a lightweight local fallback exist before activation.
 - Use the same static preview route and distributed source, never separate teaser artwork.
-- Keep activation and off-screen policy provisional until Stage 5 measurements.
+- Keep repeat timing, pause/restart behavior, activation, and off-screen policy provisional until Stage 5 measurements.
 
 ### Stage 3 exit gate
 
