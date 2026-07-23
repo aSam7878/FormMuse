@@ -76,7 +76,7 @@ describe("Template Page model", () => {
 });
 
 describe("TemplatePrimaryTabs", () => {
-  it("provides stable tab semantics and direct access to the isolated preview", () => {
+  it("provides stable tab semantics and embeds the isolated preview", () => {
     const template = hangingGiftsTemplate();
 
     render(
@@ -94,10 +94,9 @@ describe("TemplatePrimaryTabs", () => {
     ).toBeInTheDocument();
     expect(previewTab).toHaveAttribute("aria-selected", "true");
     expect(codeTab).toHaveAttribute("aria-selected", "false");
-    expect(screen.getByRole("link", { name: /open preview/i })).toHaveAttribute(
-      "href",
-      "/preview/hanging-gifts-contact",
-    );
+    expect(
+      screen.getByTitle("Interactive Hanging Gifts template preview"),
+    ).toHaveAttribute("src", "/preview/hanging-gifts-contact?outcome=success");
     expect(
       screen.queryByRole("heading", { name: "Distributed file manifest" }),
     ).not.toBeInTheDocument();

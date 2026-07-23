@@ -1,11 +1,13 @@
 "use client";
 
-import { Code2, ExternalLink, Eye, FileCode2 } from "lucide-react";
+import { Code2, Eye, FileCode2 } from "lucide-react";
 import { useId, useRef, useState } from "react";
 
 import type { TemplateInstallationFile } from "@/lib/formmuse/template-installation";
 import type { TemplatePageFile } from "@/lib/formmuse/template-page";
 import { cn } from "@/lib/utils";
+
+import { TemplatePreviewFrame } from "./template-preview-frame";
 
 type TemplatePrimaryTabsProps = Readonly<{
   previewPath: string;
@@ -140,31 +142,7 @@ export function TemplatePrimaryTabs({
           hidden={activeTab !== "preview"}
           className="focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#0b6f5d]"
         >
-          <div className="relative isolate grid min-h-[25rem] place-items-center overflow-hidden bg-[linear-gradient(135deg,#f8f0e2_0%,#fffaf2_52%,#eaf2ed_100%)] px-6 py-16 text-center">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 -z-10 [background-image:radial-gradient(circle_at_18%_28%,rgba(181,123,42,0.24)_0,transparent_24%),radial-gradient(circle_at_82%_68%,rgba(11,111,93,0.18)_0,transparent_28%)] opacity-45"
-            />
-            <div className="max-w-xl">
-              <span className="mx-auto grid size-12 place-items-center rounded-2xl border border-[#d7cdbd] bg-white/80 text-[#0b6f5d] shadow-sm">
-                <Eye aria-hidden="true" className="size-5" strokeWidth={1.7} />
-              </span>
-              <h3 className="mt-5 font-serif text-3xl tracking-[-0.025em] text-[#17322f] sm:text-4xl">
-                Open the isolated preview
-              </h3>
-              <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#5c6c67] sm:text-base">
-                Experience the complete Hanging Gifts composition in its
-                dedicated static route, separate from FormMuse website styles.
-              </p>
-              <a
-                href={previewPath}
-                className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0b6f5d] px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(11,111,93,0.2)] transition hover:bg-[#085b4d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0b6f5d]"
-              >
-                Open preview
-                <ExternalLink aria-hidden="true" className="size-4" />
-              </a>
-            </div>
-          </div>
+          <TemplatePreviewFrame previewPath={previewPath} />
         </div>
 
         <div
