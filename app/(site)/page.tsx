@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomePage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center px-6 py-20 sm:px-10">
@@ -14,12 +16,12 @@ export default function HomePage() {
       <p className="mt-10 text-sm text-neutral-500">
         The Hanging Gifts vertical slice is now in development.
       </p>
-      <a
-        href="/preview/hanging-gifts-contact/"
+      <Link
+        href="/templates/hanging-gifts-contact/"
         className="mt-6 inline-flex min-h-11 w-fit items-center rounded-full bg-neutral-900 px-5 text-sm font-semibold text-white transition hover:bg-neutral-700 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
-        Open Hanging Gifts preview
-      </a>
+        Open Hanging Gifts template route
+      </Link>
     </main>
   );
 }

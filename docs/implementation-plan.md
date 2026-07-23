@@ -397,7 +397,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 # Stage 3 — Build the generated Template Page and isolated preview
 
-**Stage status:** Direct preview partial; Template Page not started.
+**Stage status:** Complete.
 
 **Outcome:** `/templates/hanging-gifts-contact` documents and installs the same source rendered by a controlled interactive iframe at `/preview/hanging-gifts-contact`.
 
@@ -405,7 +405,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.1 Generate template and preview routes from registry records
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -416,7 +416,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.2 Build the shared Template Page shell
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -428,7 +428,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.3 Build complete Code and Installation presentation
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -442,7 +442,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.4 Generate examples, Props, notes, changelog, and Agent Prompt
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -455,7 +455,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.5 Separate the distributed composition from the preview adapter
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -466,7 +466,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.6 Build parent iframe chrome and viewport controls
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -479,7 +479,7 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.7 Implement the minimum Preview Protocol
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -491,15 +491,16 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 
 ## 3.8 Build the Catalog Teaser prototype from the same preview source
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
-- Opening viewport only, non-interactive, pointer-inert, not focusable, not scrollable, and not the card's accessible name.
+- Begin at the opening viewport, play the template's entrance, and use a repository-only deterministic teaser controller to advance automatically to a representative later view without changing the distributed adopter source. Hanging Gifts advances from its hero to the form.
+- Remain non-interactive, pointer-inert, not focusable, not visitor-scrollable, and not the card's accessible name throughout the automated sequence.
 - Parent card always contains semantic title, description, and link.
 - Stable reserved space and a lightweight local fallback exist before activation.
 - Use the same static preview route and distributed source, never separate teaser artwork.
-- Keep activation and off-screen policy provisional until Stage 5 measurements.
+- Keep repeat timing, pause/restart behavior, activation, and off-screen policy provisional until Stage 5 measurements.
 
 ### Stage 3 exit gate
 
@@ -509,6 +510,8 @@ Completed on 2026-07-23 on the cumulative `codex/stage-2-complete` branch. Hangi
 - Code/Manual/CLI file and dependency parity passes.
 - Agent Prompt is generated from machine-readable metadata.
 - Catalog Teaser renders the same composition without becoming an interactive miniature.
+
+Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branch. The frozen install, formatting, typecheck, lint, 226 Vitest tests, registry build and clean Next.js/Vite installation fixtures, guides/static-data generation, static build, and 54 Chromium/Firefox/WebKit tests passed. A final integrated browser probe also verified embedded validation, viewport selection, state-preserving Replay, and full Reset remount semantics on the generated Template Page.
 
 ---
 
