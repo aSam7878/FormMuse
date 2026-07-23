@@ -8,9 +8,14 @@ import {
   Smartphone,
   Tablet,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import type { PreviewOutcome } from "@/lib/formmuse/preview-adapter";
+import {
+  acceptPreviewMessage,
+  createPreviewMessage,
+  postPreviewMessage,
+} from "@/lib/formmuse/preview-protocol";
 import { cn } from "@/lib/utils";
 
 const viewports = [
@@ -30,15 +35,43 @@ export function TemplatePreviewFrame({
   const [resetKey, setResetKey] = useState(0);
   const [replayRequest, setReplayRequest] = useState(0);
   const [frameState, setFrameState] = useState<FrameState>("loading");
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
+  const channel = `fm-${id || "preview"}-${resetKey}`;
   const selectedViewport =
     viewports.find((candidate) => candidate.id === viewport) ?? viewports[0];
   const frameSource = useMemo(() => {
     if (!previewPath) return null;
     const separator = previewPath.includes("?") ? "&" : "?";
-    return `${previewPath}${separator}outcome=${outcome}`;
-  }, [outcome, previewPath]);
+    return `${previewPath}${separator}outcome=${outcome}&channel=${encodeURIComponent(channel)}`;
+  }, [channel, outcome, previewPath]);
+
+  useEffect(() => {
+    function receive(event: MessageEvent<unknown>) {
+      const message = acceptPreviewMessage(event, {
+        source: frameRef.current?.contentWindow ?? null,
+        origin: window.location.origin,
+        channel,
+        direction: "frame-to-parent",
+      });
+      if (message?.type === "ready") setFrameState("ready");
+    }
+    window.addEventListener("message", receive);
+    return () => window.removeEventListener("message", receive);
+  }, [channel]);
+
+  function sendCommand(type: "reset" | "replay") {
+    const target = frameRef.current?.contentWindow;
+    if (!target) return;
+    postPreviewMessage(
+      target,
+      createPreviewMessage(channel, type),
+      window.location.origin,
+    );
+  }
 
   function remountPreview(nextOutcome: PreviewOutcome = outcome) {
+    sendCommand("reset");
     setOutcome(nextOutcome);
     setFrameState("loading");
     setResetKey((value) => value + 1);
@@ -119,8 +152,12 @@ export function TemplatePreviewFrame({
           </select>
           <button
             type="button"
-            onClick={() => setReplayRequest((value) => value + 1)}
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#d8cfbf] bg-white px-3 text-sm font-semibold text-[#31534c] hover:bg-[#f7f2e9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]"
+            disabled={frameState !== "ready"}
+            onClick={() => {
+              sendCommand("replay");
+              setReplayRequest((value) => value + 1);
+            }}
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#d8cfbf] bg-white px-3 text-sm font-semibold text-[#31534c] hover:bg-[#f7f2e9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Play aria-hidden="true" className="size-4" />
             Replay
@@ -191,10 +228,11 @@ export function TemplatePreviewFrame({
             </div>
           ) : null}
           <iframe
+            ref={frameRef}
             key={`${resetKey}-${outcome}`}
             src={frameSource}
             title="Interactive Hanging Gifts template preview"
-            onLoad={() => setFrameState("ready")}
+            onLoad={() => setFrameState("loading")}
             onError={() => setFrameState("error")}
             onErrorCapture={() => setFrameState("error")}
             className="block h-[min(72vh,52rem)] min-h-[34rem] w-full border-0 bg-white"

@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 
 import {
   parsePreviewOutcome,
   simulatePreviewSubmission,
 } from "@/lib/formmuse/preview-adapter";
+import {
+  acceptPreviewMessage,
+  createPreviewMessage,
+  postPreviewMessage,
+  previewChannelFromSearch,
+} from "@/lib/formmuse/preview-protocol";
 import { HangingGiftsContactForm } from "@/registry/base/hanging-gifts-contact/hanging-gifts-contact-form";
 
 function keepDemoDestinationsInert(event: MouseEvent<HTMLDivElement>): void {
@@ -21,6 +27,41 @@ export function HangingGiftsPreviewAdapter() {
       ? "success"
       : parsePreviewOutcome(window.location.search),
   );
+  const [resetKey, setResetKey] = useState(0);
+  const [animationReplayKey, setAnimationReplayKey] = useState(0);
+  const [channel] = useState(() =>
+    typeof window === "undefined"
+      ? null
+      : previewChannelFromSearch(window.location.search),
+  );
+
+  useEffect(() => {
+    if (!channel) return;
+    const validatedChannel = channel;
+    const origin = window.location.origin;
+    function receive(event: MessageEvent<unknown>) {
+      const message = acceptPreviewMessage(event, {
+        source: window.parent,
+        origin,
+        channel: validatedChannel,
+        direction: "parent-to-frame",
+      });
+      if (message?.type === "reset") {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        setAnimationReplayKey(0);
+        setResetKey((value) => value + 1);
+      } else if (message?.type === "replay") {
+        setAnimationReplayKey((value) => value + 1);
+      }
+    }
+    window.addEventListener("message", receive);
+    postPreviewMessage(
+      window.parent,
+      createPreviewMessage(validatedChannel, "ready"),
+      origin,
+    );
+    return () => window.removeEventListener("message", receive);
+  }, [channel]);
 
   return (
     <div
@@ -29,6 +70,8 @@ export function HangingGiftsPreviewAdapter() {
       onClickCapture={keepDemoDestinationsInert}
     >
       <HangingGiftsContactForm
+        key={resetKey}
+        animationReplayKey={animationReplayKey}
         onSubmit={() => simulatePreviewSubmission(outcome)}
       />
     </div>

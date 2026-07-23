@@ -95,8 +95,10 @@ describe("TemplatePrimaryTabs", () => {
     expect(previewTab).toHaveAttribute("aria-selected", "true");
     expect(codeTab).toHaveAttribute("aria-selected", "false");
     expect(
-      screen.getByTitle("Interactive Hanging Gifts template preview"),
-    ).toHaveAttribute("src", "/preview/hanging-gifts-contact?outcome=success");
+      screen
+        .getByTitle("Interactive Hanging Gifts template preview")
+        .getAttribute("src"),
+    ).toMatch(/^\/preview\/hanging-gifts-contact\?outcome=success&channel=fm-/);
     expect(
       screen.queryByRole("heading", { name: "Distributed file manifest" }),
     ).not.toBeInTheDocument();
