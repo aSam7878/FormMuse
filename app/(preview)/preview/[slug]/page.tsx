@@ -6,14 +6,14 @@ import {
   findTemplatePreviewRoute,
   templatePreviewStaticParams,
 } from "@/lib/formmuse/template-routes";
-import { HangingGiftsContactPreview } from "@/registry/base/hanging-gifts-contact/preview";
+import { HangingGiftsPreviewAdapter } from "@/components/preview/hanging-gifts-preview-adapter";
 
 type TemplatePreviewPageProps = Readonly<{
   params: Promise<{ slug: string }>;
 }>;
 
 const previewComponents: Partial<Record<string, ComponentType>> = {
-  "hanging-gifts-contact": HangingGiftsContactPreview,
+  "hanging-gifts-contact": HangingGiftsPreviewAdapter,
 };
 
 export const dynamicParams = false;
