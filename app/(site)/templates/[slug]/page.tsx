@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { TemplatePageShell } from "@/components/template-page/template-page-shell";
+import { createTemplatePageModel } from "@/lib/formmuse/template-page";
 import {
   findTemplatePageRoute,
   templateCanonicalUrl,
@@ -44,10 +46,5 @@ export default async function TemplatePage({ params }: TemplatePageProps) {
     notFound();
   }
 
-  return (
-    <main
-      data-formmuse-template-route={route.slug}
-      data-formmuse-template-status={route.status}
-    />
-  );
+  return <TemplatePageShell template={createTemplatePageModel(route)} />;
 }
