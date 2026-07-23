@@ -3,13 +3,20 @@
 import { Code2, ExternalLink, Eye, FileCode2 } from "lucide-react";
 import { useId, useRef, useState } from "react";
 
+import type { TemplateInstallationFile } from "@/lib/formmuse/template-installation";
 import type { TemplatePageFile } from "@/lib/formmuse/template-page";
 import { cn } from "@/lib/utils";
 
 type TemplatePrimaryTabsProps = Readonly<{
   previewPath: string;
-  files: readonly TemplatePageFile[];
+  files: readonly (TemplatePageFile | TemplateInstallationFile)[];
 }>;
+
+function hasSource(
+  file: TemplatePageFile | TemplateInstallationFile,
+): file is TemplateInstallationFile {
+  return "content" in file && "purpose" in file;
+}
 
 type TabId = "preview" | "code";
 
@@ -25,6 +32,7 @@ export function TemplatePrimaryTabs({
   const [activeTab, setActiveTab] = useState<TabId>("preview");
   const idPrefix = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const sourceFiles: TemplateInstallationFile[] = files.filter(hasSource);
 
   function selectTab(index: number) {
     const tab = tabs[index];
@@ -209,6 +217,32 @@ export function TemplatePrimaryTabs({
                 </li>
               ))}
             </ul>
+            <div className="mt-5 space-y-3">
+              {sourceFiles.map((file) => (
+                <details
+                  key={`${file.path}-source`}
+                  className="group rounded-2xl border border-[#e1d8ca] bg-[#fbf9f5] open:bg-white"
+                >
+                  <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-3 px-4 py-3 font-mono text-xs font-semibold text-[#29443f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]">
+                    <span className="min-w-0 break-all">{file.path}</span>
+                    <span className="shrink-0 text-[#0b6f5d] group-open:hidden">
+                      View source
+                    </span>
+                    <span className="hidden shrink-0 text-[#0b6f5d] group-open:inline">
+                      Hide source
+                    </span>
+                  </summary>
+                  <div className="border-t border-[#e1d8ca] bg-[#182421] p-4 text-[#eaf2ed]">
+                    <p className="mb-3 text-xs leading-5 text-[#c6d5d0]">
+                      {file.purpose}
+                    </p>
+                    <pre className="max-h-[32rem] overflow-auto text-xs leading-6">
+                      <code>{file.content}</code>
+                    </pre>
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -9,11 +9,14 @@ import {
 } from "lucide-react";
 
 import type { TemplatePageModel } from "@/lib/formmuse/template-page";
+import type { TemplateInstallationModel } from "@/lib/formmuse/template-installation";
 
+import { TemplateInstallation } from "./template-installation";
 import { TemplatePrimaryTabs } from "./template-primary-tabs";
 
 type TemplatePageShellProps = Readonly<{
   template: TemplatePageModel;
+  installation: TemplateInstallationModel;
 }>;
 
 function DetailCard({
@@ -60,7 +63,10 @@ function ChipList({ values }: Readonly<{ values: readonly string[] }>) {
   );
 }
 
-export function TemplatePageShell({ template }: TemplatePageShellProps) {
+export function TemplatePageShell({
+  template,
+  installation,
+}: TemplatePageShellProps) {
   return (
     <main
       data-formmuse-template-route={template.slug}
@@ -203,9 +209,11 @@ export function TemplatePageShell({ template }: TemplatePageShellProps) {
         <div className="mt-16">
           <TemplatePrimaryTabs
             previewPath={template.previewPath}
-            files={template.files}
+            files={installation.files}
           />
         </div>
+
+        <TemplateInstallation installation={installation} />
       </div>
     </main>
   );

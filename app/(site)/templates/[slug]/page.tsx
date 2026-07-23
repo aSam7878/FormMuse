@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { TemplatePageShell } from "@/components/template-page/template-page-shell";
+import { createTemplateInstallationModel } from "@/lib/formmuse/template-installation";
 import { createTemplatePageModel } from "@/lib/formmuse/template-page";
 import {
   findTemplatePageRoute,
@@ -46,5 +47,12 @@ export default async function TemplatePage({ params }: TemplatePageProps) {
     notFound();
   }
 
-  return <TemplatePageShell template={createTemplatePageModel(route)} />;
+  const template = createTemplatePageModel(route);
+
+  return (
+    <TemplatePageShell
+      template={template}
+      installation={createTemplateInstallationModel(template)}
+    />
+  );
 }
