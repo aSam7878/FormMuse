@@ -36,35 +36,8 @@ jobs:
       - name: Install the frozen dependency graph
         run: pnpm install --frozen-lockfile
 
-      - name: Check tracked source formatting
-        run: pnpm format:check
-
-      - name: Check TypeScript
-        run: pnpm typecheck
-
-      - name: Check ESLint
-        run: pnpm lint
-
-      - name: Run unit tests
-        run: pnpm test
-
-      - name: Generate the registry
-        run: pnpm registry:build
-
-      - name: Prove Next.js and Vite registry installation
-        run: pnpm test:registry-install
-
-      - name: Compile guide sources
-        run: pnpm guides:build
-
-      - name: Generate deterministic static-data fixtures
-        run: pnpm static-data:fixture
-
-      - name: Build the static export
-        run: pnpm build
-
-      - name: Reject tracked generated-output drift
-        run: git diff --exit-code -- .
+      - name: Run the canonical foundation quality profile
+        run: pnpm quality:foundation
 
   dependency-review:
     name: Dependency review

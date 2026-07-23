@@ -38,24 +38,13 @@ describe("foundation CI source", () => {
     );
   });
 
-  it("uses the pinned toolchain and complete Stage 1 source gate", () => {
+  it("uses the pinned toolchain and canonical local/CI quality profile", () => {
     const workflow = read(".github/workflows/ci.yml");
 
     expect(workflow).toContain("node-version: 24.18.0");
     expect(workflow).toContain("pnpm install --frozen-lockfile");
-    for (const command of [
-      "pnpm format:check",
-      "pnpm typecheck",
-      "pnpm lint",
-      "pnpm test",
-      "pnpm registry:build",
-      "pnpm guides:build",
-      "pnpm static-data:fixture",
-      "pnpm build",
-      "git diff --exit-code -- .",
-    ]) {
-      expect(workflow).toContain(`run: ${command}`);
-    }
+    expect(workflow).toContain("run: pnpm quality:foundation");
+    expect(workflow).not.toContain("run: pnpm test\n");
   });
 
   it("keeps pull-request execution least-privileged and credential-free", () => {
@@ -74,12 +63,17 @@ describe("foundation CI source", () => {
 
   it("defines fail-closed dependency and generated-output review gates", () => {
     const workflow = read(".github/workflows/ci.yml");
+    const packageJson = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
 
     expect(workflow).toContain("fail-on-severity: high");
     expect(workflow).toContain("license-check: true");
     expect(workflow).toContain("vulnerability-check: true");
     expect(workflow).toContain("comment-summary-in-pr: never");
-    expect(workflow).toContain("git diff --exit-code -- .");
+    expect(packageJson.scripts["quality:generated-diff"]).toBe(
+      "git diff --exit-code -- .",
+    );
   });
 });
 
