@@ -16,6 +16,7 @@ export type TemplatePageModel = Readonly<{
   status: string;
   statusLabel: string;
   version: string;
+  updated: string;
   layout: string;
   layoutLabel: string;
   appearance: string;
@@ -29,6 +30,20 @@ export type TemplatePageModel = Readonly<{
   dependencies: readonly string[];
   registryDependencies: readonly string[];
   files: readonly TemplatePageFile[];
+  props: readonly Readonly<{
+    name: string;
+    type: string;
+    required: boolean;
+    description: string;
+    default?: string;
+  }>[];
+  examples: readonly Readonly<{
+    title: string;
+    description: string;
+    path: string;
+  }>[];
+  usageNotes: readonly string[];
+  accessibilityNotes: readonly string[];
   templatePath: `/templates/${string}`;
   previewPath: `/preview/${string}`;
 }>;
@@ -58,6 +73,7 @@ export function createTemplatePageModel(
     status: metadata.status,
     statusLabel: titleCaseIdentifier(metadata.status),
     version: metadata.version,
+    updated: metadata.updated,
     layout: metadata.layout,
     layoutLabel: titleCaseIdentifier(metadata.layout),
     appearance: metadata.appearance,
@@ -84,6 +100,18 @@ export function createTemplatePageModel(
       type: file.type,
       target: file.target,
     })),
+    props: metadata.props.map((prop) => ({
+      ...prop,
+      default:
+        prop.default === undefined
+          ? undefined
+          : typeof prop.default === "string"
+            ? prop.default
+            : JSON.stringify(prop.default),
+    })),
+    examples: metadata.examples,
+    usageNotes: metadata.usageNotes,
+    accessibilityNotes: metadata.accessibilityNotes,
     templatePath: route.templatePath,
     previewPath: route.previewPath,
   };

@@ -10,13 +10,16 @@ import {
 
 import type { TemplatePageModel } from "@/lib/formmuse/template-page";
 import type { TemplateInstallationModel } from "@/lib/formmuse/template-installation";
+import type { TemplatePresentationModel } from "@/lib/formmuse/template-presentation";
 
+import { TemplateDocumentationSections } from "./template-documentation-sections";
 import { TemplateInstallation } from "./template-installation";
 import { TemplatePrimaryTabs } from "./template-primary-tabs";
 
 type TemplatePageShellProps = Readonly<{
   template: TemplatePageModel;
   installation: TemplateInstallationModel;
+  presentation: TemplatePresentationModel;
 }>;
 
 function DetailCard({
@@ -66,6 +69,7 @@ function ChipList({ values }: Readonly<{ values: readonly string[] }>) {
 export function TemplatePageShell({
   template,
   installation,
+  presentation,
 }: TemplatePageShellProps) {
   return (
     <main
@@ -214,6 +218,7 @@ export function TemplatePageShell({
         </div>
 
         <TemplateInstallation installation={installation} />
+        <TemplateDocumentationSections presentation={presentation} />
       </div>
     </main>
   );

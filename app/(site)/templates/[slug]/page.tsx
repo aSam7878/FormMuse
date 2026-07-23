@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { TemplatePageShell } from "@/components/template-page/template-page-shell";
 import { createTemplateInstallationModel } from "@/lib/formmuse/template-installation";
 import { createTemplatePageModel } from "@/lib/formmuse/template-page";
+import { createTemplatePresentationModel } from "@/lib/formmuse/template-presentation";
 import {
   findTemplatePageRoute,
   templateCanonicalUrl,
@@ -48,11 +49,13 @@ export default async function TemplatePage({ params }: TemplatePageProps) {
   }
 
   const template = createTemplatePageModel(route);
+  const installation = createTemplateInstallationModel(template);
 
   return (
     <TemplatePageShell
       template={template}
-      installation={createTemplateInstallationModel(template)}
+      installation={installation}
+      presentation={createTemplatePresentationModel(template, installation)}
     />
   );
 }
