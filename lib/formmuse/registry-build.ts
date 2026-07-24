@@ -37,6 +37,7 @@ import {
   KebabCaseSlugSchema,
   validateFormMuseRegistryBoundary,
 } from "./registry-schemas";
+import { assertPublishedItemsHaveCompleteEvidence } from "./publication-report";
 
 const PINNED_SHADCN_VERSION = "4.13.1";
 const ROOT_REGISTRY_KEYS = ["$schema", "homepage", "items", "name"];
@@ -789,6 +790,7 @@ export function buildRegistry(
   const outputDirectory =
     options.outputDirectory ?? join(projectRoot, "public/r");
   const authored = loadAuthoredRegistry(projectRoot, registryPath);
+  assertPublishedItemsHaveCompleteEvidence(projectRoot, authored.items);
   const items = selectInstallableItems(
     authored.items,
     options.deployEnvironment,

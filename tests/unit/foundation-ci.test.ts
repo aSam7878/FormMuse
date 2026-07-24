@@ -110,6 +110,19 @@ describe("foundation CI source", () => {
     expect(workflow).toContain("manager: [pnpm, npm, yarn, bun]");
     expect(workflow).toContain("pnpm quality:installation-public --manager");
   });
+
+  it("generates complete reproducible publication evidence in CI", () => {
+    const workflow = read(".github/workflows/ci.yml");
+
+    expect(workflow).toContain("name: Reproducible publication evidence");
+    expect(workflow).toContain(
+      "needs: [source, visual, site-quality, security]",
+    );
+    expect(workflow).toContain(
+      "pnpm exec playwright install --with-deps chromium firefox webkit",
+    );
+    expect(workflow).toContain("run: pnpm quality:publication-report");
+  });
 });
 
 describe("repository security source", () => {

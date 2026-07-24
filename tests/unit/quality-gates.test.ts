@@ -132,6 +132,20 @@ describe("canonical quality gates", () => {
     );
   });
 
+  it("assigns machine-readable publication evidence to one canonical command", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+    const publicationReportGate = qualityGates.find(
+      (gate) => gate.id === "publication-report",
+    );
+
+    expect(publicationReportGate?.script).toBe("quality:publication-report");
+    expect(packageJson.scripts["quality:publication-report"]).toBe(
+      "node --import tsx scripts/generate-publication-report.mts",
+    );
+  });
+
   it("stops at the owning failing layer and preserves its exit code", () => {
     const write = vi.fn();
     const execute = vi
