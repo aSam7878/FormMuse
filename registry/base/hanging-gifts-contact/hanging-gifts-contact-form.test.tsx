@@ -209,7 +209,9 @@ describe("HangingGiftsContactForm", () => {
 
     await user.type(screen.getByLabelText("First name"), "Avery");
 
-    expect(screen.queryByText("Enter your first name.")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Enter your first name."),
+    ).not.toBeInTheDocument();
     expect(screen.getByLabelText("First name")).toHaveAttribute(
       "aria-invalid",
       "false",
@@ -264,7 +266,9 @@ describe("HangingGiftsContactForm", () => {
     expect(form).toHaveAttribute("aria-busy", "true");
     expect(within(form as HTMLFormElement).getByRole("group")).toBeDisabled();
     expect(screen.getByText("Sending your message…")).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveTextContent("Sending your message…");
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Sending your message…",
+    );
     expect(screen.getByRole("status").closest("form")).toBeNull();
     pending.resolve();
     expect(await screen.findByText("Message sent")).toBeInTheDocument();

@@ -61,7 +61,9 @@ function selectedFixtureFrameworks(): FixtureFramework[] {
     arguments_[0] !== "--framework" ||
     (arguments_[1] !== "next" && arguments_[1] !== "vite")
   ) {
-    fail("Fixture verification accepts only --framework next or --framework vite.");
+    fail(
+      "Fixture verification accepts only --framework next or --framework vite.",
+    );
   }
   return [arguments_[1]];
 }
@@ -648,10 +650,7 @@ async function main(): Promise<void> {
     }
 
     if (viteInstalledFiles) {
-      const viteRoot = join(
-        temporaryRoot,
-        "vite/formmuse-vite-base-fixture",
-      );
+      const viteRoot = join(temporaryRoot, "vite/formmuse-vite-base-fixture");
       assertConflictIsVisible(cliPath, viteRoot, itemPath, viteInstalledFiles);
       assertRadixPreflight(cliPath, join(temporaryRoot, "radix"));
     }

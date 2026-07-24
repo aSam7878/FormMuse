@@ -8,8 +8,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: 1,
   reporter: "list",
-  snapshotPathTemplate:
-    "{testDir}/__snapshots__/{testFilePath}/{arg}{ext}",
+  snapshotPathTemplate: "{testDir}/__snapshots__/{testFilePath}/{arg}{ext}",
   use: {
     baseURL: "http://127.0.0.1:3100",
     colorScheme: "light",

@@ -98,9 +98,7 @@ test("keeps Replay stateful and makes Reset a full preview remount", async ({
   const resetFrame = await waitForPreview(page);
   await expect(resetFrame.getByLabel("First name")).toHaveValue("");
   const resetContent = await previewContent(page);
-  await expect
-    .poll(() => resetContent?.evaluate(() => window.scrollY))
-    .toBe(0);
+  await expect.poll(() => resetContent?.evaluate(() => window.scrollY)).toBe(0);
 });
 
 test("uses the parent-selected deterministic failure outcome inside the iframe", async ({
@@ -199,7 +197,12 @@ test("keeps post-idle iframe activity local, ephemeral, and navigation-free", as
   expect(initialState.sessionStorage).toEqual([]);
   expect(initialState.tracker.beforeUnload).toBe(0);
   expect(finalState).toEqual(initialState);
-  expect(laterRequests.filter((url) => new URL(url).origin !== page.url().match(/^https?:\/\/[^/]+/)?.[0])).toEqual([]);
+  expect(
+    laterRequests.filter(
+      (url) =>
+        new URL(url).origin !== page.url().match(/^https?:\/\/[^/]+/)?.[0],
+    ),
+  ).toEqual([]);
   const expectedPreviewPath = new URL(previewPath, page.url()).pathname.replace(
     /\/$/,
     "",
@@ -226,7 +229,9 @@ test("navigates the current static routes without page or console errors", async
   });
 
   await page.goto("/");
-  await page.getByRole("link", { name: "Open Hanging Gifts template route" }).click();
+  await page
+    .getByRole("link", { name: "Open Hanging Gifts template route" })
+    .click();
   await expect(page).toHaveURL(new RegExp(`${templatePath}$`));
   await waitForPreview(page);
   await page.goto(previewPath);
