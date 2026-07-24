@@ -74,6 +74,10 @@ describe("foundation CI source", () => {
     expect(packageJson.scripts["quality:generated-diff"]).toBe(
       "git diff --exit-code -- .",
     );
+    expect(workflow).toContain(
+      "name: Supply-chain and generated-output security",
+    );
+    expect(workflow).toContain("run: pnpm quality:security");
   });
 
   it("compares a reviewed visual baseline without updating it in CI", () => {
@@ -93,7 +97,7 @@ describe("foundation CI source", () => {
     expect(packageJson.scripts["quality:visual"]).toBe("pnpm test:visual");
     expect(visualConfig).toContain('locale: "en-US"');
     expect(visualConfig).toContain('timezoneId: "UTC"');
-    expect(visualConfig).toContain('deviceScaleFactor: 1');
+    expect(visualConfig).toContain("deviceScaleFactor: 1");
     expect(visualConfig).toContain('name: "chromium-ubuntu-24.04"');
   });
 });

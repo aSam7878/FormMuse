@@ -27,7 +27,7 @@ Use pnpm for FormMuse development. User-facing installation documentation must s
 
 | Purpose | Package | Version |
 |---|---|---:|
-| Static website framework | `next` | `16.2.10` |
+| Static website framework | `next` | `16.2.11` |
 | UI runtime | `react` | `19.2.7` |
 | DOM renderer | `react-dom` | `19.2.7` |
 | Language | `typescript` | `6.0.3` |

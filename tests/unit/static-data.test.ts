@@ -160,10 +160,11 @@ describe("search data", () => {
   });
 
   it("rejects secret-shaped and local-path source content", () => {
+    const credential = "api_" + 'key = "abcdefgh' + '12345678"';
     const secret = guideSources();
     secret[0] = {
       ...secret[0],
-      processedText: 'api_key = "abcdefgh12345678"',
+      processedText: credential,
     };
     expect(() => buildSearchData(secret, [])).toThrow(StaticDataError);
 

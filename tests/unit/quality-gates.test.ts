@@ -120,6 +120,18 @@ describe("canonical quality gates", () => {
     );
   });
 
+  it("keeps the supply-chain and generated-output security gate independently runnable", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+    const securityGate = qualityGates.find((gate) => gate.id === "security");
+
+    expect(securityGate?.script).toBe("quality:security");
+    expect(packageJson.scripts["quality:security"]).toBe(
+      "node --import tsx scripts/run-security-quality.mts",
+    );
+  });
+
   it("stops at the owning failing layer and preserves its exit code", () => {
     const write = vi.fn();
     const execute = vi
