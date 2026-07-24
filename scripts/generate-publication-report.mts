@@ -29,12 +29,20 @@ function sha256File(path: string): string | undefined {
 }
 
 function run(command: string): number {
+  if (!command.startsWith("pnpm ")) {
+    throw new Error(`Publication report command must use pnpm: ${command}`);
+  }
+  const script = command.slice("pnpm ".length);
   process.stdout.write(`[publication-report:start] ${command}\n`);
-  const result = spawnSync(process.execPath, [pinnedPnpmCli, "run", command], {
-    cwd: PROJECT_ROOT,
-    env: process.env,
-    stdio: "inherit",
-  });
+  const result = spawnSync(
+    process.execPath,
+    [pinnedPnpmCli, "run", script],
+    {
+      cwd: PROJECT_ROOT,
+      env: process.env,
+      stdio: "inherit",
+    },
+  );
   const exitCode = result.status ?? 1;
   process.stdout.write(
     `[publication-report:${exitCode === 0 ? "pass" : "fail"}] ${command}\n`,
