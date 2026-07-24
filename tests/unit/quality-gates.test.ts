@@ -101,6 +101,25 @@ describe("canonical quality gates", () => {
     );
   });
 
+  it("keeps the static Lighthouse and Linkinator gates independently runnable", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+    const lighthouseGate = qualityGates.find(
+      (gate) => gate.id === "lighthouse",
+    );
+    const linksGate = qualityGates.find((gate) => gate.id === "links");
+
+    expect(lighthouseGate?.script).toBe("quality:lighthouse");
+    expect(linksGate?.script).toBe("quality:links");
+    expect(packageJson.scripts["quality:lighthouse"]).toBe(
+      "node --import tsx scripts/run-lighthouse-quality.mts",
+    );
+    expect(packageJson.scripts["quality:links"]).toBe(
+      "node --import tsx scripts/run-link-quality.mts",
+    );
+  });
+
   it("stops at the owning failing layer and preserves its exit code", () => {
     const write = vi.fn();
     const execute = vi

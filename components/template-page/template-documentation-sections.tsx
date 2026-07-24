@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Check,
-  CheckCircle2,
-  Clipboard,
-  ExternalLink,
-  Sparkles,
-} from "lucide-react";
+import { Check, CheckCircle2, Clipboard, Sparkles } from "lucide-react";
 import { useState } from "react";
 
 import type { TemplatePresentationModel } from "@/lib/formmuse/template-presentation";
@@ -83,7 +77,7 @@ export function TemplateDocumentationSections({
       </section>
 
       <section aria-labelledby="props-title">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
           <div>
             <p className="text-xs font-semibold tracking-[0.16em] text-[#8f5e20] uppercase">
               Structured API
@@ -95,13 +89,6 @@ export function TemplateDocumentationSections({
               Props
             </h2>
           </div>
-          <a
-            href={presentation.templateApiPath}
-            className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#0b6f5d] underline decoration-[#9bc1b8] underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#0b6f5d]"
-          >
-            Read the canonical Template API guide{" "}
-            <ExternalLink aria-hidden="true" className="size-4" />
-          </a>
         </div>
         <div
           tabIndex={0}

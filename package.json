@@ -37,6 +37,8 @@
     "quality:browser": "pnpm test:browser",
     "quality:visual": "pnpm test:visual",
     "quality:accessibility": "pnpm test:accessibility",
+    "quality:lighthouse": "node --import tsx scripts/run-lighthouse-quality.mts",
+    "quality:links": "node --import tsx scripts/run-link-quality.mts",
     "quality:registry-validate": "vitest run tests/unit/registry-schemas.test.ts tests/unit/registry-build.test.ts",
     "quality:static-export": "pnpm guides:build && pnpm static-data:fixture && pnpm build",
     "quality:generated-diff": "git diff --exit-code -- .",
