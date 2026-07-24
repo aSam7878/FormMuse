@@ -84,6 +84,23 @@ describe("canonical quality gates", () => {
     expect(packageJson.scripts["quality:browser"]).toBe("pnpm test:browser");
   });
 
+  it("assigns parent-and-preview accessibility checks to one canonical command", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+    const accessibilityGate = qualityGates.find(
+      (gate) => gate.id === "accessibility",
+    );
+
+    expect(accessibilityGate?.script).toBe("quality:accessibility");
+    expect(packageJson.scripts["quality:accessibility"]).toBe(
+      "pnpm test:accessibility",
+    );
+    expect(packageJson.scripts["test:accessibility"]).toBe(
+      "playwright test tests/e2e/accessibility.spec.ts",
+    );
+  });
+
   it("stops at the owning failing layer and preserves its exit code", () => {
     const write = vi.fn();
     const execute = vi

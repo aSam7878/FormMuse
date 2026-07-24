@@ -35,7 +35,7 @@ function DetailCard({
 }>) {
   return (
     <div className="rounded-2xl border border-[#dfd6c7] bg-white/65 p-4 shadow-[0_12px_32px_rgba(70,55,32,0.05)]">
-      <dt className="flex items-center gap-2 text-xs font-semibold tracking-[0.12em] text-[#7a8581] uppercase">
+      <dt className="flex items-center gap-2 text-xs font-semibold tracking-[0.12em] text-[#5d6965] uppercase">
         <Icon
           aria-hidden="true"
           className="size-4 text-[#0b6f5d]"
@@ -45,7 +45,7 @@ function DetailCard({
       </dt>
       <dd className="mt-3">
         <p className="font-serif text-xl text-[#17322f]">{value}</p>
-        <p className="mt-1 text-xs leading-5 text-[#6d7773]">{detail}</p>
+        <p className="mt-1 text-xs leading-5 text-[#5d6965]">{detail}</p>
       </dd>
     </div>
   );
@@ -89,7 +89,7 @@ export function TemplatePageShell({
             <span aria-hidden="true" className="text-[#b7aea0]">
               /
             </span>
-            <span className="text-[#6d7773]">{template.categoryLabel}</span>
+            <span className="text-[#5d6965]">{template.categoryLabel}</span>
           </div>
 
           <h1 className="mt-5 max-w-4xl font-serif text-[clamp(2.75rem,7vw,5.8rem)] leading-[0.93] tracking-[-0.045em] text-[#142d2b]">
@@ -195,13 +195,13 @@ export function TemplatePageShell({
             </div>
             <div className="mt-4 grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(15rem,1fr)]">
               <div>
-                <p className="mb-2 text-xs font-semibold tracking-[0.1em] text-[#7a8581] uppercase">
+                <p className="mb-2 text-xs font-semibold tracking-[0.1em] text-[#5d6965] uppercase">
                   Packages
                 </p>
                 <ChipList values={template.dependencies} />
               </div>
               <div>
-                <p className="mb-2 text-xs font-semibold tracking-[0.1em] text-[#7a8581] uppercase">
+                <p className="mb-2 text-xs font-semibold tracking-[0.1em] text-[#5d6965] uppercase">
                   shadcn Base UI controls
                 </p>
                 <ChipList values={template.registryDependencies} />

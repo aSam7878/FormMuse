@@ -1,4 +1,3 @@
-import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator } from "@playwright/test";
 
 const previewPath = "/preview/hanging-gifts-contact/";
@@ -227,15 +226,6 @@ test("supports logical keyboard order and Escape-closing mobile navigation", asy
     await page.keyboard.press("Tab");
     await expect(control).toBeFocused();
   }
-});
-
-test("contains no automatically detectable accessibility violations", async ({
-  page,
-}) => {
-  await page.goto(previewPath);
-  const results = await new AxeBuilder({ page }).analyze();
-
-  expect(results.violations).toEqual([]);
 });
 
 test("removes infinite decorative animation in reduced motion", async ({

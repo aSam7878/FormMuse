@@ -42,7 +42,7 @@ export function TemplateDocumentationSections({
   return (
     <div className="mt-16 space-y-16">
       <section aria-labelledby="examples-title">
-        <p className="text-xs font-semibold tracking-[0.16em] text-[#9a6926] uppercase">
+        <p className="text-xs font-semibold tracking-[0.16em] text-[#8f5e20] uppercase">
           Type-checked examples
         </p>
         <h2
@@ -69,7 +69,11 @@ export function TemplateDocumentationSections({
                 <p className="mb-3 font-mono text-[0.68rem] break-all text-[#aebfba]">
                   {example.path}
                 </p>
-                <pre className="max-h-96 overflow-auto text-xs leading-6">
+                <pre
+                  tabIndex={0}
+                  aria-label={`${example.title} source code`}
+                  className="max-h-96 overflow-auto text-xs leading-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]"
+                >
                   <code>{example.source}</code>
                 </pre>
               </div>
@@ -81,7 +85,7 @@ export function TemplateDocumentationSections({
       <section aria-labelledby="props-title">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold tracking-[0.16em] text-[#9a6926] uppercase">
+            <p className="text-xs font-semibold tracking-[0.16em] text-[#8f5e20] uppercase">
               Structured API
             </p>
             <h2
@@ -99,7 +103,11 @@ export function TemplateDocumentationSections({
             <ExternalLink aria-hidden="true" className="size-4" />
           </a>
         </div>
-        <div className="mt-6 overflow-x-auto rounded-[1.5rem] border border-[#dfd5c5] bg-white/75">
+        <div
+          tabIndex={0}
+          aria-label="Template props table"
+          className="mt-6 overflow-x-auto rounded-[1.5rem] border border-[#dfd5c5] bg-white/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]"
+        >
           <table className="w-full min-w-[52rem] border-collapse text-left text-sm">
             <thead className="bg-[#f3eee5] text-xs tracking-[0.09em] text-[#52625d] uppercase">
               <tr>
@@ -185,7 +193,7 @@ export function TemplateDocumentationSections({
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold tracking-[0.14em] text-[#9a6926] uppercase">
+            <p className="text-xs font-semibold tracking-[0.14em] text-[#8f5e20] uppercase">
               Version {presentation.version} · Updated {presentation.updated}
             </p>
             <h2
@@ -212,7 +220,7 @@ export function TemplateDocumentationSections({
           aria-hidden="true"
           className="absolute top-6 right-6 size-8 text-[#b57b2a] opacity-60"
         />
-        <p className="text-xs font-semibold tracking-[0.16em] text-[#9a6926] uppercase">
+        <p className="text-xs font-semibold tracking-[0.16em] text-[#8f5e20] uppercase">
           Agent handoff
         </p>
         <h2
@@ -232,7 +240,11 @@ export function TemplateDocumentationSections({
           <summary className="cursor-pointer text-sm font-semibold text-[#31534c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]">
             Review prompt text
           </summary>
-          <pre className="mt-3 max-h-96 overflow-auto rounded-2xl bg-white/70 p-4 text-xs leading-6 whitespace-pre-wrap text-[#405650]">
+          <pre
+            tabIndex={0}
+            aria-label="Agent prompt text"
+            className="mt-3 max-h-96 overflow-auto rounded-2xl bg-white/70 p-4 text-xs leading-6 whitespace-pre-wrap text-[#405650] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]"
+          >
             {presentation.agentPrompt}
           </pre>
         </details>

@@ -64,7 +64,12 @@ async function expectElementVisual(
   const screenshot = await page.screenshot({
     animations: "disabled",
     caret: "hide",
-    clip,
+    clip: {
+      x: Math.floor(clip.x),
+      y: Math.floor(clip.y),
+      width: Math.ceil(clip.width),
+      height: Math.ceil(clip.height),
+    },
     scale: "css",
   });
   expect(screenshot).toMatchSnapshot(name);
