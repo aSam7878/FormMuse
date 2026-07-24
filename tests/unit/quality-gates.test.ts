@@ -74,6 +74,16 @@ describe("canonical quality gates", () => {
     );
   });
 
+  it("assigns the browser integration suite to one canonical command", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+    const browserGate = qualityGates.find((gate) => gate.id === "browser");
+
+    expect(browserGate?.script).toBe("quality:browser");
+    expect(packageJson.scripts["quality:browser"]).toBe("pnpm test:browser");
+  });
+
   it("stops at the owning failing layer and preserves its exit code", () => {
     const write = vi.fn();
     const execute = vi
