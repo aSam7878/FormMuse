@@ -75,6 +75,27 @@ describe("foundation CI source", () => {
       "git diff --exit-code -- .",
     );
   });
+
+  it("compares a reviewed visual baseline without updating it in CI", () => {
+    const workflow = read(".github/workflows/ci.yml");
+    const visualConfig = read("playwright.visual.config.ts");
+    const packageJson = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
+
+    expect(workflow).toContain("name: Official Chromium visual baseline");
+    expect(workflow).toContain("runs-on: ubuntu-24.04");
+    expect(workflow).toContain(
+      "pnpm exec playwright install --with-deps chromium",
+    );
+    expect(workflow).toContain("run: pnpm quality:visual");
+    expect(workflow).not.toContain("--update-snapshots");
+    expect(packageJson.scripts["quality:visual"]).toBe("pnpm test:visual");
+    expect(visualConfig).toContain('locale: "en-US"');
+    expect(visualConfig).toContain('timezoneId: "UTC"');
+    expect(visualConfig).toContain('deviceScaleFactor: 1');
+    expect(visualConfig).toContain('name: "chromium-ubuntu-24.04"');
+  });
 });
 
 describe("repository security source", () => {
