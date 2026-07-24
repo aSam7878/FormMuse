@@ -1,0 +1,50 @@
+name: Latest public shadcn compatibility
+
+on:
+  schedule:
+    - cron: "17 4 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: latest-shadcn-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  public-installation:
+    name: Latest shadcn public install (${{ matrix.manager }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        manager: [pnpm, npm, yarn, bun]
+    steps:
+      - name: Check out the reviewed commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the pinned Node runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.18.0
+          package-manager-cache: false
+
+      - name: Prepare the public package-manager launchers
+        run: |
+          corepack enable pnpm yarn
+          corepack prepare yarn@stable --activate
+          npm install --global bun
+          pnpm --version
+          npm --version
+          yarn --version
+          bun --version
+
+      - name: Install the frozen FormMuse dependency graph
+        run: pnpm install --frozen-lockfile
+
+      - name: Smoke-test the documented latest CLI command
+        run: pnpm quality:installation-public --manager ${{ matrix.manager }}

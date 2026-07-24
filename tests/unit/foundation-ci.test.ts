@@ -100,6 +100,16 @@ describe("foundation CI source", () => {
     expect(visualConfig).toContain("deviceScaleFactor: 1");
     expect(visualConfig).toContain('name: "chromium-ubuntu-24.04"');
   });
+
+  it("keeps latest public CLI compatibility outside pull-request CI", () => {
+    const workflow = read(".github/workflows/latest-shadcn-compatibility.yml");
+
+    expect(workflow).toContain("schedule:");
+    expect(workflow).toContain("workflow_dispatch:");
+    expect(workflow).not.toContain("pull_request:");
+    expect(workflow).toContain("manager: [pnpm, npm, yarn, bun]");
+    expect(workflow).toContain("pnpm quality:installation-public --manager");
+  });
 });
 
 describe("repository security source", () => {

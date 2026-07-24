@@ -40,6 +40,7 @@
     "quality:lighthouse": "node --import tsx scripts/run-lighthouse-quality.mts",
     "quality:links": "node --import tsx scripts/run-link-quality.mts",
     "quality:security": "node --import tsx scripts/run-security-quality.mts",
+    "quality:installation-public": "node --import tsx scripts/verify-public-installation.mts",
     "quality:registry-validate": "vitest run tests/unit/registry-schemas.test.ts tests/unit/registry-build.test.ts",
     "quality:static-export": "pnpm guides:build && pnpm static-data:fixture && pnpm build",
     "quality:generated-diff": "git diff --exit-code -- .",
