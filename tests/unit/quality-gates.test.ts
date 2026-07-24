@@ -61,6 +61,19 @@ describe("canonical quality gates", () => {
     expect(packageJson.scripts["quality:unit"]).not.toMatch(/--threshold/i);
   });
 
+  it("keeps the clean Next.js and Vite fixture commands independently runnable", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+
+    expect(packageJson.scripts["quality:fixture-next"]).toBe(
+      "node --import tsx scripts/verify-registry-install.ts --framework next",
+    );
+    expect(packageJson.scripts["quality:fixture-vite"]).toBe(
+      "node --import tsx scripts/verify-registry-install.ts --framework vite",
+    );
+  });
+
   it("stops at the owning failing layer and preserves its exit code", () => {
     const write = vi.fn();
     const execute = vi

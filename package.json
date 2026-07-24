@@ -30,6 +30,8 @@
     "quality:foundation": "node --import tsx scripts/run-quality-gates.mts --profile foundation",
     "quality:list": "node --import tsx scripts/run-quality-gates.mts --list",
     "quality:unit": "pnpm test:coverage",
+    "quality:fixture-next": "node --import tsx scripts/verify-registry-install.ts --framework next",
+    "quality:fixture-vite": "node --import tsx scripts/verify-registry-install.ts --framework vite",
     "quality:registry-validate": "vitest run tests/unit/registry-schemas.test.ts tests/unit/registry-build.test.ts",
     "quality:static-export": "pnpm guides:build && pnpm static-data:fixture && pnpm build",
     "quality:generated-diff": "git diff --exit-code -- .",
