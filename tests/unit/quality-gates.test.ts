@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -45,6 +48,17 @@ describe("canonical quality gates", () => {
       "static-export",
       "generated-diff",
     ]);
+  });
+
+  it("makes the canonical unit gate collect coverage without inventing a threshold", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+    const unitGate = qualityGates.find((gate) => gate.id === "unit");
+
+    expect(unitGate?.script).toBe("quality:unit");
+    expect(packageJson.scripts["quality:unit"]).toBe("pnpm test:coverage");
+    expect(packageJson.scripts["quality:unit"]).not.toMatch(/--threshold/i);
   });
 
   it("stops at the owning failing layer and preserves its exit code", () => {

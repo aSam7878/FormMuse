@@ -38,7 +38,7 @@ export const qualityGates = [
   {
     id: "unit",
     label: "Vitest and Testing Library",
-    script: "test",
+    script: "quality:unit",
     availability: "foundation",
   },
   {
