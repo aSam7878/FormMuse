@@ -1,5 +1,7 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+import { PREVIEW_SUBMISSION_DELAY_MS } from "../../lib/formmuse/preview-adapter";
+
 const previewPath = "/preview/hanging-gifts-contact/";
 
 async function completeForm(page: import("@playwright/test").Page) {
@@ -79,6 +81,7 @@ test("submits successfully when the optional last name is empty", async ({
 test("shows pending and persistent success states without duplicate submission", async ({
   page,
 }) => {
+  await page.clock.install({ time: new Date("2026-07-24T00:00:00.000Z") });
   await page.goto(previewPath);
   await completeForm(page);
   await page.getByRole("button", { name: "Submit" }).click();
@@ -87,6 +90,8 @@ test("shows pending and persistent success states without duplicate submission",
   await expect(page.locator("fieldset")).toHaveAttribute("disabled", "");
   await expect(page.getByLabel("First name")).toBeDisabled();
   await expect(page.getByRole("status")).toHaveText("Sending your message…");
+
+  await page.clock.runFor(PREVIEW_SUBMISSION_DELAY_MS);
 
   const successHeading = page.getByRole("heading", { name: "Message sent" });
   await expect(successHeading).toBeVisible();
@@ -99,9 +104,12 @@ test("shows pending and persistent success states without duplicate submission",
 test("preserves entered values after failure and retries only explicitly", async ({
   page,
 }) => {
+  await page.clock.install({ time: new Date("2026-07-24T00:00:00.000Z") });
   await page.goto(`${previewPath}?outcome=failure`);
   await completeForm(page);
   await page.getByRole("button", { name: "Submit" }).click();
+  await expect(page.getByRole("status")).toHaveText("Sending your message…");
+  await page.clock.runFor(PREVIEW_SUBMISSION_DELAY_MS);
 
   const failureHeading = page.getByRole("heading", {
     name: "We could not send your message",
@@ -277,6 +285,7 @@ test("preserves the original transparent-to-solid navbar transition", async ({
 test("keeps the hanging gifts visibly swaying in normal motion", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(previewPath);
   const firstGift = page.locator("[data-formmuse-gift]").first();
@@ -285,12 +294,11 @@ test("keeps the hanging gifts visibly swaying in normal motion", async ({
   const initialTransform = await firstGift.evaluate(
     (element) => getComputedStyle(element).transform,
   );
-  await page.waitForTimeout(450);
-  const laterTransform = await firstGift.evaluate(
-    (element) => getComputedStyle(element).transform,
-  );
-
-  expect(laterTransform).not.toBe(initialTransform);
+  await expect
+    .poll(() =>
+      firstGift.evaluate((element) => getComputedStyle(element).transform),
+    )
+    .not.toBe(initialTransform);
 });
 
 test("opens and closes the original full-screen mobile navigation", async ({
