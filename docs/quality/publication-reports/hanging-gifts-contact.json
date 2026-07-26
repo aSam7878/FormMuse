@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "template": {
+    "slug": "hanging-gifts-contact",
+    "version": "0.0.0",
+    "registryStatus": "draft"
+  },
+  "recordedAt": "2026-07-26T14:02:50.207Z",
+  "environment": {
+    "node": "v24.18.0",
+    "pnpm": "pnpm (unknown version)",
+    "operatingSystem": "darwin-arm64"
+  },
+  "artifact": {
+    "authoredItemSha256": "9be451042a1e79ecd9c6a75ec169815a98a45bc2e93c2e8b6303757abe61655f",
+    "generatedItemSha256": "76d1d8adc71c2653a29854bb27884c987767bea215fcefe1a52410ae2a692dff"
+  },
+  "gates": [
+    {
+      "id": "format",
+      "result": "passed",
+      "command": "pnpm format:check",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "types",
+      "result": "passed",
+      "command": "pnpm typecheck",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "lint",
+      "result": "passed",
+      "command": "pnpm lint",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "unit",
+      "result": "passed",
+      "command": "pnpm quality:unit",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "registry-validate",
+      "result": "passed",
+      "command": "pnpm quality:registry-validate",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "registry-build",
+      "result": "passed",
+      "command": "pnpm registry:build",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "installation-pinned",
+      "result": "passed",
+      "command": "pnpm test:registry-install",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "static-export",
+      "result": "passed",
+      "command": "pnpm quality:static-export",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "generated-diff",
+      "result": "passed",
+      "command": "pnpm quality:generated-diff",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "fixture-next",
+      "result": "passed",
+      "command": "pnpm quality:fixture-next",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "fixture-vite",
+      "result": "passed",
+      "command": "pnpm quality:fixture-vite",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "browser-engines",
+      "result": "passed",
+      "command": "pnpm quality:browser",
+      "evidenceKind": "engine-emulation"
+    },
+    {
+      "id": "visual",
+      "result": "passed",
+      "command": "pnpm quality:visual",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "accessibility-automation",
+      "result": "passed",
+      "command": "pnpm quality:accessibility",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "lighthouse",
+      "result": "passed",
+      "command": "pnpm quality:lighthouse",
+      "evidenceKind": "laboratory"
+    },
+    {
+      "id": "links",
+      "result": "passed",
+      "command": "pnpm quality:links",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "security",
+      "result": "passed",
+      "command": "pnpm quality:security",
+      "evidenceKind": "automated"
+    },
+    {
+      "id": "installation-public-latest",
+      "result": "incomplete",
+      "evidenceKind": "external-workflow"
+    },
+    {
+      "id": "manual-accessibility",
+      "result": "incomplete",
+      "evidenceKind": "manual",
+      "evidenceReference": "docs/quality/accessibility-manual-evidence.md"
+    },
+    {
+      "id": "branded-browser",
+      "result": "incomplete",
+      "evidenceKind": "manual"
+    },
+    {
+      "id": "physical-device",
+      "result": "incomplete",
+      "evidenceKind": "manual"
+    },
+    {
+      "id": "asset-license-review",
+      "result": "incomplete",
+      "evidenceKind": "manual",
+      "evidenceReference": "docs/security/license-triage.md"
+    }
+  ],
+  "blockers": [
+    "Fresh scheduled latest shadcn public-command workflow is incomplete.",
+    "Recorded keyboard, focus, zoom, screen-reader, touch, motion, and contrast review is incomplete.",
+    "Current branded Chrome, Edge, Firefox, and Safari smoke tests is incomplete.",
+    "Current physical iOS Safari and Android Chrome smoke tests is incomplete.",
+    "Asset and dependency license review is incomplete."
+  ],
+  "eligible": false
+}
