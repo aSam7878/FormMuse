@@ -7,9 +7,12 @@ engineStrict: true
 minimumReleaseAgeExclude:
   - "@testing-library/jest-dom@7.0.0"
 overrides:
+  "minimatch@3.1.5>brace-expansion": 5.0.8
   postcss: 8.5.20
   sharp: 0.35.0
   tmp: 0.2.7
   uuid: 11.1.1
+patchedDependencies:
+  minimatch@3.1.5: patches/minimatch@3.1.5.patch
 saveExact: true
 strictPeerDependencies: true
