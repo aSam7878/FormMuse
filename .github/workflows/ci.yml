@@ -90,7 +90,12 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Compare the official visual baseline
+        if: github.event_name != 'workflow_dispatch'
         run: pnpm quality:visual
+
+      - name: Record Ubuntu visual snapshot candidates
+        if: github.event_name == 'workflow_dispatch'
+        run: pnpm test:visual -- --update-snapshots
 
       - name: Preserve failed visual comparison artifacts
         if: failure()
@@ -100,6 +105,15 @@ jobs:
           path: test-results
           if-no-files-found: error
           retention-days: 7
+
+      - name: Preserve Ubuntu visual snapshot candidates
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: stage-4-ubuntu-visual-snapshot-candidates
+          path: tests/visual/__snapshots__/visual-baseline.spec.ts
+          if-no-files-found: error
+          retention-days: 1
 
   site-quality:
     name: Static Lighthouse and link quality

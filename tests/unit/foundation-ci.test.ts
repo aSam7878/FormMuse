@@ -94,7 +94,8 @@ describe("foundation CI source", () => {
       "pnpm exec playwright install --with-deps chromium",
     );
     expect(workflow).toContain("run: pnpm quality:visual");
-    expect(workflow).not.toContain("--update-snapshots");
+    expect(workflow).toContain("if: github.event_name != 'workflow_dispatch'");
+    expect(workflow).toContain("run: pnpm test:visual -- --update-snapshots");
     expect(packageJson.scripts["quality:visual"]).toBe("pnpm test:visual");
     expect(visualConfig).toContain('locale: "en-US"');
     expect(visualConfig).toContain('timezoneId: "UTC"');
