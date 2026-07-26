@@ -95,7 +95,9 @@ describe("foundation CI source", () => {
     );
     expect(workflow).toContain("run: pnpm quality:visual");
     expect(workflow).toContain("if: github.event_name != 'workflow_dispatch'");
-    expect(workflow).toContain("run: pnpm test:visual -- --update-snapshots");
+    expect(workflow).toContain(
+      "run: pnpm exec playwright test --config=playwright.visual.config.ts --update-snapshots",
+    );
     expect(packageJson.scripts["quality:visual"]).toBe("pnpm test:visual");
     expect(visualConfig).toContain('locale: "en-US"');
     expect(visualConfig).toContain('timezoneId: "UTC"');

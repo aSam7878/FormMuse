@@ -95,7 +95,7 @@ jobs:
 
       - name: Record Ubuntu visual snapshot candidates
         if: github.event_name == 'workflow_dispatch'
-        run: pnpm test:visual -- --update-snapshots
+        run: pnpm exec playwright test --config=playwright.visual.config.ts --update-snapshots
 
       - name: Preserve failed visual comparison artifacts
         if: failure()
