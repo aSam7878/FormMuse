@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 import {
   authoredItemSha256,
   publicationGateDefinitions,
+  publicationReportExitCode,
   publicationReportPath,
   type PublicationGateId,
   type PublicationGateResult,
@@ -14,6 +15,14 @@ import {
 import { loadAuthoredRegistry } from "../lib/formmuse/registry-build";
 
 const PROJECT_ROOT = resolve(process.cwd());
+const allowedArguments = new Set(["--allow-draft-failures"]);
+const unknownArgument = process.argv
+  .slice(2)
+  .find((argument) => !allowedArguments.has(argument));
+if (unknownArgument) {
+  throw new Error(`Unknown publication report option: ${unknownArgument}`);
+}
+const allowDraftFailures = process.argv.includes("--allow-draft-failures");
 const pnpmCli = process.env.npm_execpath;
 
 if (!pnpmCli) {
@@ -120,8 +129,10 @@ for (const definition of publicationGateDefinitions) {
 }
 
 const authored = loadAuthoredRegistry(PROJECT_ROOT);
+const reports: PublicationReport[] = [];
 for (const item of authored.items) {
   const report = createReport(item, results);
+  reports.push(report);
   const path = publicationReportPath(PROJECT_ROOT, item.name);
   mkdirSync(resolve(path, ".."), { recursive: true });
   writeFileSync(path, `${JSON.stringify(report, null, 2)}\n`);
@@ -130,6 +141,19 @@ for (const item of authored.items) {
   );
 }
 
-if ([...results.values()].some((result) => result === "failed")) {
+const automatedFailure = [...results.values()].some(
+  (result) => result === "failed",
+);
+const exitCode = publicationReportExitCode({
+  allowDraftFailures,
+  automatedFailure,
+  registryStatuses: reports.map((report) => report.template.registryStatus),
+});
+if (automatedFailure && exitCode === 0) {
+  process.stdout.write(
+    "[publication-report:advisory] automated failures remain blocking evidence, but do not fail pull-request CI while every template is draft\n",
+  );
+}
+if (exitCode !== 0) {
   process.exitCode = 1;
 }

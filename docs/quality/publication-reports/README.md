@@ -17,3 +17,10 @@ Record.
 Automated browser engines and mobile emulation are labelled separately from
 branded-browser and physical-device evidence. Lighthouse results are laboratory
 evidence, not field data or accessibility certification.
+
+Pull-request CI uses `pnpm quality:publication-report:ci`. It still runs and
+records every gate, but automated failures are advisory while every authored
+template remains `draft`. The canonical `pnpm quality:publication-report`
+command stays strict, and CI becomes strict automatically as soon as any
+template is `published` or `deprecated`. Registry generation independently
+rejects publication without current complete evidence.

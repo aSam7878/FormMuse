@@ -186,6 +186,26 @@ export type PublicationReport = Readonly<{
   eligible: boolean;
 }>;
 
+export function publicationReportExitCode({
+  allowDraftFailures,
+  automatedFailure,
+  registryStatuses,
+}: Readonly<{
+  allowDraftFailures: boolean;
+  automatedFailure: boolean;
+  registryStatuses: readonly PublicationReport["template"]["registryStatus"][];
+}>): 0 | 1 {
+  if (!automatedFailure) return 0;
+  if (
+    allowDraftFailures &&
+    registryStatuses.length > 0 &&
+    registryStatuses.every((status) => status === "draft")
+  ) {
+    return 0;
+  }
+  return 1;
+}
+
 export class PublicationReportError extends Error {
   override readonly name = "PublicationReportError";
 }
