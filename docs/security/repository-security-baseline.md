@@ -7,6 +7,7 @@ This document separates security controls committed in source from GitHub accoun
 - `.github/workflows/ci.yml` runs pull-request checks with Node.js 24.18.0, pnpm 11.15.1 from `packageManager`, a frozen lockfile, read-only default permissions, and no repository credential persisted by checkout.
 - The foundation gate checks tracked-source formatting, TypeScript, ESLint, unit tests, registry generation, guide compilation, deterministic static-data fixtures, static export, and tracked generated-output drift.
 - The dependency-review job fails when a pull request introduces a dependency with a high or critical known vulnerability. It performs licence review without granting pull-request write access.
+- The `Supply-chain and generated-output security` job runs the pinned npm audit, licence inventory, secret scan, distributed-source boundary scan, generated-registry check, Manual Installation parity check, and static-export resource scan. Its one recorded build-only unknown-licence exception remains an owner-only public-launch checkpoint in `docs/security/license-triage.md`.
 - `.github/workflows/codeql.yml` analyzes JavaScript and TypeScript on pull requests, `main`, a weekly schedule, and manual dispatch. Only its analysis job receives `security-events: write`.
 - `.github/dependabot.yml` proposes weekly npm and GitHub Actions updates. No workflow or source setting auto-merges dependency changes.
 - Third-party actions are pinned to complete reviewed commit SHAs. Dependabot may propose pin updates, but they require the normal review and quality gate.

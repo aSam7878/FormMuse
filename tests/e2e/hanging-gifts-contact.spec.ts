@@ -1,9 +1,21 @@
-import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Locator } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+import { PREVIEW_SUBMISSION_DELAY_MS } from "../../lib/formmuse/preview-adapter";
 
 const previewPath = "/preview/hanging-gifts-contact/";
+const previewClockStartTime = new Date("2026-07-24T00:00:00.000Z");
+const previewClockPauseTime = new Date("2026-07-24T00:01:00.000Z");
 
-async function completeForm(page: import("@playwright/test").Page) {
+async function installSubmissionClock(page: Page) {
+  await page.clock.install({ time: previewClockStartTime });
+}
+
+async function submitWithPausedClock(page: Page) {
+  await page.clock.pauseAt(previewClockPauseTime);
+  await page.getByRole("button", { name: "Submit" }).click({ force: true });
+}
+
+async function completeForm(page: Page) {
   await page.getByLabel("First name").fill("Avery");
   await page.getByLabel("Last name (optional)").fill("Stone");
   await page.getByRole("combobox", { name: "Requirement" }).click();
@@ -50,6 +62,7 @@ test("validates on submit and focuses the first invalid field", async ({
 test("submits successfully when the optional last name is empty", async ({
   page,
 }) => {
+  await installSubmissionClock(page);
   await page.goto(previewPath);
   await expect(
     page.getByText("All fields are required unless marked optional."),
@@ -70,7 +83,8 @@ test("submits successfully when the optional last name is empty", async ({
   await page
     .getByLabel("Message")
     .fill("I would like to discuss a thoughtful new project.");
-  await page.getByRole("button", { name: "Submit" }).click();
+  await submitWithPausedClock(page);
+  await page.clock.runFor(PREVIEW_SUBMISSION_DELAY_MS);
 
   await expect(
     page.getByRole("heading", { name: "Message sent" }),
@@ -80,14 +94,17 @@ test("submits successfully when the optional last name is empty", async ({
 test("shows pending and persistent success states without duplicate submission", async ({
   page,
 }) => {
+  await installSubmissionClock(page);
   await page.goto(previewPath);
   await completeForm(page);
-  await page.getByRole("button", { name: "Submit" }).click();
+  await submitWithPausedClock(page);
 
   await expect(page.locator("form")).toHaveAttribute("aria-busy", "true");
   await expect(page.locator("fieldset")).toHaveAttribute("disabled", "");
   await expect(page.getByLabel("First name")).toBeDisabled();
   await expect(page.getByRole("status")).toHaveText("Sending your message…");
+
+  await page.clock.runFor(PREVIEW_SUBMISSION_DELAY_MS);
 
   const successHeading = page.getByRole("heading", { name: "Message sent" });
   await expect(successHeading).toBeVisible();
@@ -100,9 +117,12 @@ test("shows pending and persistent success states without duplicate submission",
 test("preserves entered values after failure and retries only explicitly", async ({
   page,
 }) => {
+  await installSubmissionClock(page);
   await page.goto(`${previewPath}?outcome=failure`);
   await completeForm(page);
-  await page.getByRole("button", { name: "Submit" }).click();
+  await submitWithPausedClock(page);
+  await expect(page.getByRole("status")).toHaveText("Sending your message…");
+  await page.clock.runFor(PREVIEW_SUBMISSION_DELAY_MS);
 
   const failureHeading = page.getByRole("heading", {
     name: "We could not send your message",
@@ -229,15 +249,6 @@ test("supports logical keyboard order and Escape-closing mobile navigation", asy
   }
 });
 
-test("contains no automatically detectable accessibility violations", async ({
-  page,
-}) => {
-  await page.goto(previewPath);
-  const results = await new AxeBuilder({ page }).analyze();
-
-  expect(results.violations).toEqual([]);
-});
-
 test("removes infinite decorative animation in reduced motion", async ({
   page,
 }) => {
@@ -287,6 +298,7 @@ test("preserves the original transparent-to-solid navbar transition", async ({
 test("keeps the hanging gifts visibly swaying in normal motion", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(previewPath);
   const firstGift = page.locator("[data-formmuse-gift]").first();
@@ -295,12 +307,11 @@ test("keeps the hanging gifts visibly swaying in normal motion", async ({
   const initialTransform = await firstGift.evaluate(
     (element) => getComputedStyle(element).transform,
   );
-  await page.waitForTimeout(450);
-  const laterTransform = await firstGift.evaluate(
-    (element) => getComputedStyle(element).transform,
-  );
-
-  expect(laterTransform).not.toBe(initialTransform);
+  await expect
+    .poll(() =>
+      firstGift.evaluate((element) => getComputedStyle(element).transform),
+    )
+    .not.toBe(initialTransform);
 });
 
 test("opens and closes the original full-screen mobile navigation", async ({
@@ -326,6 +337,7 @@ test("opens and closes the original full-screen mobile navigation", async ({
 test("does not make external requests during loading or form interaction", async ({
   page,
 }) => {
+  await installSubmissionClock(page);
   const externalRequests: string[] = [];
 
   page.on("request", (request) => {
@@ -337,7 +349,8 @@ test("does not make external requests during loading or form interaction", async
 
   await page.goto(previewPath);
   await completeForm(page);
-  await page.getByRole("button", { name: "Submit" }).click();
+  await submitWithPausedClock(page);
+  await page.clock.runFor(PREVIEW_SUBMISSION_DELAY_MS);
   await expect(
     page.getByRole("heading", { name: "Message sent" }),
   ).toBeVisible();

@@ -12,6 +12,7 @@ function read(path: string): string {
 const EXPECTED_ACTION_PINS = new Map([
   ["actions/checkout", "3d3c42e5aac5ba805825da76410c181273ba90b1"],
   ["actions/setup-node", "820762786026740c76f36085b0efc47a31fe5020"],
+  ["actions/upload-artifact", "ea165f8d65b6e75b540449e92b4886f43607fa02"],
   [
     "actions/dependency-review-action",
     "a1d282b36b6f3519aa1f3fc636f609c47dddb294",
@@ -38,24 +39,13 @@ describe("foundation CI source", () => {
     );
   });
 
-  it("uses the pinned toolchain and complete Stage 1 source gate", () => {
+  it("uses the pinned toolchain and canonical local/CI quality profile", () => {
     const workflow = read(".github/workflows/ci.yml");
 
     expect(workflow).toContain("node-version: 24.18.0");
     expect(workflow).toContain("pnpm install --frozen-lockfile");
-    for (const command of [
-      "pnpm format:check",
-      "pnpm typecheck",
-      "pnpm lint",
-      "pnpm test",
-      "pnpm registry:build",
-      "pnpm guides:build",
-      "pnpm static-data:fixture",
-      "pnpm build",
-      "git diff --exit-code -- .",
-    ]) {
-      expect(workflow).toContain(`run: ${command}`);
-    }
+    expect(workflow).toContain("run: pnpm quality:foundation");
+    expect(workflow).not.toContain("run: pnpm test\n");
   });
 
   it("keeps pull-request execution least-privileged and credential-free", () => {
@@ -74,12 +64,65 @@ describe("foundation CI source", () => {
 
   it("defines fail-closed dependency and generated-output review gates", () => {
     const workflow = read(".github/workflows/ci.yml");
+    const packageJson = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
 
     expect(workflow).toContain("fail-on-severity: high");
     expect(workflow).toContain("license-check: true");
     expect(workflow).toContain("vulnerability-check: true");
     expect(workflow).toContain("comment-summary-in-pr: never");
-    expect(workflow).toContain("git diff --exit-code -- .");
+    expect(packageJson.scripts["quality:generated-diff"]).toBe(
+      "git diff --exit-code -- .",
+    );
+    expect(workflow).toContain(
+      "name: Supply-chain and generated-output security",
+    );
+    expect(workflow).toContain("run: pnpm quality:security");
+  });
+
+  it("compares a reviewed visual baseline without updating it in CI", () => {
+    const workflow = read(".github/workflows/ci.yml");
+    const visualConfig = read("playwright.visual.config.ts");
+    const packageJson = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
+
+    expect(workflow).toContain("name: Official Chromium visual baseline");
+    expect(workflow).toContain("runs-on: ubuntu-24.04");
+    expect(workflow).toContain(
+      "pnpm exec playwright install --with-deps chromium",
+    );
+    expect(workflow).toContain("run: pnpm quality:visual");
+    expect(workflow).not.toContain("--update-snapshots");
+    expect(packageJson.scripts["quality:visual"]).toBe("pnpm test:visual");
+    expect(visualConfig).toContain('locale: "en-US"');
+    expect(visualConfig).toContain('timezoneId: "UTC"');
+    expect(visualConfig).toContain("deviceScaleFactor: 1");
+    expect(visualConfig).toContain('name: "chromium-ubuntu-24.04"');
+  });
+
+  it("keeps latest public CLI compatibility outside pull-request CI", () => {
+    const workflow = read(".github/workflows/latest-shadcn-compatibility.yml");
+
+    expect(workflow).toContain("schedule:");
+    expect(workflow).toContain("workflow_dispatch:");
+    expect(workflow).not.toContain("pull_request:");
+    expect(workflow).toContain("manager: [pnpm, npm, yarn, bun]");
+    expect(workflow).toContain("pnpm quality:installation-public --manager");
+  });
+
+  it("generates complete reproducible publication evidence in CI", () => {
+    const workflow = read(".github/workflows/ci.yml");
+
+    expect(workflow).toContain("name: Reproducible publication evidence");
+    expect(workflow).toContain(
+      "needs: [source, visual, site-quality, security]",
+    );
+    expect(workflow).toContain(
+      "pnpm exec playwright install --with-deps chromium firefox webkit",
+    );
+    expect(workflow).toContain("run: pnpm quality:publication-report");
   });
 });
 

@@ -206,6 +206,16 @@ describe("HangingGiftsContactForm", () => {
     ).toBeInTheDocument();
     expect(screen.getByLabelText("First name")).toHaveFocus();
     expect(onSubmit).not.toHaveBeenCalled();
+
+    await user.type(screen.getByLabelText("First name"), "Avery");
+
+    expect(
+      screen.queryByText("Enter your first name."),
+    ).not.toBeInTheDocument();
+    expect(screen.getByLabelText("First name")).toHaveAttribute(
+      "aria-invalid",
+      "false",
+    );
   });
 
   it("submits parsed values and preserves message formatting", async () => {
@@ -253,7 +263,13 @@ describe("HangingGiftsContactForm", () => {
     fireEvent.submit(form as HTMLFormElement);
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    expect(form).toHaveAttribute("aria-busy", "true");
+    expect(within(form as HTMLFormElement).getByRole("group")).toBeDisabled();
     expect(screen.getByText("Sending your message…")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Sending your message…",
+    );
+    expect(screen.getByRole("status").closest("form")).toBeNull();
     pending.resolve();
     expect(await screen.findByText("Message sent")).toBeInTheDocument();
   });
@@ -335,6 +351,20 @@ describe("HangingGiftsContactForm", () => {
     );
 
     expect(screen.getByLabelText("First name")).toHaveValue("Edited");
+  });
+
+  it("merges partial initial values with the documented empty defaults", () => {
+    render(
+      <HangingGiftsContactForm
+        defaultValues={{ firstName: "Avery" }}
+        onSubmit={async () => undefined}
+      />,
+    );
+
+    expect(screen.getByLabelText("First name")).toHaveValue("Avery");
+    expect(screen.getByLabelText(/Last name/)).toHaveValue("");
+    expect(screen.getByLabelText("Email address")).toHaveValue("");
+    expect(screen.getByLabelText("Message")).toHaveValue("");
   });
 
   it("applies className only to the outer root and normalizes assetBaseUrl", () => {

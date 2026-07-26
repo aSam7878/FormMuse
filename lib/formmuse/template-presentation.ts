@@ -18,7 +18,6 @@ export type TemplatePresentationModel = Readonly<{
   props: TemplatePageModel["props"];
   usageNotes: readonly string[];
   accessibilityNotes: readonly string[];
-  templateApiPath: "/docs/template-api";
   changelogPath: string;
   changelogSource: string;
   agentPrompt: string;
@@ -113,7 +112,6 @@ export function createTemplatePresentationModel(
     props: template.props,
     usageNotes: template.usageNotes,
     accessibilityNotes: template.accessibilityNotes,
-    templateApiPath: "/docs/template-api",
     changelogPath,
     changelogSource: readTemplateFile(changelogPath),
     agentPrompt: createAgentPrompt(template, installation),

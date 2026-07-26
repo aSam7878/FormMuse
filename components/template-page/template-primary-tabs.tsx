@@ -74,7 +74,7 @@ export function TemplatePrimaryTabs({
     <section aria-labelledby={`${idPrefix}-surface-title`}>
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#9a6926] uppercase">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#8f5e20] uppercase">
             Template surface
           </p>
           <h2
@@ -214,7 +214,11 @@ export function TemplatePrimaryTabs({
                     <p className="mb-3 text-xs leading-5 text-[#c6d5d0]">
                       {file.purpose}
                     </p>
-                    <pre className="max-h-[32rem] overflow-auto text-xs leading-6">
+                    <pre
+                      tabIndex={0}
+                      aria-label={`${file.path} source code`}
+                      className="max-h-[32rem] overflow-auto text-xs leading-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]"
+                    >
                       <code>{file.content}</code>
                     </pre>
                   </div>

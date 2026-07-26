@@ -517,7 +517,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 # Stage 4 — Add the complete testing and compatibility infrastructure
 
-**Stage status:** Partial tool installation; major infrastructure not started.
+**Stage status:** Complete on the cumulative `codex/stage-4-quality-system` branch; pending review and merge.
 
 **Outcome:** One reproducible quality system can determine whether a template or site change is eligible for publication.
 
@@ -525,7 +525,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.1 Define canonical quality commands and gate aggregation
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -536,7 +536,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.2 Complete Vitest and Testing Library coverage
 
-**Status:** Schema tests partial; rendered component tests not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -547,7 +547,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.3 Build clean Next.js and Vite compatibility fixtures
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -560,7 +560,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.4 Expand Playwright integration coverage
 
-**Status:** Partial.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -572,7 +572,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.5 Establish the Visual Baseline Environment
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -584,7 +584,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.6 Complete automated and manual accessibility evidence
 
-**Status:** Axe partial; manual evidence not started.
+**Status:** Automated evidence and the manual-evidence format are complete; the required human execution evidence remains a publication blocker.
 
 **Deliverables:**
 
@@ -596,7 +596,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.7 Add Lighthouse CI and Linkinator
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -608,7 +608,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.8 Add supply-chain and generated-output security checks
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -620,7 +620,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.9 Test pinned and public shadcn installation paths
 
-**Status:** Not started.
+**Status:** Pinned and public command-form coverage are complete; a fresh scheduled `shadcn@latest` pass remains a publication checkpoint.
 
 **Deliverables:**
 
@@ -632,7 +632,7 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 ## 4.10 Generate a machine-readable publication report
 
-**Status:** Not started.
+**Status:** Complete; Hanging Gifts remains `draft` while required human and external evidence is incomplete.
 
 **Deliverables:**
 
@@ -649,6 +649,8 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 - Official visual baselines exist in a pinned environment.
 - Manual evidence format exists and automated tools are not misrepresented as certification.
 - Publication status is mechanically tied to complete evidence rather than launch-count pressure.
+
+Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch. The canonical aggregate gate, rendered behavior tests, clean Next.js and Vite fixtures, multi-engine and mobile-emulation integration tests, pinned Ubuntu visual baselines, automated accessibility, Lighthouse, links, supply-chain and generated-output security, pinned installation compatibility, and machine-readable publication reporting are implemented. Hanging Gifts remains `draft` because the report intentionally retains the fresh `shadcn@latest`, human accessibility, branded-browser, physical-device, and asset-licence checkpoints as incomplete publication evidence.
 
 ---
 

@@ -51,6 +51,23 @@ function fail(message: string): never {
   throw new Error(message);
 }
 
+function selectedFixtureFrameworks(): FixtureFramework[] {
+  const arguments_ = process.argv.slice(2);
+  if (arguments_.length === 0) {
+    return ["vite", "next"];
+  }
+  if (
+    arguments_.length !== 2 ||
+    arguments_[0] !== "--framework" ||
+    (arguments_[1] !== "next" && arguments_[1] !== "vite")
+  ) {
+    fail(
+      "Fixture verification accepts only --framework next or --framework vite.",
+    );
+  }
+  return [arguments_[1]];
+}
+
 function isObject(value: unknown): value is JsonObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -592,6 +609,7 @@ async function verifyFrameworkFixture(
 
 async function main(): Promise<void> {
   const cliPath = assertPinnedShadcn();
+  const frameworks = selectedFixtureFrameworks();
   const temporaryRoot = mkdtempSync(
     join(tmpdir(), "formmuse-registry-install."),
   );
@@ -617,26 +635,27 @@ async function main(): Promise<void> {
       item.registryDependencies ?? [],
     );
 
-    const viteInstalledFiles = await verifyFrameworkFixture(
-      cliPath,
-      temporaryRoot,
-      "vite",
-      itemPath,
-      item,
-    );
-    await verifyFrameworkFixture(
-      cliPath,
-      temporaryRoot,
-      "next",
-      itemPath,
-      item,
-    );
-    const viteRoot = join(temporaryRoot, "vite/formmuse-vite-base-fixture");
-    assertConflictIsVisible(cliPath, viteRoot, itemPath, viteInstalledFiles);
+    let viteInstalledFiles: string[] | undefined;
+    for (const framework of frameworks) {
+      const installedFiles = await verifyFrameworkFixture(
+        cliPath,
+        temporaryRoot,
+        framework,
+        itemPath,
+        item,
+      );
+      if (framework === "vite") {
+        viteInstalledFiles = installedFiles;
+      }
+    }
 
-    assertRadixPreflight(cliPath, join(temporaryRoot, "radix"));
+    if (viteInstalledFiles) {
+      const viteRoot = join(temporaryRoot, "vite/formmuse-vite-base-fixture");
+      assertConflictIsVisible(cliPath, viteRoot, itemPath, viteInstalledFiles);
+      assertRadixPreflight(cliPath, join(temporaryRoot, "radix"));
+    }
     process.stdout.write(
-      `Verified pinned shadcn ${SHADCN_VERSION} installed, typed, built, and rendered Hanging Gifts in clean Vite and Next.js Base UI fixtures with independent dependency ownership, visible conflicts, and Radix rejection.\n`,
+      `Verified pinned shadcn ${SHADCN_VERSION} installed, typed, built, and rendered Hanging Gifts in clean ${frameworks.join(" and ")} Base UI fixture${frameworks.length === 1 ? "" : "s"} with independent dependency ownership${viteInstalledFiles ? ", visible conflicts, and Radix rejection" : ""}.\n`,
     );
   } finally {
     rmSync(temporaryRoot, { recursive: true, force: true });

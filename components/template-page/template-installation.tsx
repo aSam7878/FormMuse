@@ -73,7 +73,7 @@ export function TemplateInstallation({
 
   return (
     <section aria-labelledby={`${id}-installation-title`} className="mt-16">
-      <p className="text-xs font-semibold tracking-[0.16em] text-[#9a6926] uppercase">
+      <p className="text-xs font-semibold tracking-[0.16em] text-[#8f5e20] uppercase">
         Install the template
       </p>
       <h2
@@ -110,7 +110,7 @@ export function TemplateInstallation({
               <dt className="font-semibold text-[#24413b]">
                 {requirement.name}
               </dt>
-              <dd className="mt-1 text-xs leading-5 text-[#697570]">
+              <dd className="mt-1 text-xs leading-5 text-[#5d6965]">
                 {requirement.detail}
               </dd>
             </div>
@@ -167,7 +167,7 @@ export function TemplateInstallation({
                 "relative min-h-11 px-4 text-sm font-semibold capitalize focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]",
                 activeTab === tab
                   ? "text-[#0b6f5d] after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:bg-[#0b6f5d]"
-                  : "text-[#697570]",
+                  : "text-[#5d6965]",
               )}
             >
               {tab === "cli" ? "CLI" : "Manual"}
@@ -232,7 +232,7 @@ export function TemplateInstallation({
                 />
               </div>
             </div>
-            <p className="text-xs leading-5 text-[#697570]">
+            <p className="text-xs leading-5 text-[#5d6965]">
               Coding agents and troubleshooting sessions may inspect the project
               with{" "}
               <code className="rounded bg-[#f2eee6] px-1.5 py-1">
@@ -341,7 +341,7 @@ export function TemplateInstallation({
               <h3 className="font-serif text-2xl text-[#17322f]">
                 5. Import and render
               </h3>
-              <p className="mt-2 text-sm text-[#697570]">
+              <p className="mt-2 text-sm text-[#5d6965]">
                 Import from{" "}
                 <code className="rounded bg-[#f2eee6] px-1.5 py-1">
                   {installation.importPath}
@@ -355,7 +355,11 @@ export function TemplateInstallation({
                   </code>
                   <CopyButton value={installation.finalUsageSource} />
                 </div>
-                <pre className="max-h-96 overflow-auto text-xs leading-6">
+                <pre
+                  tabIndex={0}
+                  aria-label="Manual installation example source code"
+                  className="max-h-96 overflow-auto text-xs leading-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b6f5d]"
+                >
                   <code>{installation.finalUsageSource}</code>
                 </pre>
               </div>
