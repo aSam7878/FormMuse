@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import {
   authoredItemSha256,
   publicationGateDefinitions,
+  publicationReportExitCode,
   type PublicationReport,
   validatePublicationReport,
 } from "../../lib/formmuse/publication-report";
@@ -93,5 +94,51 @@ describe("publication report eligibility", () => {
         ),
       }),
     ).toThrow(/Publication report (is missing|does not match|has incomplete)/);
+  });
+});
+
+describe("publication report CI policy", () => {
+  it("keeps automated failures advisory only while every template is draft", () => {
+    expect(
+      publicationReportExitCode({
+        allowDraftFailures: true,
+        automatedFailure: true,
+        registryStatuses: ["draft", "draft"],
+      }),
+    ).toBe(0);
+  });
+
+  it("keeps strict commands and non-draft templates blocking", () => {
+    expect(
+      publicationReportExitCode({
+        allowDraftFailures: false,
+        automatedFailure: true,
+        registryStatuses: ["draft"],
+      }),
+    ).toBe(1);
+    expect(
+      publicationReportExitCode({
+        allowDraftFailures: true,
+        automatedFailure: true,
+        registryStatuses: ["draft", "published"],
+      }),
+    ).toBe(1);
+  });
+
+  it("passes successful evidence and rejects an empty advisory scope", () => {
+    expect(
+      publicationReportExitCode({
+        allowDraftFailures: false,
+        automatedFailure: false,
+        registryStatuses: ["published"],
+      }),
+    ).toBe(0);
+    expect(
+      publicationReportExitCode({
+        allowDraftFailures: true,
+        automatedFailure: true,
+        registryStatuses: [],
+      }),
+    ).toBe(1);
   });
 });

@@ -114,6 +114,9 @@ describe("foundation CI source", () => {
 
   it("generates complete reproducible publication evidence in CI", () => {
     const workflow = read(".github/workflows/ci.yml");
+    const packageJson = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
 
     expect(workflow).toContain("name: Reproducible publication evidence");
     expect(workflow).toContain(
@@ -122,7 +125,13 @@ describe("foundation CI source", () => {
     expect(workflow).toContain(
       "pnpm exec playwright install --with-deps chromium firefox webkit",
     );
-    expect(workflow).toContain("run: pnpm quality:publication-report");
+    expect(workflow).toContain("run: pnpm quality:publication-report:ci");
+    expect(packageJson.scripts["quality:publication-report"]).toBe(
+      "node --import tsx scripts/generate-publication-report.mts",
+    );
+    expect(packageJson.scripts["quality:publication-report:ci"]).toBe(
+      "node --import tsx scripts/generate-publication-report.mts --allow-draft-failures",
+    );
   });
 });
 

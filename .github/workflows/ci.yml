@@ -189,4 +189,4 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium firefox webkit
 
       - name: Generate complete machine-readable publication evidence
-        run: pnpm quality:publication-report
+        run: pnpm quality:publication-report:ci
