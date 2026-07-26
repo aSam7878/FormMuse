@@ -34,15 +34,11 @@ function run(command: string): number {
   }
   const script = command.slice("pnpm ".length);
   process.stdout.write(`[publication-report:start] ${command}\n`);
-  const result = spawnSync(
-    process.execPath,
-    [pinnedPnpmCli, "run", script],
-    {
-      cwd: PROJECT_ROOT,
-      env: process.env,
-      stdio: "inherit",
-    },
-  );
+  const result = spawnSync(process.execPath, [pinnedPnpmCli, "run", script], {
+    cwd: PROJECT_ROOT,
+    env: process.env,
+    stdio: "inherit",
+  });
   const exitCode = result.status ?? 1;
   process.stdout.write(
     `[publication-report:${exitCode === 0 ? "pass" : "fail"}] ${command}\n`,
