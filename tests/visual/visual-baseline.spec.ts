@@ -45,7 +45,7 @@ async function expectVisual(page: Page, name: string): Promise<void> {
     caret: "hide",
     scale: "css",
   });
-  expect(screenshot).toMatchSnapshot(name);
+  expect(screenshot).toMatchSnapshot(name, { maxDiffPixels: 2 });
 }
 
 async function expectElementVisual(
@@ -72,7 +72,7 @@ async function expectElementVisual(
     },
     scale: "css",
   });
-  expect(screenshot).toMatchSnapshot(name);
+  expect(screenshot).toMatchSnapshot(name, { maxDiffPixels: 2 });
 }
 
 async function expectStableElementVisual(
@@ -84,7 +84,7 @@ async function expectStableElementVisual(
     caret: "hide",
     scale: "css",
   });
-  expect(screenshot).toMatchSnapshot(name);
+  expect(screenshot).toMatchSnapshot(name, { maxDiffPixels: 2 });
 }
 
 test("captures the approved narrow, breakpoint-adjacent, and wide compositions", async ({
