@@ -517,7 +517,8 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 # Stage 4 — Add the complete testing and compatibility infrastructure
 
-**Stage status:** Complete on the cumulative `codex/stage-4-quality-system` branch; pending review and merge.
+**Stage status:** Complete on `main` at reviewed baseline
+`484bf6d00ef6842e713954c5e8340305ef441439`.
 
 **Outcome:** One reproducible quality system can determine whether a template or site change is eligible for publication.
 
@@ -656,7 +657,7 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 # Stage 5 — Measure performance and finalize preview isolation
 
-**Stage status:** Evidence-blocked until Stages 1–4 complete.
+**Stage status:** In progress on the cumulative `codex/stage-5` branch.
 
 **Outcome:** Hanging Gifts supplies measured performance budgets, Catalog Teaser behavior, and a documented minimum preview security model that later templates can reuse.
 
@@ -664,7 +665,7 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 ## 5.1 Measure the complete Hanging Gifts baseline
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Measurements:**
 
@@ -676,6 +677,18 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 - Desktop and mobile-class laboratory profiles in the pinned environment.
 
 **Evidence:** Store raw reports, summarized findings, exact environment, and reproducible commands. Do not call laboratory values field data.
+
+Completed on 2026-07-27 from baseline
+`484bf6d00ef6842e713954c5e8340305ef441439`. The pinned laboratory command,
+30 raw samples, and reviewed summary cover the real preview and Template Page,
+desktop, mobile-class and reduced-motion profiles, and explicit inactive,
+active, nearby, and retained off-screen Catalog Teaser populations. Because the
+public catalog route does not exist yet, the owner approved a test-only
+same-origin Playwright harness that server-renders the real `CatalogTeaser`
+component against the real static preview route. It is not an exported or
+public route and does not pull Stage 7 UI work forward. The report records zero
+external requests and zero page or console errors and remains laboratory
+evidence rather than field data or policy.
 
 ## 5.2 Propose evidence-based budgets
 
