@@ -35,7 +35,7 @@ export default defineConfig({
   ],
   webServer: {
     command:
-      "FORMMUSE_DEPLOY_ENV=development FORMMUSE_SITE_URL=http://127.0.0.1:3100 FORMMUSE_PREVIEW_URL=http://127.0.0.1:3101 pnpm build && node --import tsx scripts/serve-preview-origins.mts",
+      "FORMMUSE_DEPLOY_ENV=development FORMMUSE_SITE_URL=http://127.0.0.1:3100 FORMMUSE_PREVIEW_URL=http://127.0.0.1:3101 pnpm build && FORMMUSE_SITE_URL=http://127.0.0.1:3100 node --import tsx scripts/serve-preview-origins.mts",
     url: "http://127.0.0.1:3101/preview/hanging-gifts-contact/",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

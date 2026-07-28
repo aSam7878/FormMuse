@@ -735,7 +735,7 @@ the final hostname and Hostinger routing remain Stage 6 evidence.
 
 ## 5.4 Prove preview-specific CSP and Permissions Policy
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -744,6 +744,15 @@ the final hostname and Hostinger routing remain Stage 6 evidence.
 - Deny camera, microphone, geolocation, payment, fullscreen, display capture, and other unnecessary capabilities.
 - Verify the delivery mechanism with a portable local static server and later on Hostinger; do not assume unavailable per-route headers.
 - Record every exception, browser result, and static-host limitation.
+
+Completed on 2026-07-28. The portable dual-origin static server now delivers a
+denial-first CSP, an explicit Permissions Policy, preview-only route exposure,
+`frame-ancestors` restricted to the configured site origin, and the sandbox as
+a response-level second boundary. The only active-content exceptions are
+same-origin resources plus the inline scripts and styles required by the
+production Next.js artifact. The iframe independently denies the same device
+capabilities. Integration tests inspect the delivered headers; Hostinger
+delivery remains an explicit Stage 6 proof rather than an assumption.
 
 ## 5.5 Security-test the Preview Protocol
 

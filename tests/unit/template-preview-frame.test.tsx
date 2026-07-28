@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { TemplatePreviewFrame } from "../../components/template-page/template-preview-frame";
+import { PREVIEW_PERMISSIONS_ALLOW } from "../../lib/formmuse/preview-security";
 import { createPreviewMessage } from "../../lib/formmuse/preview-protocol";
 
 afterEach(cleanup);
@@ -44,6 +45,7 @@ describe("Template preview frame chrome", () => {
       "sandbox",
       "allow-forms allow-same-origin allow-scripts",
     );
+    expect(frame).toHaveAttribute("allow", PREVIEW_PERMISSIONS_ALLOW);
     expect(screen.getByRole("button", { name: "Desktop" })).toHaveAttribute(
       "aria-pressed",
       "true",

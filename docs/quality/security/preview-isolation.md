@@ -45,3 +45,26 @@ prove the chosen preview hostname, HTTPS, origin routing, preview-only path
 exposure, and the production header mechanism on Hostinger. A build fails
 closed when a non-development preview origin is absent, insecure, local, or
 equal to the site origin.
+
+## CSP and Permissions Policy
+
+The portable dual-origin server delivers preview documents with a real HTTP
+Content Security Policy header. It begins with `default-src 'none'`, permits
+only same-origin scripts, styles, fonts, and media plus same-origin or `data:`
+images, and blocks connections, form actions, nested frames, objects, workers,
+manifests, and base URL changes. Production Next.js hydration requires inline
+scripts, and the authored composition requires inline styles, so
+`'unsafe-inline'` is the recorded narrow exception for those two directives.
+No evaluation permission is allowed.
+
+The CSP header repeats the sandbox so removing the iframe attribute cannot
+remove the capability boundary, and `frame-ancestors` names only the configured
+site origin. The response Permissions Policy and the iframe `allow` attribute
+both deny accelerometer, camera, display capture, fullscreen, geolocation,
+gyroscope, magnetometer, microphone, MIDI, payment, picture-in-picture,
+public-key credential access, screen wake lock, serial, USB, and web share.
+
+The portable server also refuses non-preview pages on the preview origin. The
+focused integration test verifies the actual response headers and the 404
+boundary. Hostinger must reproduce these exact semantics in Stage 6; this local
+proof does not claim that Hostinger supports an untested configuration.

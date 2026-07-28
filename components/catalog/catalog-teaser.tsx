@@ -1,6 +1,7 @@
 import { Gift } from "lucide-react";
 
 import { teaserPreviewSource } from "@/lib/formmuse/catalog-teaser";
+import { PREVIEW_PERMISSIONS_ALLOW } from "@/lib/formmuse/preview-security";
 
 export function CatalogTeaser({
   title,
@@ -37,6 +38,7 @@ export function CatalogTeaser({
             tabIndex={-1}
             scrolling="no"
             sandbox="allow-forms allow-same-origin allow-scripts"
+            allow={PREVIEW_PERMISSIONS_ALLOW}
             className="pointer-events-none absolute inset-0 h-full w-full border-0"
           />
         ) : null}

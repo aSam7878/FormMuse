@@ -16,6 +16,7 @@ import {
   createPreviewMessage,
   postPreviewMessage,
 } from "@/lib/formmuse/preview-protocol";
+import { PREVIEW_PERMISSIONS_ALLOW } from "@/lib/formmuse/preview-security";
 import { cn } from "@/lib/utils";
 
 const viewports = [
@@ -241,6 +242,7 @@ export function TemplatePreviewFrame({
             onError={() => setFrameState("error")}
             onErrorCapture={() => setFrameState("error")}
             sandbox="allow-forms allow-same-origin allow-scripts"
+            allow={PREVIEW_PERMISSIONS_ALLOW}
             className="block h-[min(72vh,52rem)] min-h-[34rem] w-full border-0 bg-white"
           />
         </div>

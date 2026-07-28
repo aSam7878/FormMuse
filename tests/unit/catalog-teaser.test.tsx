@@ -2,6 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { CatalogTeaser } from "../../components/catalog/catalog-teaser";
+import { PREVIEW_PERMISSIONS_ALLOW } from "../../lib/formmuse/preview-security";
 import {
   parsePreviewMode,
   teaserPreviewSource,
@@ -48,6 +49,7 @@ describe("Catalog Teaser prototype", () => {
       "sandbox",
       "allow-forms allow-same-origin allow-scripts",
     );
+    expect(frame).toHaveAttribute("allow", PREVIEW_PERMISSIONS_ALLOW);
   });
 
   it("accepts only the exact teaser mode", () => {

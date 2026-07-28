@@ -83,6 +83,31 @@ test("keeps the Template Page controls and iframe preview connected", async ({
   await waitForPreview(page);
 });
 
+test("delivers denial-first preview security headers", async ({ request }) => {
+  const response = await request.get(`${previewOrigin}${previewPath}`);
+  expect(response.ok()).toBe(true);
+  const headers = response.headers();
+  expect(headers["content-security-policy"]).toContain("default-src 'none'");
+  expect(headers["content-security-policy"]).toContain("connect-src 'none'");
+  expect(headers["content-security-policy"]).toContain("form-action 'none'");
+  expect(headers["content-security-policy"]).toContain("frame-src 'none'");
+  expect(headers["content-security-policy"]).toContain("worker-src 'none'");
+  expect(headers["content-security-policy"]).toContain(
+    "sandbox allow-forms allow-same-origin allow-scripts",
+  );
+  expect(headers["content-security-policy"]).toContain(
+    "frame-ancestors http://127.0.0.1:3100",
+  );
+  expect(headers["permissions-policy"]).toContain("camera=()");
+  expect(headers["permissions-policy"]).toContain("microphone=()");
+  expect(headers["permissions-policy"]).toContain("payment=()");
+  expect(headers["referrer-policy"]).toBe("no-referrer");
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+
+  const nonPreview = await request.get(`${previewOrigin}/templates/`);
+  expect(nonPreview.status()).toBe(404);
+});
+
 test("keeps Replay stateful and makes Reset a full preview remount", async ({
   page,
 }) => {
@@ -241,7 +266,7 @@ test("navigates the current static routes without page or console errors", async
     .click();
   await expect(page).toHaveURL(new RegExp(`${templatePath}$`));
   await waitForPreview(page);
-  await page.goto(previewPath);
+  await page.goto(`${previewOrigin}${previewPath}`);
   await expect(
     page.getByRole("heading", { name: "Let's Talk Gifting." }),
   ).toBeVisible();
