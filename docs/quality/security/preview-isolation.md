@@ -68,3 +68,19 @@ The portable server also refuses non-preview pages on the preview origin. The
 focused integration test verifies the actual response headers and the 404
 boundary. Hostinger must reproduce these exact semantics in Stage 6; this local
 proof does not claim that Hostinger supports an untested configuration.
+
+## Preview Protocol adversarial coverage
+
+Protocol messages contain only version, channel, direction, type, and monotonic
+sequence. Readiness is sequence zero; Reset and Replay require a positive safe
+integer. Each receiver records its last accepted sequence and rejects a replay
+or older message.
+
+Unit attacks cover the wrong window, origin, channel, version, type, direction,
+missing fields, unknown fields, malformed values, unsafe sequence values, and
+replayed messages. The strict schema continues to reject visitor values,
+arbitrary strings, URLs, selectors, HTML, code, credentials, analytics, and
+generic commands. Browser evidence confirms that the parent DOM is inaccessible
+from the distinct preview origin and remains unchanged through submission,
+Replay, and Reset. The post-idle request audit permits only the configured site
+and preview origins and observes no analytics or external network side effect.

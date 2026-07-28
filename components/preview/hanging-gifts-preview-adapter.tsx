@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import {
   parsePreviewOutcome,
@@ -45,6 +45,7 @@ export function HangingGiftsPreviewAdapter({
       ? "interactive"
       : parsePreviewMode(window.location.search),
   );
+  const receivedSequenceRef = useRef(0);
 
   useEffect(() => {
     if (mode !== "teaser") return;
@@ -71,12 +72,15 @@ export function HangingGiftsPreviewAdapter({
         origin: parentOrigin,
         channel: validatedChannel,
         direction: "parent-to-frame",
+        afterSequence: receivedSequenceRef.current,
       });
-      if (message?.type === "reset") {
+      if (!message) return;
+      receivedSequenceRef.current = message.sequence;
+      if (message.type === "reset") {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         setAnimationReplayKey(0);
         setResetKey((value) => value + 1);
-      } else if (message?.type === "replay") {
+      } else if (message.type === "replay") {
         setAnimationReplayKey((value) => value + 1);
       }
     }

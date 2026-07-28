@@ -10,18 +10,21 @@ const ReadyMessageSchema = z.strictObject({
   channel: PreviewChannelSchema,
   direction: z.literal("frame-to-parent"),
   type: z.literal("ready"),
+  sequence: z.literal(0),
 });
 const ResetMessageSchema = z.strictObject({
   version: z.literal(PREVIEW_PROTOCOL_VERSION),
   channel: PreviewChannelSchema,
   direction: z.literal("parent-to-frame"),
   type: z.literal("reset"),
+  sequence: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
 });
 const ReplayMessageSchema = z.strictObject({
   version: z.literal(PREVIEW_PROTOCOL_VERSION),
   channel: PreviewChannelSchema,
   direction: z.literal("parent-to-frame"),
   type: z.literal("replay"),
+  sequence: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
 });
 
 export const PreviewProtocolMessageSchema = z.discriminatedUnion("type", [
@@ -36,12 +39,14 @@ export type PreviewProtocolMessage = z.output<
 export function createPreviewMessage(
   channel: string,
   type: PreviewProtocolMessage["type"],
+  sequence = type === "ready" ? 0 : Number.NaN,
 ): PreviewProtocolMessage {
   return PreviewProtocolMessageSchema.parse({
     version: PREVIEW_PROTOCOL_VERSION,
     channel,
     direction: type === "ready" ? "frame-to-parent" : "parent-to-frame",
     type,
+    sequence,
   });
 }
 
@@ -59,6 +64,7 @@ export function acceptPreviewMessage(
     origin: string;
     channel: string;
     direction: PreviewProtocolMessage["direction"];
+    afterSequence: number;
   }>,
 ): PreviewProtocolMessage | null {
   if (
@@ -71,7 +77,8 @@ export function acceptPreviewMessage(
   if (
     !result.success ||
     result.data.channel !== expected.channel ||
-    result.data.direction !== expected.direction
+    result.data.direction !== expected.direction ||
+    result.data.sequence <= expected.afterSequence
   )
     return null;
   return result.data;

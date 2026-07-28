@@ -38,6 +38,8 @@ export function TemplatePreviewFrame({
   const [replayRequest, setReplayRequest] = useState(0);
   const [frameState, setFrameState] = useState<FrameState>("loading");
   const frameRef = useRef<HTMLIFrameElement>(null);
+  const receivedSequenceRef = useRef(-1);
+  const commandSequenceRef = useRef(0);
   const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
   const channel = `fm-${id || "preview"}-${resetKey}`;
   const selectedViewport =
@@ -57,8 +59,12 @@ export function TemplatePreviewFrame({
         origin: previewOrigin,
         channel,
         direction: "frame-to-parent",
+        afterSequence: receivedSequenceRef.current,
       });
-      if (message?.type === "ready") setFrameState("ready");
+      if (message?.type === "ready") {
+        receivedSequenceRef.current = message.sequence;
+        setFrameState("ready");
+      }
     }
     window.addEventListener("message", receive);
     return () => window.removeEventListener("message", receive);
@@ -67,15 +73,17 @@ export function TemplatePreviewFrame({
   function sendCommand(type: "reset" | "replay") {
     const target = frameRef.current?.contentWindow;
     if (!target) return;
+    commandSequenceRef.current += 1;
     postPreviewMessage(
       target,
-      createPreviewMessage(channel, type),
+      createPreviewMessage(channel, type, commandSequenceRef.current),
       previewOrigin,
     );
   }
 
   function remountPreview(nextOutcome: PreviewOutcome = outcome) {
     sendCommand("reset");
+    receivedSequenceRef.current = -1;
     setOutcome(nextOutcome);
     setFrameState("loading");
     setResetKey((value) => value + 1);

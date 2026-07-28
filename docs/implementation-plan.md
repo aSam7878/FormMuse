@@ -756,7 +756,7 @@ delivery remains an explicit Stage 6 proof rather than an assumption.
 
 ## 5.5 Security-test the Preview Protocol
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Tests:**
 
@@ -764,6 +764,13 @@ delivery remains an explicit Stage 6 proof rather than an assumption.
 - Values, arbitrary strings, URLs, selectors, HTML, or executable content are not accepted.
 - Reset and Replay cannot affect the parent site outside their frame.
 - Protocol messages produce no analytics or network side effect.
+
+Completed on 2026-07-28. The exact schema now includes a monotonic sequence and
+both receivers reject repeated or older messages. Adversarial unit coverage
+rejects every listed source, origin, channel, version, type, direction, shape,
+and payload failure. Cross-origin browser coverage proves that the preview
+cannot read the parent DOM, Reset and Replay leave parent state unchanged, and
+post-idle protocol and form activity creates no external or analytics request.
 
 ## 5.6 Finalize Catalog Teaser lifecycle
 

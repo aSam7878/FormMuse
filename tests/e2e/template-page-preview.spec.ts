@@ -62,6 +62,12 @@ test("keeps the Template Page controls and iframe preview connected", async ({
     "src",
     new RegExp(`^${previewOrigin}/preview/hanging-gifts-contact`),
   );
+  expect(
+    await page.getByTitle(previewTitle).evaluate((frame) => {
+      const iframe = frame as HTMLIFrameElement;
+      return iframe.contentDocument === null;
+    }),
+  ).toBe(true);
   await waitForPreview(page);
 
   const viewport = page.locator("[data-preview-viewport]");
@@ -188,6 +194,14 @@ test("keeps post-idle iframe activity local, ephemeral, and navigation-free", as
   await page.goto(templatePath);
   const frame = await waitForPreview(page);
   await page.waitForLoadState("networkidle");
+  const parentBefore = await page.evaluate(() => {
+    document.documentElement.dataset.previewIsolation = "unchanged";
+    return {
+      title: document.title,
+      url: window.location.href,
+      marker: document.documentElement.dataset.previewIsolation,
+    };
+  });
   const before = await previewContent(page);
   const initialState = await before.evaluate(async () => ({
     cacheKeys: await caches.keys(),
@@ -231,6 +245,13 @@ test("keeps post-idle iframe activity local, ephemeral, and navigation-free", as
   expect(initialState.sessionStorage).toEqual([]);
   expect(initialState.tracker.beforeUnload).toBe(0);
   expect(finalState).toEqual(initialState);
+  expect(
+    await page.evaluate(() => ({
+      title: document.title,
+      url: window.location.href,
+      marker: document.documentElement.dataset.previewIsolation,
+    })),
+  ).toEqual(parentBefore);
   const allowedOrigins = new Set([new URL(page.url()).origin, previewOrigin]);
   expect(
     laterRequests.filter((url) => !allowedOrigins.has(new URL(url).origin)),
