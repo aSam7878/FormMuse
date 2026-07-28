@@ -25,7 +25,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "pnpm build && pnpm exec serve out -l 3100",
+    command:
+      "FORMMUSE_DEPLOY_ENV=development FORMMUSE_SITE_URL=http://127.0.0.1:3100 FORMMUSE_PREVIEW_URL=http://127.0.0.1:3101 pnpm build && FORMMUSE_SITE_URL=http://127.0.0.1:3100 pnpm exec tsx scripts/serve-preview-origins.mts",
     url: "http://127.0.0.1:3100",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

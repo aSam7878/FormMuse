@@ -102,6 +102,10 @@ describe("foundation CI source", () => {
     expect(visualConfig).toContain('timezoneId: "UTC"');
     expect(visualConfig).toContain("deviceScaleFactor: 1");
     expect(visualConfig).toContain('name: "chromium-ubuntu-24.04"');
+    expect(visualConfig).toContain(
+      "FORMMUSE_PREVIEW_URL=http://127.0.0.1:3101",
+    );
+    expect(visualConfig).toContain("scripts/serve-preview-origins.mts");
   });
 
   it("keeps latest public CLI compatibility outside pull-request CI", () => {
