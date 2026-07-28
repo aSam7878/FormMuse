@@ -692,7 +692,7 @@ evidence rather than field data or policy.
 
 ## 5.2 Propose evidence-based budgets
 
-**Status:** Evidence-blocked.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -701,6 +701,14 @@ evidence rather than field data or policy.
 - A documented process for intentional baseline changes and regressions.
 
 **Owner checkpoint:** The project owner reviews and approves the first budgets. Do not turn measurements into permanent policy without approval.
+
+Completed on 2026-07-28. The owner approved the first regression budgets after
+reviewing the Stage 5.1 three-run medians and observed ranges. The machine-readable
+policy separates the site shell, full preview, incremental preview JavaScript,
+and Catalog Teaser populations; records the explicit safety margin for each
+threshold; retains the existing Lighthouse LCP gate rather than mislabelling a
+new laboratory value as field data; and requires fresh three-run evidence,
+rationale, and owner approval for every intentional budget change.
 
 ## 5.3 Prove the minimum iframe sandbox
 
