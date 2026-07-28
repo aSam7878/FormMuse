@@ -13,6 +13,16 @@ ephemeral loopback URL, installs it once, then verifies that a second run
 preserves a deliberately customized adopter file and exposes the conflict. It
 does not pass `--yes`, `--overwrite`, or any confirmation-suppression flag.
 
+## Current release evidence
+
+GitHub Actions run
+[`30379771199`](https://github.com/aSam7878/FormMuse/actions/runs/30379771199)
+passed on 2026-07-28 against commit
+`bf3c400d931a015f6575704ac161d41b1d07cb50`. All four pnpm, npm, Yarn, and Bun
+jobs completed the current public `shadcn@latest` installation and repeated-run
+conflict-preservation checks. This evidence expires for publication when a newer
+scheduled run fails or when the applicable source or public CLI changes.
+
 | Package manager | Install command                                    |
 | --------------- | -------------------------------------------------- |
 | pnpm            | `pnpm dlx shadcn@latest add <registry-item-url>`   |

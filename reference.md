@@ -239,6 +239,8 @@ FORMMUSE_SITE_URL=<absolute origin of this build>
 - Preview CI supplies its temporary HTTPS origin, marks the deployment `noindex`, omits production sitemap entries and temporary canonical URLs, and may use its origin in registry commands for testing.
 - Production requires the verified permanent HTTPS domain, generates canonical metadata and the public sitemap, and fails on a missing, insecure, or localhost origin.
 
+The owner has selected `https://formmuse.dev` as the permanent production Build Origin. This records the public identity without claiming that DNS, hosting, TLS, or deployment has passed; Stage 6 must prove those operational controls before production use.
+
 Keep parsing, validation, and URL construction in one build-only `lib/formmuse` configuration module. Do not read these environment variables from client components or prefix them with `NEXT_PUBLIC_` unless a future client-only requirement is explicitly approved.
 
 ### Hosting and site analytics
@@ -416,6 +418,8 @@ Support means that core rendering, input, validation, keyboard and assistive-tec
 Use a pinned Playwright version and its matching Chromium, Firefox, WebKit, and mobile-emulation projects as the continuous automated baseline on every pull request. This is engine and emulation coverage, not evidence that branded Safari or a physical mobile device passed. Playwright WebKit must never be reported as Safari, and an emulated device profile must never be reported as real-device testing.
 
 Before publishing an individual Form Template, smoke-test it in the current stable branded Chrome, Edge, Firefox, and Safari browsers and on current real iOS Safari and Android Chrome devices. A device owned by the project or a reputable real-device testing cloud qualifies; viewport or user-agent emulation does not.
+
+For the initial launch collection only, the owner may batch these branded-browser and physical-device checks after every launch template is complete and immediately before launch. Every affected template remains `draft`, and no browser-support or publication claim may be made, until the batched evidence passes and records exact versions. This scheduling exception changes when the evidence is collected, not what must pass.
 
 Run the complete current-and-previous-major Browser Support Window before the initial public launch, every tagged FormMuse release, and any publication that changes shared Control Primitives, compatibility infrastructure, registry installation behavior, preview infrastructure, or another shared layer capable of affecting multiple templates. Historical versions may be exercised through maintained test environments or a reputable browser/device service. Record exact browser, engine, operating-system, and device versions in release evidence. Never advertise support for a version that has not actually passed the applicable matrix.
 

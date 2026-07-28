@@ -657,7 +657,7 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 # Stage 5 — Measure performance and finalize preview isolation
 
-**Stage status:** In progress on the cumulative `codex/stage-5` branch.
+**Stage status:** Complete on the cumulative `codex/stage-5` branch.
 
 **Outcome:** Hanging Gifts supplies measured performance budgets, Catalog Teaser behavior, and a documented minimum preview security model that later templates can reuse.
 
@@ -796,7 +796,7 @@ other Preview Protocol surface was added.
 
 ## 5.7 Close the Hanging Gifts publication evidence gap
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -804,7 +804,17 @@ other Preview Protocol surface was added.
 - Run current branded Chrome, Edge, Firefox, and Safari smoke checks.
 - Run current real iOS Safari and Android Chrome checks using owned devices or an approved device cloud.
 - Complete manual accessibility and visual review.
-- List any remaining Hostinger-specific CSP/header or deployment evidence deferred to Stage 6.
+- List any remaining selected-host CSP/header or deployment evidence deferred to Stage 6.
+
+Completed on 2026-07-28. `docs/quality/stage-5-closeout.md` consolidates the
+Stage 2–5 evidence and records the fresh four-manager public-installation run.
+The owner moved branded Chrome, Edge, Firefox, Safari, real iOS Safari, and real
+Android Chrome checks to one batched prelaunch review after all launch templates
+are complete. Manual accessibility, visual, browser/device, and licence approval
+remain explicit owner-controlled launch actions; Hanging Gifts therefore remains
+`draft`. Production-host CSP, header, artifact-promotion, and rollback proof
+remains Stage 6 work, and the owner has withdrawn Hostinger while the replacement
+static host is being selected.
 
 ### Stage 5 exit gate
 
@@ -812,6 +822,11 @@ other Preview Protocol surface was added.
 - Minimum sandbox, CSP, Permissions Policy, and protocol are documented with browser evidence.
 - Hanging Gifts passes every environment-independent publication gate.
 - Any remaining blockers are explicitly limited to Stage 6 host/deployment proof or owner-controlled launch actions.
+
+Stage 5 passed its exit gate on 2026-07-28. Every environment-independent gate
+is complete. The remaining incomplete publication evidence is limited to the
+recorded owner-controlled prelaunch review and Stage 6 proof against the selected
+production host; it is not reported as passed and does not authorize publication.
 
 ---
 

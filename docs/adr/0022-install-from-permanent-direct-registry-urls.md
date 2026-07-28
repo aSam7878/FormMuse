@@ -6,4 +6,6 @@ The generated commands will use exactly these launch forms: `pnpm dlx shadcn@lat
 
 V1 will not require a namespace registration step or inclusion in shadcn's registry directory. FormMuse may add `@formmuse/<slug>` later as an optional shorter address, but it will not remove or change the original direct URL. The production hostname will be recorded only after FormMuse controls its permanent canonical domain; planning examples must not claim an unverified domain.
 
+On 2026-07-28 the owner selected `https://formmuse.dev` as the permanent production Build Origin. This decision fixes the intended public registry prefix without claiming that DNS, TLS, hosting, or deployment is operational before Stage 6 proves it.
+
 CLI commands will derive their absolute registry item URLs from the current Build Origin. This lets local and preview builds test their own generated registry files, while public production documentation resolves to the permanent canonical domain. Temporary preview URLs are never treated as permanent installation or SEO identities.
