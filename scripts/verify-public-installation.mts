@@ -67,7 +67,11 @@ async function run(
   return new Promise((resolveResult, reject) => {
     const child = spawn(executable, arguments_, {
       cwd,
-      env: { ...process.env, NO_COLOR: "1" },
+      env: {
+        ...process.env,
+        NO_COLOR: "1",
+        ...(executable === "yarn" ? { COREPACK_ENABLE_PROJECT_SPEC: "0" } : {}),
+      },
       stdio: ["ignore", "pipe", "pipe"],
     });
     let output = "";

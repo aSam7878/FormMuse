@@ -106,6 +106,7 @@ describe("foundation CI source", () => {
 
   it("keeps latest public CLI compatibility outside pull-request CI", () => {
     const workflow = read(".github/workflows/latest-shadcn-compatibility.yml");
+    const verifier = read("scripts/verify-public-installation.mts");
 
     expect(workflow).toContain("schedule:");
     expect(workflow).toContain("workflow_dispatch:");
@@ -116,6 +117,11 @@ describe("foundation CI source", () => {
     expect(workflow).toContain("if: matrix.manager == 'yarn'");
     expect(workflow).toContain("if: matrix.manager == 'bun'");
     expect(workflow).not.toContain("npm install --global bun");
+    expect(workflow).not.toMatch(
+      /name: Smoke-test[\s\S]*?env:\s*\n\s+COREPACK_ENABLE_PROJECT_SPEC:/,
+    );
+    expect(verifier).toContain('executable === "yarn"');
+    expect(verifier).toContain('COREPACK_ENABLE_PROJECT_SPEC: "0"');
   });
 
   it("generates complete reproducible publication evidence in CI", () => {

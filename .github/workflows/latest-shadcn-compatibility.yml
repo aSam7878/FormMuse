@@ -58,6 +58,4 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Smoke-test the documented latest CLI command
-        env:
-          COREPACK_ENABLE_PROJECT_SPEC: ${{ matrix.manager == 'yarn' && '0' || '1' }}
         run: pnpm quality:installation-public --manager ${{ matrix.manager }}
