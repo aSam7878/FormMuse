@@ -50,14 +50,31 @@ const distributedSourceRules: readonly ContentRule[] = [
 
 const staticExportRules: readonly ContentRule[] = [
   [
-    "remote executable or media resource",
-    /<(?:script|iframe|img|audio|video|source|link|form)\b[^>]*\b(?:src|href|action)=["']https?:\/\//i,
-  ],
-  [
     "analytics or telemetry resource",
     /<(?:script|img|iframe)\b[^>]*(?:googletagmanager|google-analytics|plausible|posthog|umami|clarity)/i,
   ],
 ];
+
+const remoteResourceElement =
+  /<(?:script|iframe|img|audio|video|source|link|form)\b[^>]*>/giu;
+const remoteResourceAttribute =
+  /\b(?:src|href|action)=["'](https?:\/\/[^"']+)["']/iu;
+
+function hasDisallowedRemoteStaticResource(
+  content: string,
+  allowedPreviewOrigin?: string,
+): boolean {
+  return [...content.matchAll(remoteResourceElement)].some(([element]) => {
+    const resource = element.match(remoteResourceAttribute)?.[1];
+    if (!resource) return false;
+    if (!allowedPreviewOrigin || !/^<iframe\b/iu.test(element)) return true;
+    const url = new URL(resource);
+    return (
+      url.origin !== allowedPreviewOrigin ||
+      !url.pathname.startsWith("/preview/")
+    );
+  });
+}
 
 function findingsFor(
   content: string,
@@ -89,9 +106,13 @@ export function distributedSourceFindings(
 export function staticExportFindings(
   content: string,
   path: string,
+  allowedPreviewOrigin?: string,
 ): SecurityFinding[] {
   return [
     ...secretFindings(content, path),
+    ...(hasDisallowedRemoteStaticResource(content, allowedPreviewOrigin)
+      ? [{ path, rule: "remote executable or media resource" }]
+      : []),
     ...findingsFor(content, path, staticExportRules),
   ];
 }

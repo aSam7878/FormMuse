@@ -751,8 +751,10 @@ denial-first CSP, an explicit Permissions Policy, preview-only route exposure,
 a response-level second boundary. The only active-content exceptions are
 same-origin resources plus the inline scripts and styles required by the
 production Next.js artifact. The iframe independently denies the same device
-capabilities. Integration tests inspect the delivered headers; Hostinger
-delivery remains an explicit Stage 6 proof rather than an assumption.
+capabilities. The Preview Protocol runs Zod in `jitless` mode so Firefox does
+not attempt an evaluation probe, and the CSP does not grant `unsafe-eval`.
+Integration tests inspect the delivered headers; Hostinger delivery remains an
+explicit Stage 6 proof rather than an assumption.
 
 ## 5.5 Security-test the Preview Protocol
 
@@ -774,7 +776,7 @@ post-idle protocol and form activity creates no external or analytics request.
 
 ## 5.6 Finalize Catalog Teaser lifecycle
 
-**Status:** Evidence-blocked.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -782,6 +784,15 @@ post-idle protocol and form activity creates no external or analytics request.
 - Prefer lazy mounting and unmounting over adding pause/resume protocol commands.
 - Add pause/resume only if evidence proves it necessary and document the added protocol surface.
 - Verify twenty representative teaser slots do not eagerly load twenty complete previews.
+
+Completed on 2026-07-28. The measured lifecycle activates candidates inside a
+600px vertical observer margin, ranks visible candidates before nearby ones,
+and mounts at most three previews. Leaving the active neighborhood unmounts a
+visited preview; returning remounts it from the deterministic opening state.
+If Intersection Observer is unavailable, the semantic card and reserved local
+fallback remain and no live preview mounts. Twenty-slot unit coverage proves
+the initial fallback and three-preview ceiling. No pause/resume command or
+other Preview Protocol surface was added.
 
 ## 5.7 Close the Hanging Gifts publication evidence gap
 

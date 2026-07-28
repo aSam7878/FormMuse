@@ -8,14 +8,9 @@ export function CatalogTeaser({
   description,
   templatePath,
   previewPath,
+  previewOrigin,
   active = false,
-}: Readonly<{
-  title: string;
-  description: string;
-  templatePath: string;
-  previewPath: string;
-  active?: boolean;
-}>) {
+}: CatalogTeaserProps) {
   return (
     <article className="overflow-hidden rounded-[1.5rem] border border-[#dfd5c5] bg-white shadow-[0_18px_50px_rgba(60,46,25,0.08)]">
       <div className="relative aspect-[4/3] overflow-hidden bg-[linear-gradient(135deg,#f8efe1,#fffaf2_55%,#e7f0eb)]">
@@ -32,7 +27,7 @@ export function CatalogTeaser({
         </div>
         {active ? (
           <iframe
-            src={teaserPreviewSource(previewPath)}
+            src={teaserPreviewSource(previewPath, previewOrigin)}
             title={`${title} decorative catalog teaser`}
             aria-hidden="true"
             tabIndex={-1}
@@ -57,3 +52,12 @@ export function CatalogTeaser({
     </article>
   );
 }
+
+export type CatalogTeaserProps = Readonly<{
+  title: string;
+  description: string;
+  templatePath: string;
+  previewPath: string;
+  previewOrigin: string;
+  active?: boolean;
+}>;

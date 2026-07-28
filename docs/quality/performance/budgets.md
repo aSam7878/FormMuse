@@ -30,7 +30,12 @@ values live in `budgets.json`.
 | Simultaneously mounted teasers        |                3 |
 
 Visited teasers unmount after leaving the active neighborhood. The policy does
-not add pause/resume messages to the Preview Protocol.
+not add pause/resume messages to the Preview Protocol. An Intersection Observer
+activates candidates within a 600px vertical margin, ranks visible candidates
+before nearby candidates, and mounts no more than three previews. A visited
+teaser unmounts after leaving that neighborhood and remounts if it returns.
+When Intersection Observer is unavailable, all cards retain their semantic
+content and lightweight local fallback; no live preview is mounted.
 
 The ceilings preserve explicit headroom over the Stage 5.1 measurements while
 making the observed failure shape—retaining eight complete off-screen

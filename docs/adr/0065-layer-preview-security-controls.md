@@ -19,3 +19,7 @@ same-origin refers only to the separate preview host, and `allow-forms` is the
 minimum additional capability required for simulated submission across the
 supported engines. Production and preview builds fail unless the configured
 preview origin is HTTPS and distinct from the site origin.
+
+The denial-first CSP does not grant `unsafe-eval`. The Preview Protocol uses
+Zod's `jitless` configuration so its schema validation does not attempt a
+`Function` capability probe under Firefox's CSP enforcement.

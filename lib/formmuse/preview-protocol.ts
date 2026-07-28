@@ -1,5 +1,10 @@
 import { z } from "zod/v4";
 
+// The preview CSP intentionally omits unsafe-eval. Disable Zod's object-parser
+// JIT before any schema is created so Firefox does not attempt its Function
+// capability probe and the protocol remains compatible with that policy.
+z.config({ jitless: true });
+
 export const PREVIEW_PROTOCOL_VERSION = 1 as const;
 export const PreviewChannelSchema = z
   .string()

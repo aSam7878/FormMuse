@@ -23,7 +23,11 @@
     },
     "catalogTeasers": {
       "simultaneouslyMountedMax": 3,
+      "activationRootMargin": "600px 0px",
+      "observerFallback": "inactive",
       "offscreenVisitedBehavior": "unmount",
+      "reactivationBehavior": "remount",
+      "protocolExtension": "none",
       "oneActiveHeapBytesMax": 10000000,
       "twentyInactivePreviewJavascriptBytesMax": 0,
       "twentyInactiveTotalResponseBytesMax": 120000,

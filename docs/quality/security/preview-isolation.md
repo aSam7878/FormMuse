@@ -55,7 +55,10 @@ images, and blocks connections, form actions, nested frames, objects, workers,
 manifests, and base URL changes. Production Next.js hydration requires inline
 scripts, and the authored composition requires inline styles, so
 `'unsafe-inline'` is the recorded narrow exception for those two directives.
-No evaluation permission is allowed.
+No evaluation permission is allowed. The Preview Protocol configures Zod's
+documented `jitless` mode before defining its schemas, preventing Zod's
+otherwise-caught `Function` capability probe from violating the policy in
+Firefox; `unsafe-eval` is not added.
 
 The CSP header repeats the sandbox so removing the iframe attribute cannot
 remove the capability boundary, and `frame-ancestors` names only the configured
@@ -68,6 +71,16 @@ The portable server also refuses non-preview pages on the preview origin. The
 focused integration test verifies the actual response headers and the 404
 boundary. Hostinger must reproduce these exact semantics in Stage 6; this local
 proof does not claim that Hostinger supports an untested configuration.
+
+The generated-output security scan permits only an iframe whose URL uses the
+validated preview origin and whose path begins with `/preview/`. Scripts,
+images, forms, other active-resource elements, other origins, and non-preview
+paths remain rejected as remote resources.
+
+Static site-quality laboratories use separate reserved `.example` site and
+template-preview origins. Production audits continue to require the real
+owner-verified site and preview origins once templates become Published; the
+laboratory values do not choose the Stage 6 hostname.
 
 ## Preview Protocol adversarial coverage
 

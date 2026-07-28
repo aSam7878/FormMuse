@@ -13,6 +13,7 @@ Object.assign(globalThis, { React });
 
 const root = process.cwd();
 const origin = "http://127.0.0.1:3100";
+const previewOrigin = "http://127.0.0.1:3101";
 const previewPath = "/preview/hanging-gifts-contact/";
 const templatePath = "/templates/hanging-gifts-contact/";
 const outputPath = resolve(
@@ -140,6 +141,7 @@ function teaserMarkup(
           "Representative laboratory slot using the real Catalog Teaser component.",
         templatePath,
         previewPath,
+        previewOrigin,
         active: activeIndexes.has(index),
       }),
     ),
@@ -159,8 +161,11 @@ function harnessHtml(
 async function waitForServer(): Promise<void> {
   for (let attempt = 0; attempt < 100; attempt += 1) {
     try {
-      const response = await fetch(origin);
-      if (response.ok) return;
+      const [siteResponse, previewResponse] = await Promise.all([
+        fetch(origin),
+        fetch(`${previewOrigin}${previewPath}`),
+      ]);
+      if (siteResponse.ok && previewResponse.ok) return;
     } catch {}
     await new Promise((resolvePromise) => setTimeout(resolvePromise, 100));
   }
@@ -169,11 +174,11 @@ async function waitForServer(): Promise<void> {
 
 function startServer(): ChildProcess {
   return spawn(
-    "pnpm",
-    ["exec", "serve", "out", "-l", "3100", "--no-clipboard"],
+    "node",
+    ["--import", "tsx", "scripts/serve-preview-origins.mts"],
     {
       cwd: root,
-      env: process.env,
+      env: { ...process.env, FORMMUSE_SITE_URL: origin },
       stdio: ["ignore", "pipe", "pipe"],
     },
   );
@@ -286,7 +291,10 @@ async function collectScenario(
 
   const start = Date.now();
   if (scenario.url) {
-    await page.goto(new URL(scenario.url, origin).href, {
+    const scenarioOrigin = scenario.url.startsWith("/preview/")
+      ? previewOrigin
+      : origin;
+    await page.goto(new URL(scenario.url, scenarioOrigin).href, {
       waitUntil: "networkidle",
     });
   } else if (scenario.harness) {
@@ -404,7 +412,8 @@ async function collectScenario(
     left.url.localeCompare(right.url),
   );
   const externalRequests = resourceList.filter(
-    (resource) => new URL(resource.url).origin !== origin,
+    (resource) =>
+      ![origin, previewOrigin].includes(new URL(resource.url).origin),
   );
   const result = {
     id: scenario.id,
@@ -618,7 +627,7 @@ async function main() {
             await instance.close();
             return version;
           }),
-        server: "serve 14.2.6 over loopback HTTP",
+        server: "FormMuse dual-origin static server over loopback HTTP",
         cache: "new browser context per scenario",
         profiles,
       },

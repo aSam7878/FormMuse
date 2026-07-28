@@ -12,6 +12,7 @@ import {
   type SecurityFinding,
 } from "../lib/formmuse/security-quality";
 import { resolveBuildOrigin } from "../lib/formmuse/build-origin";
+import { resolvePreviewOrigin } from "../lib/formmuse/preview-origin";
 import { loadAuthoredRegistry } from "../lib/formmuse/registry-build";
 import { createTemplateInstallationModel } from "../lib/formmuse/template-installation";
 import { createTemplatePageModel } from "../lib/formmuse/template-page";
@@ -232,11 +233,15 @@ for (const finding of findingsFromFiles(
 
 assertManualInstallationParity();
 runPnpm(["run", "quality:static-export"]);
+const previewOrigin = resolvePreviewOrigin(
+  undefined,
+  resolveBuildOrigin(),
+).origin;
 for (const finding of findingsFromFiles(
   filesUnder(resolve(projectRoot, "out")).filter((path) =>
     path.endsWith(".html"),
   ),
-  staticExportFindings,
+  (content, path) => staticExportFindings(content, path, previewOrigin),
 )) {
   failures.push(`Static export ${finding.path} contains ${finding.rule}.`);
 }

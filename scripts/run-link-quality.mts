@@ -31,6 +31,8 @@ for (const build of siteQualityBuilds(publishedTemplateCount())) {
         "--recurse",
         "--check-fragments",
         "--directory-listing",
+        "--skip",
+        `^${build.previewOrigin.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")}/preview/`,
         "--format",
         "JSON",
         "--verbosity",

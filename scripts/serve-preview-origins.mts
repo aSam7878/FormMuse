@@ -14,7 +14,6 @@ import {
 
 const backendPort = 3199;
 const servers: Server[] = [];
-let backend: ChildProcess | undefined;
 
 function previewPathAllowed(pathname: string): boolean {
   return ["/preview/", "/_next/", "/formmuse/"].some((prefix) =>
@@ -73,18 +72,13 @@ async function waitForBackend(): Promise<void> {
   throw new Error("Static export backend did not start.");
 }
 
-function stop(): void {
-  for (const server of servers) server.close();
-  if (backend && !backend.killed) backend.kill("SIGTERM");
-}
-
 const configuredSiteOrigin = process.env.FORMMUSE_SITE_URL;
 if (!configuredSiteOrigin) {
   throw new Error("FORMMUSE_SITE_URL is required by the dual-origin server.");
 }
 const siteOrigin = new URL(configuredSiteOrigin).origin;
 
-backend = spawn(
+const backend: ChildProcess = spawn(
   "pnpm",
   ["exec", "serve", "out", "-l", String(backendPort), "--no-clipboard"],
   { stdio: "inherit" },
@@ -92,6 +86,11 @@ backend = spawn(
 backend.once("error", (error) => {
   throw error;
 });
+
+function stop(): void {
+  for (const server of servers) server.close();
+  if (!backend.killed) backend.kill("SIGTERM");
+}
 
 await waitForBackend();
 
@@ -120,7 +119,7 @@ process.once("SIGTERM", () => {
 process.once("exit", stop);
 
 await new Promise<never>((_, reject) => {
-  backend?.once("exit", (code, signal) => {
+  backend.once("exit", (code, signal) => {
     reject(
       new Error(
         `Static export backend exited unexpectedly (${code ?? signal}).`,

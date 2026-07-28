@@ -44,7 +44,11 @@ describe("owner-approved performance budgets", () => {
       },
       catalogTeasers: {
         simultaneouslyMountedMax: 3,
+        activationRootMargin: "600px 0px",
+        observerFallback: "inactive",
         offscreenVisitedBehavior: "unmount",
+        reactivationBehavior: "remount",
+        protocolExtension: "none",
         oneActiveHeapBytesMax: 10_000_000,
         twentyInactivePreviewJavascriptBytesMax: 0,
         twentyInactiveTotalResponseBytesMax: 120_000,

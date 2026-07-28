@@ -50,6 +50,35 @@ describe("security content scanning", () => {
       ),
     ).toEqual([]);
   });
+
+  it("allows only preview-route iframes on the validated preview origin", () => {
+    const previewOrigin = "https://preview.formmuse.test";
+    expect(
+      staticExportFindings(
+        '<iframe src="https://preview.formmuse.test/preview/example"></iframe>',
+        "out/templates/example/index.html",
+        previewOrigin,
+      ),
+    ).toEqual([]);
+    for (const element of [
+      '<iframe src="https://preview.formmuse.test/not-preview"></iframe>',
+      '<iframe src="https://elsewhere.test/preview/example"></iframe>',
+      '<img src="https://preview.formmuse.test/preview/example">',
+    ]) {
+      expect(
+        staticExportFindings(
+          element,
+          "out/templates/example/index.html",
+          previewOrigin,
+        ),
+      ).toEqual([
+        {
+          path: "out/templates/example/index.html",
+          rule: "remote executable or media resource",
+        },
+      ]);
+    }
+  });
 });
 
 describe("licence inventory review", () => {
