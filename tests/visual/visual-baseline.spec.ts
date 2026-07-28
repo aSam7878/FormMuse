@@ -158,6 +158,7 @@ test("captures the approved reduced-motion and preview-chrome states", async ({
 
   await page.goto(templatePath);
   await waitForFonts(page);
+  await expect(page.getByRole("button", { name: "Replay" })).toBeEnabled();
   const previewChrome = page.locator("[data-preview-viewport]");
   await previewChrome.scrollIntoViewIfNeeded();
   await expectVisual(page, "template-page-preview-chrome.png");
