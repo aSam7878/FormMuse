@@ -33,18 +33,31 @@ jobs:
           node-version: 24.18.0
           package-manager-cache: false
 
-      - name: Prepare the public package-manager launchers
+      - name: Prepare the pinned pnpm launcher
         run: |
-          corepack enable pnpm yarn
-          corepack prepare yarn@stable --activate
-          npm install --global bun
+          corepack enable pnpm
           pnpm --version
           npm --version
+
+      - name: Prepare the public Yarn launcher
+        if: matrix.manager == 'yarn'
+        env:
+          COREPACK_ENABLE_PROJECT_SPEC: "0"
+        run: |
+          corepack enable yarn
+          corepack prepare yarn@stable --activate
           yarn --version
-          bun --version
+
+      - name: Prepare the public Bun launcher
+        if: matrix.manager == 'bun'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: latest
 
       - name: Install the frozen FormMuse dependency graph
         run: pnpm install --frozen-lockfile
 
       - name: Smoke-test the documented latest CLI command
+        env:
+          COREPACK_ENABLE_PROJECT_SPEC: ${{ matrix.manager == 'yarn' && '0' || '1' }}
         run: pnpm quality:installation-public --manager ${{ matrix.manager }}

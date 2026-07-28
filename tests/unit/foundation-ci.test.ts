@@ -13,6 +13,7 @@ const EXPECTED_ACTION_PINS = new Map([
   ["actions/checkout", "3d3c42e5aac5ba805825da76410c181273ba90b1"],
   ["actions/setup-node", "820762786026740c76f36085b0efc47a31fe5020"],
   ["actions/upload-artifact", "ea165f8d65b6e75b540449e92b4886f43607fa02"],
+  ["oven-sh/setup-bun", "0c5077e51419868618aeaa5fe8019c62421857d6"],
   [
     "actions/dependency-review-action",
     "a1d282b36b6f3519aa1f3fc636f609c47dddb294",
@@ -26,6 +27,7 @@ describe("foundation CI source", () => {
     const workflows = [
       read(".github/workflows/ci.yml"),
       read(".github/workflows/codeql.yml"),
+      read(".github/workflows/latest-shadcn-compatibility.yml"),
     ].join("\n");
     const uses = [...workflows.matchAll(/^\s*uses:\s*([^@\s]+)@([^\s#]+)/gmu)];
 
@@ -110,6 +112,10 @@ describe("foundation CI source", () => {
     expect(workflow).not.toContain("pull_request:");
     expect(workflow).toContain("manager: [pnpm, npm, yarn, bun]");
     expect(workflow).toContain("pnpm quality:installation-public --manager");
+    expect(workflow).toContain("COREPACK_ENABLE_PROJECT_SPEC:");
+    expect(workflow).toContain("if: matrix.manager == 'yarn'");
+    expect(workflow).toContain("if: matrix.manager == 'bun'");
+    expect(workflow).not.toContain("npm install --global bun");
   });
 
   it("generates complete reproducible publication evidence in CI", () => {
