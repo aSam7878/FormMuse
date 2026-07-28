@@ -9,6 +9,7 @@ import {
 const templatePath = "/templates/hanging-gifts-contact/";
 const previewPath = "/preview/hanging-gifts-contact/";
 const previewTitle = "Interactive Hanging Gifts template preview";
+const previewOrigin = "http://127.0.0.1:3101";
 
 declare global {
   interface Window {
@@ -53,6 +54,14 @@ test("keeps the Template Page controls and iframe preview connected", async ({
   page,
 }) => {
   await page.goto(templatePath);
+  await expect(page.getByTitle(previewTitle)).toHaveAttribute(
+    "sandbox",
+    "allow-forms allow-same-origin allow-scripts",
+  );
+  await expect(page.getByTitle(previewTitle)).toHaveAttribute(
+    "src",
+    new RegExp(`^${previewOrigin}/preview/hanging-gifts-contact`),
+  );
   await waitForPreview(page);
 
   const viewport = page.locator("[data-preview-viewport]");
@@ -197,11 +206,9 @@ test("keeps post-idle iframe activity local, ephemeral, and navigation-free", as
   expect(initialState.sessionStorage).toEqual([]);
   expect(initialState.tracker.beforeUnload).toBe(0);
   expect(finalState).toEqual(initialState);
+  const allowedOrigins = new Set([new URL(page.url()).origin, previewOrigin]);
   expect(
-    laterRequests.filter(
-      (url) =>
-        new URL(url).origin !== page.url().match(/^https?:\/\/[^/]+/)?.[0],
-    ),
+    laterRequests.filter((url) => !allowedOrigins.has(new URL(url).origin)),
   ).toEqual([]);
   const expectedPreviewPath = new URL(previewPath, page.url()).pathname.replace(
     /\/$/,

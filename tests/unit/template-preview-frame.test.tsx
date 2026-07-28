@@ -18,7 +18,7 @@ function markReady(frame: HTMLIFrameElement) {
     window,
     new MessageEvent("message", {
       data: createPreviewMessage(channel, "ready"),
-      origin: window.location.origin,
+      origin: "https://preview.formmuse.test",
       source: frame.contentWindow,
     }),
   );
@@ -28,14 +28,21 @@ describe("Template preview frame chrome", () => {
   it("embeds the isolated preview and exposes accessible viewport and outcome controls", async () => {
     const user = userEvent.setup();
     render(
-      <TemplatePreviewFrame previewPath="/preview/hanging-gifts-contact" />,
+      <TemplatePreviewFrame
+        previewPath="/preview/hanging-gifts-contact"
+        previewOrigin="https://preview.formmuse.test"
+      />,
     );
 
     const frame = screen.getByTitle(
       "Interactive Hanging Gifts template preview",
     );
     expect(frame.getAttribute("src")).toMatch(
-      /^\/preview\/hanging-gifts-contact\?outcome=success&channel=fm-/,
+      /^https:\/\/preview\.formmuse\.test\/preview\/hanging-gifts-contact\?outcome=success&channel=fm-/,
+    );
+    expect(frame).toHaveAttribute(
+      "sandbox",
+      "allow-forms allow-same-origin allow-scripts",
     );
     expect(screen.getByRole("button", { name: "Desktop" })).toHaveAttribute(
       "aria-pressed",
@@ -60,13 +67,18 @@ describe("Template preview frame chrome", () => {
       screen
         .getByTitle("Interactive Hanging Gifts template preview")
         .getAttribute("src"),
-    ).toMatch(/^\/preview\/hanging-gifts-contact\?outcome=failure&channel=fm-/);
+    ).toMatch(
+      /^https:\/\/preview\.formmuse\.test\/preview\/hanging-gifts-contact\?outcome=failure&channel=fm-/,
+    );
   });
 
   it("distinguishes Replay requests from a full Reset remount", async () => {
     const user = userEvent.setup();
     render(
-      <TemplatePreviewFrame previewPath="/preview/hanging-gifts-contact" />,
+      <TemplatePreviewFrame
+        previewPath="/preview/hanging-gifts-contact"
+        previewOrigin="https://preview.formmuse.test"
+      />,
     );
     const initialFrame = screen.getByTitle(
       "Interactive Hanging Gifts template preview",
@@ -91,7 +103,10 @@ describe("Template preview frame chrome", () => {
 
   it("announces ready, error, and unavailable states", () => {
     const { rerender } = render(
-      <TemplatePreviewFrame previewPath="/preview/hanging-gifts-contact" />,
+      <TemplatePreviewFrame
+        previewPath="/preview/hanging-gifts-contact"
+        previewOrigin="https://preview.formmuse.test"
+      />,
     );
     const frame = screen.getByTitle(
       "Interactive Hanging Gifts template preview",
@@ -103,7 +118,12 @@ describe("Template preview frame chrome", () => {
     fireEvent.error(frame);
     expect(screen.getByRole("alert")).toHaveTextContent("could not be loaded");
 
-    rerender(<TemplatePreviewFrame previewPath={null} />);
+    rerender(
+      <TemplatePreviewFrame
+        previewPath={null}
+        previewOrigin="https://preview.formmuse.test"
+      />,
+    );
     expect(
       screen.getByRole("heading", { name: "Preview unavailable" }),
     ).toBeInTheDocument();

@@ -25,7 +25,9 @@ function keepDemoDestinationsInert(event: MouseEvent<HTMLDivElement>): void {
   }
 }
 
-export function HangingGiftsPreviewAdapter() {
+export function HangingGiftsPreviewAdapter({
+  parentOrigin,
+}: Readonly<{ parentOrigin: string }>) {
   const [outcome] = useState(() =>
     typeof window === "undefined"
       ? "success"
@@ -63,11 +65,10 @@ export function HangingGiftsPreviewAdapter() {
   useEffect(() => {
     if (!channel) return;
     const validatedChannel = channel;
-    const origin = window.location.origin;
     function receive(event: MessageEvent<unknown>) {
       const message = acceptPreviewMessage(event, {
         source: window.parent,
-        origin,
+        origin: parentOrigin,
         channel: validatedChannel,
         direction: "parent-to-frame",
       });
@@ -80,13 +81,18 @@ export function HangingGiftsPreviewAdapter() {
       }
     }
     window.addEventListener("message", receive);
-    postPreviewMessage(
-      window.parent,
-      createPreviewMessage(validatedChannel, "ready"),
-      origin,
-    );
-    return () => window.removeEventListener("message", receive);
-  }, [channel]);
+    const readyTimer = window.setTimeout(() => {
+      postPreviewMessage(
+        window.parent,
+        createPreviewMessage(validatedChannel, "ready"),
+        parentOrigin,
+      );
+    }, 250);
+    return () => {
+      window.clearTimeout(readyTimer);
+      window.removeEventListener("message", receive);
+    };
+  }, [channel, parentOrigin]);
 
   return (
     <div

@@ -306,6 +306,10 @@ _Avoid_: Unlisted blanket “official visual identity,” accidental MIT logo gr
 
 **Build Origin**:
 The validated absolute origin of the current build, supplied through `FORMMUSE_SITE_URL` and interpreted with `FORMMUSE_DEPLOY_ENV`. It is local in development, temporary in previews, and the verified permanent HTTPS domain in production.
+
+**Preview Origin:** The separately validated, non-indexable origin used only for
+static Template Preview execution. `FORMMUSE_PREVIEW_URL` must differ from the
+Build Origin; its final hostname is selected and proven during Stage 6.
 _Avoid_: Hardcoded hostname, temporary canonical domain
 
 **Initial Values**:

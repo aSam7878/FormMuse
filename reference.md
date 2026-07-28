@@ -1035,6 +1035,14 @@ Use a preview-specific Content Security Policy independently of iframe sandboxin
 
 Do not casually combine `allow-scripts` and `allow-same-origin` for a same-origin frame. First test an opaque-origin frame with scripts but without same-origin privileges. If the static module-loading model cannot function safely, record the failure and security consequence before granting another capability. A distinct preview origin is a fallback to evaluate only when required by evidence, not an automatic V1 hosting dependency. FormMuse runs reviewed owner-authored templates rather than arbitrary uploaded code, but that reduced threat does not justify overstating the sandbox boundary.
 
+The Hanging Gifts Stage 5 experiment supplied that evidence: opaque-origin font
+requests failed in Chromium and Firefox. The owner selected a distinct preview
+origin. On that separate origin, use exactly `allow-forms allow-same-origin
+allow-scripts`; never serve that combination from the FormMuse site origin.
+Require exact configured origins for Preview Protocol messaging and fail
+non-development builds when the preview origin is absent, insecure, local, or
+equal to the site origin.
+
 Keep the Preview Protocol versioned and schema-validated. Its required surface is readiness, Reset, and Replay. Validate `event.source`, the expected origin whenever the frame has a meaningful origin, the protocol version, a per-frame channel identifier, and the exact message shape before acting. Use an exact target origin whenever possible. Never exchange submitted or in-progress values, visitor-authored content, HTML, selectors, URLs, code, arbitrary commands, credentials, or analytics data. Do not add height messages because full previews retain a fixed emulated viewport and internal scrolling. Add pause/resume only if measured catalog behavior proves that lazy mounting and off-screen unmounting cannot satisfy the performance requirement.
 
 The vertical slice must record the tested iframe flags, CSP, Permissions Policy, message schema, origin behavior, browser results, static-host behavior, and reason for every granted capability before Preview Isolation becomes shared infrastructure.

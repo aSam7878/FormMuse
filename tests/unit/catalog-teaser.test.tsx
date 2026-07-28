@@ -44,6 +44,10 @@ describe("Catalog Teaser prototype", () => {
     expect(frame).toHaveAttribute("tabindex", "-1");
     expect(frame).toHaveClass("pointer-events-none");
     expect(frame).toHaveAttribute("scrolling", "no");
+    expect(frame).toHaveAttribute(
+      "sandbox",
+      "allow-forms allow-same-origin allow-scripts",
+    );
   });
 
   it("accepts only the exact teaser mode", () => {

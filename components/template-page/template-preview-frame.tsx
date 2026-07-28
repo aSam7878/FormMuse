@@ -29,7 +29,8 @@ type FrameState = "loading" | "ready" | "error";
 
 export function TemplatePreviewFrame({
   previewPath,
-}: Readonly<{ previewPath: string | null }>) {
+  previewOrigin,
+}: Readonly<{ previewPath: string | null; previewOrigin: string }>) {
   const [viewport, setViewport] = useState<ViewportId>("desktop");
   const [outcome, setOutcome] = useState<PreviewOutcome>("success");
   const [resetKey, setResetKey] = useState(0);
@@ -42,15 +43,17 @@ export function TemplatePreviewFrame({
     viewports.find((candidate) => candidate.id === viewport) ?? viewports[0];
   const frameSource = useMemo(() => {
     if (!previewPath) return null;
-    const separator = previewPath.includes("?") ? "&" : "?";
-    return `${previewPath}${separator}outcome=${outcome}&channel=${encodeURIComponent(channel)}`;
-  }, [channel, outcome, previewPath]);
+    const source = new URL(previewPath, `${previewOrigin}/`);
+    source.searchParams.set("outcome", outcome);
+    source.searchParams.set("channel", channel);
+    return source.toString();
+  }, [channel, outcome, previewOrigin, previewPath]);
 
   useEffect(() => {
     function receive(event: MessageEvent<unknown>) {
       const message = acceptPreviewMessage(event, {
         source: frameRef.current?.contentWindow ?? null,
-        origin: window.location.origin,
+        origin: previewOrigin,
         channel,
         direction: "frame-to-parent",
       });
@@ -58,7 +61,7 @@ export function TemplatePreviewFrame({
     }
     window.addEventListener("message", receive);
     return () => window.removeEventListener("message", receive);
-  }, [channel]);
+  }, [channel, previewOrigin]);
 
   function sendCommand(type: "reset" | "replay") {
     const target = frameRef.current?.contentWindow;
@@ -66,7 +69,7 @@ export function TemplatePreviewFrame({
     postPreviewMessage(
       target,
       createPreviewMessage(channel, type),
-      window.location.origin,
+      previewOrigin,
     );
   }
 
@@ -237,6 +240,7 @@ export function TemplatePreviewFrame({
             onLoad={() => setFrameState("loading")}
             onError={() => setFrameState("error")}
             onErrorCapture={() => setFrameState("error")}
+            sandbox="allow-forms allow-same-origin allow-scripts"
             className="block h-[min(72vh,52rem)] min-h-[34rem] w-full border-0 bg-white"
           />
         </div>

@@ -82,6 +82,7 @@ describe("TemplatePrimaryTabs", () => {
     render(
       <TemplatePrimaryTabs
         previewPath={template.previewPath}
+        previewOrigin="https://preview.formmuse.test"
         files={template.files}
       />,
     );
@@ -98,7 +99,9 @@ describe("TemplatePrimaryTabs", () => {
       screen
         .getByTitle("Interactive Hanging Gifts template preview")
         .getAttribute("src"),
-    ).toMatch(/^\/preview\/hanging-gifts-contact\?outcome=success&channel=fm-/);
+    ).toMatch(
+      /^https:\/\/preview\.formmuse\.test\/preview\/hanging-gifts-contact\?outcome=success&channel=fm-/,
+    );
     expect(
       screen.queryByRole("heading", { name: "Distributed file manifest" }),
     ).not.toBeInTheDocument();
@@ -111,6 +114,7 @@ describe("TemplatePrimaryTabs", () => {
     render(
       <TemplatePrimaryTabs
         previewPath={template.previewPath}
+        previewOrigin="https://preview.formmuse.test"
         files={template.files}
       />,
     );

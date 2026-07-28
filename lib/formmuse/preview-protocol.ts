@@ -83,7 +83,7 @@ export function postPreviewMessage(
   targetOrigin: string,
 ): void {
   const parsedOrigin = new URL(targetOrigin);
-  if (parsedOrigin.origin !== targetOrigin || targetOrigin === "null") {
+  if (parsedOrigin.origin !== targetOrigin) {
     throw new Error(
       "Preview Protocol requires an exact meaningful target origin.",
     );

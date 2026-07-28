@@ -36,6 +36,7 @@ export function CatalogTeaser({
             aria-hidden="true"
             tabIndex={-1}
             scrolling="no"
+            sandbox="allow-forms allow-same-origin allow-scripts"
             className="pointer-events-none absolute inset-0 h-full w-full border-0"
           />
         ) : null}

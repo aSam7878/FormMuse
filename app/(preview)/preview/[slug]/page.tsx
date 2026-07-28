@@ -6,13 +6,16 @@ import {
   findTemplatePreviewRoute,
   templatePreviewStaticParams,
 } from "@/lib/formmuse/template-routes";
+import { resolveBuildOrigin } from "@/lib/formmuse/build-origin";
 import { HangingGiftsPreviewAdapter } from "@/components/preview/hanging-gifts-preview-adapter";
 
 type TemplatePreviewPageProps = Readonly<{
   params: Promise<{ slug: string }>;
 }>;
 
-const previewComponents: Partial<Record<string, ComponentType>> = {
+const previewComponents: Partial<
+  Record<string, ComponentType<{ parentOrigin: string }>>
+> = {
   "hanging-gifts-contact": HangingGiftsPreviewAdapter,
 };
 
@@ -57,5 +60,5 @@ export default async function TemplatePreviewPage({
     notFound();
   }
 
-  return <Preview />;
+  return <Preview parentOrigin={resolveBuildOrigin().origin} />;
 }

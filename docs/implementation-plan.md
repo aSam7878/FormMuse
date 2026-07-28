@@ -712,7 +712,7 @@ rationale, and owner approval for every intentional budget change.
 
 ## 5.3 Prove the minimum iframe sandbox
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Sequence:**
 
@@ -724,6 +724,14 @@ rationale, and owner approval for every intentional budget change.
 6. Evaluate a distinct preview origin only if the minimum same-origin static model cannot meet functional and security requirements.
 
 **Owner checkpoint:** Any decision to weaken the initial sandbox or add a separate preview origin requires explicit owner approval after evidence review.
+
+Completed on 2026-07-28. The initial opaque-origin experiment loaded the static
+application but failed local font CORS in Chromium and Firefox. The owner chose
+the documented distinct-origin fallback. The validated build configuration now
+requires a separate preview origin, uses exact-origin protocol messaging, and
+permits only forms, same-origin within the preview host, and scripts. All five
+Playwright engine/emulation projects passed the focused Template Page suite;
+the final hostname and Hostinger routing remain Stage 6 evidence.
 
 ## 5.4 Prove preview-specific CSP and Permissions Policy
 
