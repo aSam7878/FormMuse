@@ -11,6 +11,7 @@ import { TemplatePreviewFrame } from "./template-preview-frame";
 
 type TemplatePrimaryTabsProps = Readonly<{
   previewPath: string;
+  previewOrigin: string;
   files: readonly (TemplatePageFile | TemplateInstallationFile)[];
 }>;
 
@@ -29,6 +30,7 @@ const tabs = [
 
 export function TemplatePrimaryTabs({
   previewPath,
+  previewOrigin,
   files,
 }: TemplatePrimaryTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>("preview");
@@ -142,7 +144,10 @@ export function TemplatePrimaryTabs({
           hidden={activeTab !== "preview"}
           className="focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#0b6f5d]"
         >
-          <TemplatePreviewFrame previewPath={previewPath} />
+          <TemplatePreviewFrame
+            previewPath={previewPath}
+            previewOrigin={previewOrigin}
+          />
         </div>
 
         <div

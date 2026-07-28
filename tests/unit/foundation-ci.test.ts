@@ -13,6 +13,7 @@ const EXPECTED_ACTION_PINS = new Map([
   ["actions/checkout", "3d3c42e5aac5ba805825da76410c181273ba90b1"],
   ["actions/setup-node", "820762786026740c76f36085b0efc47a31fe5020"],
   ["actions/upload-artifact", "ea165f8d65b6e75b540449e92b4886f43607fa02"],
+  ["oven-sh/setup-bun", "0c5077e51419868618aeaa5fe8019c62421857d6"],
   [
     "actions/dependency-review-action",
     "a1d282b36b6f3519aa1f3fc636f609c47dddb294",
@@ -26,6 +27,7 @@ describe("foundation CI source", () => {
     const workflows = [
       read(".github/workflows/ci.yml"),
       read(".github/workflows/codeql.yml"),
+      read(".github/workflows/latest-shadcn-compatibility.yml"),
     ].join("\n");
     const uses = [...workflows.matchAll(/^\s*uses:\s*([^@\s]+)@([^\s#]+)/gmu)];
 
@@ -100,16 +102,30 @@ describe("foundation CI source", () => {
     expect(visualConfig).toContain('timezoneId: "UTC"');
     expect(visualConfig).toContain("deviceScaleFactor: 1");
     expect(visualConfig).toContain('name: "chromium-ubuntu-24.04"');
+    expect(visualConfig).toContain(
+      "FORMMUSE_PREVIEW_URL=http://127.0.0.1:3101",
+    );
+    expect(visualConfig).toContain("scripts/serve-preview-origins.mts");
   });
 
   it("keeps latest public CLI compatibility outside pull-request CI", () => {
     const workflow = read(".github/workflows/latest-shadcn-compatibility.yml");
+    const verifier = read("scripts/verify-public-installation.mts");
 
     expect(workflow).toContain("schedule:");
     expect(workflow).toContain("workflow_dispatch:");
     expect(workflow).not.toContain("pull_request:");
     expect(workflow).toContain("manager: [pnpm, npm, yarn, bun]");
     expect(workflow).toContain("pnpm quality:installation-public --manager");
+    expect(workflow).toContain("COREPACK_ENABLE_PROJECT_SPEC:");
+    expect(workflow).toContain("if: matrix.manager == 'yarn'");
+    expect(workflow).toContain("if: matrix.manager == 'bun'");
+    expect(workflow).not.toContain("npm install --global bun");
+    expect(workflow).not.toMatch(
+      /name: Smoke-test[\s\S]*?env:\s*\n\s+COREPACK_ENABLE_PROJECT_SPEC:/,
+    );
+    expect(verifier).toContain('executable === "yarn"');
+    expect(verifier).toContain('COREPACK_ENABLE_PROJECT_SPEC: "0"');
   });
 
   it("generates complete reproducible publication evidence in CI", () => {

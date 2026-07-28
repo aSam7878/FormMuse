@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import {
   parsePreviewOutcome,
@@ -25,7 +25,9 @@ function keepDemoDestinationsInert(event: MouseEvent<HTMLDivElement>): void {
   }
 }
 
-export function HangingGiftsPreviewAdapter() {
+export function HangingGiftsPreviewAdapter({
+  parentOrigin,
+}: Readonly<{ parentOrigin: string }>) {
   const [outcome] = useState(() =>
     typeof window === "undefined"
       ? "success"
@@ -43,6 +45,7 @@ export function HangingGiftsPreviewAdapter() {
       ? "interactive"
       : parsePreviewMode(window.location.search),
   );
+  const receivedSequenceRef = useRef(0);
 
   useEffect(() => {
     if (mode !== "teaser") return;
@@ -63,30 +66,37 @@ export function HangingGiftsPreviewAdapter() {
   useEffect(() => {
     if (!channel) return;
     const validatedChannel = channel;
-    const origin = window.location.origin;
     function receive(event: MessageEvent<unknown>) {
       const message = acceptPreviewMessage(event, {
         source: window.parent,
-        origin,
+        origin: parentOrigin,
         channel: validatedChannel,
         direction: "parent-to-frame",
+        afterSequence: receivedSequenceRef.current,
       });
-      if (message?.type === "reset") {
+      if (!message) return;
+      receivedSequenceRef.current = message.sequence;
+      if (message.type === "reset") {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         setAnimationReplayKey(0);
         setResetKey((value) => value + 1);
-      } else if (message?.type === "replay") {
+      } else if (message.type === "replay") {
         setAnimationReplayKey((value) => value + 1);
       }
     }
     window.addEventListener("message", receive);
-    postPreviewMessage(
-      window.parent,
-      createPreviewMessage(validatedChannel, "ready"),
-      origin,
-    );
-    return () => window.removeEventListener("message", receive);
-  }, [channel]);
+    const readyTimer = window.setTimeout(() => {
+      postPreviewMessage(
+        window.parent,
+        createPreviewMessage(validatedChannel, "ready"),
+        parentOrigin,
+      );
+    }, 250);
+    return () => {
+      window.clearTimeout(readyTimer);
+      window.removeEventListener("message", receive);
+    };
+  }, [channel, parentOrigin]);
 
   return (
     <div

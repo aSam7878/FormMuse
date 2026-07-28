@@ -1,5 +1,10 @@
 import { z } from "zod/v4";
 
+// The preview CSP intentionally omits unsafe-eval. Disable Zod's object-parser
+// JIT before any schema is created so Firefox does not attempt its Function
+// capability probe and the protocol remains compatible with that policy.
+z.config({ jitless: true });
+
 export const PREVIEW_PROTOCOL_VERSION = 1 as const;
 export const PreviewChannelSchema = z
   .string()
@@ -10,18 +15,21 @@ const ReadyMessageSchema = z.strictObject({
   channel: PreviewChannelSchema,
   direction: z.literal("frame-to-parent"),
   type: z.literal("ready"),
+  sequence: z.literal(0),
 });
 const ResetMessageSchema = z.strictObject({
   version: z.literal(PREVIEW_PROTOCOL_VERSION),
   channel: PreviewChannelSchema,
   direction: z.literal("parent-to-frame"),
   type: z.literal("reset"),
+  sequence: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
 });
 const ReplayMessageSchema = z.strictObject({
   version: z.literal(PREVIEW_PROTOCOL_VERSION),
   channel: PreviewChannelSchema,
   direction: z.literal("parent-to-frame"),
   type: z.literal("replay"),
+  sequence: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
 });
 
 export const PreviewProtocolMessageSchema = z.discriminatedUnion("type", [
@@ -36,12 +44,14 @@ export type PreviewProtocolMessage = z.output<
 export function createPreviewMessage(
   channel: string,
   type: PreviewProtocolMessage["type"],
+  sequence = type === "ready" ? 0 : Number.NaN,
 ): PreviewProtocolMessage {
   return PreviewProtocolMessageSchema.parse({
     version: PREVIEW_PROTOCOL_VERSION,
     channel,
     direction: type === "ready" ? "frame-to-parent" : "parent-to-frame",
     type,
+    sequence,
   });
 }
 
@@ -59,6 +69,7 @@ export function acceptPreviewMessage(
     origin: string;
     channel: string;
     direction: PreviewProtocolMessage["direction"];
+    afterSequence: number;
   }>,
 ): PreviewProtocolMessage | null {
   if (
@@ -71,7 +82,8 @@ export function acceptPreviewMessage(
   if (
     !result.success ||
     result.data.channel !== expected.channel ||
-    result.data.direction !== expected.direction
+    result.data.direction !== expected.direction ||
+    result.data.sequence <= expected.afterSequence
   )
     return null;
   return result.data;
@@ -83,7 +95,7 @@ export function postPreviewMessage(
   targetOrigin: string,
 ): void {
   const parsedOrigin = new URL(targetOrigin);
-  if (parsedOrigin.origin !== targetOrigin || targetOrigin === "null") {
+  if (parsedOrigin.origin !== targetOrigin) {
     throw new Error(
       "Preview Protocol requires an exact meaningful target origin.",
     );

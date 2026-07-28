@@ -517,7 +517,8 @@ Completed on 2026-07-24 on the cumulative `codex/stage-3-template-preview` branc
 
 # Stage 4 — Add the complete testing and compatibility infrastructure
 
-**Stage status:** Complete on the cumulative `codex/stage-4-quality-system` branch; pending review and merge.
+**Stage status:** Complete on `main` at reviewed baseline
+`484bf6d00ef6842e713954c5e8340305ef441439`.
 
 **Outcome:** One reproducible quality system can determine whether a template or site change is eligible for publication.
 
@@ -656,7 +657,7 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 # Stage 5 — Measure performance and finalize preview isolation
 
-**Stage status:** Evidence-blocked until Stages 1–4 complete.
+**Stage status:** Complete on the cumulative `codex/stage-5` branch.
 
 **Outcome:** Hanging Gifts supplies measured performance budgets, Catalog Teaser behavior, and a documented minimum preview security model that later templates can reuse.
 
@@ -664,7 +665,7 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 ## 5.1 Measure the complete Hanging Gifts baseline
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Measurements:**
 
@@ -677,9 +678,21 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 **Evidence:** Store raw reports, summarized findings, exact environment, and reproducible commands. Do not call laboratory values field data.
 
+Completed on 2026-07-27 from baseline
+`484bf6d00ef6842e713954c5e8340305ef441439`. The pinned laboratory command,
+30 raw samples, and reviewed summary cover the real preview and Template Page,
+desktop, mobile-class and reduced-motion profiles, and explicit inactive,
+active, nearby, and retained off-screen Catalog Teaser populations. Because the
+public catalog route does not exist yet, the owner approved a test-only
+same-origin Playwright harness that server-renders the real `CatalogTeaser`
+component against the real static preview route. It is not an exported or
+public route and does not pull Stage 7 UI work forward. The report records zero
+external requests and zero page or console errors and remains laboratory
+evidence rather than field data or policy.
+
 ## 5.2 Propose evidence-based budgets
 
-**Status:** Evidence-blocked.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -689,9 +702,17 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 **Owner checkpoint:** The project owner reviews and approves the first budgets. Do not turn measurements into permanent policy without approval.
 
+Completed on 2026-07-28. The owner approved the first regression budgets after
+reviewing the Stage 5.1 three-run medians and observed ranges. The machine-readable
+policy separates the site shell, full preview, incremental preview JavaScript,
+and Catalog Teaser populations; records the explicit safety margin for each
+threshold; retains the existing Lighthouse LCP gate rather than mislabelling a
+new laboratory value as field data; and requires fresh three-run evidence,
+rationale, and owner approval for every intentional budget change.
+
 ## 5.3 Prove the minimum iframe sandbox
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Sequence:**
 
@@ -704,9 +725,17 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 
 **Owner checkpoint:** Any decision to weaken the initial sandbox or add a separate preview origin requires explicit owner approval after evidence review.
 
+Completed on 2026-07-28. The initial opaque-origin experiment loaded the static
+application but failed local font CORS in Chromium and Firefox. The owner chose
+the documented distinct-origin fallback. The validated build configuration now
+requires a separate preview origin, uses exact-origin protocol messaging, and
+permits only forms, same-origin within the preview host, and scripts. All five
+Playwright engine/emulation projects passed the focused Template Page suite;
+the final hostname and Hostinger routing remain Stage 6 evidence.
+
 ## 5.4 Prove preview-specific CSP and Permissions Policy
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -716,9 +745,20 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 - Verify the delivery mechanism with a portable local static server and later on Hostinger; do not assume unavailable per-route headers.
 - Record every exception, browser result, and static-host limitation.
 
+Completed on 2026-07-28. The portable dual-origin static server now delivers a
+denial-first CSP, an explicit Permissions Policy, preview-only route exposure,
+`frame-ancestors` restricted to the configured site origin, and the sandbox as
+a response-level second boundary. The only active-content exceptions are
+same-origin resources plus the inline scripts and styles required by the
+production Next.js artifact. The iframe independently denies the same device
+capabilities. The Preview Protocol runs Zod in `jitless` mode so Firefox does
+not attempt an evaluation probe, and the CSP does not grant `unsafe-eval`.
+Integration tests inspect the delivered headers; Hostinger delivery remains an
+explicit Stage 6 proof rather than an assumption.
+
 ## 5.5 Security-test the Preview Protocol
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Tests:**
 
@@ -727,9 +767,16 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 - Reset and Replay cannot affect the parent site outside their frame.
 - Protocol messages produce no analytics or network side effect.
 
+Completed on 2026-07-28. The exact schema now includes a monotonic sequence and
+both receivers reject repeated or older messages. Adversarial unit coverage
+rejects every listed source, origin, channel, version, type, direction, shape,
+and payload failure. Cross-origin browser coverage proves that the preview
+cannot read the parent DOM, Reset and Replay leave parent state unchanged, and
+post-idle protocol and form activity creates no external or analytics request.
+
 ## 5.6 Finalize Catalog Teaser lifecycle
 
-**Status:** Evidence-blocked.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -738,9 +785,18 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 - Add pause/resume only if evidence proves it necessary and document the added protocol surface.
 - Verify twenty representative teaser slots do not eagerly load twenty complete previews.
 
+Completed on 2026-07-28. The measured lifecycle activates candidates inside a
+600px vertical observer margin, ranks visible candidates before nearby ones,
+and mounts at most three previews. Leaving the active neighborhood unmounts a
+visited preview; returning remounts it from the deterministic opening state.
+If Intersection Observer is unavailable, the semantic card and reserved local
+fallback remain and no live preview mounts. Twenty-slot unit coverage proves
+the initial fallback and three-preview ceiling. No pause/resume command or
+other Preview Protocol surface was added.
+
 ## 5.7 Close the Hanging Gifts publication evidence gap
 
-**Status:** Not started.
+**Status:** Complete.
 
 **Deliverables:**
 
@@ -748,7 +804,17 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 - Run current branded Chrome, Edge, Firefox, and Safari smoke checks.
 - Run current real iOS Safari and Android Chrome checks using owned devices or an approved device cloud.
 - Complete manual accessibility and visual review.
-- List any remaining Hostinger-specific CSP/header or deployment evidence deferred to Stage 6.
+- List any remaining selected-host CSP/header or deployment evidence deferred to Stage 6.
+
+Completed on 2026-07-28. `docs/quality/stage-5-closeout.md` consolidates the
+Stage 2–5 evidence and records the fresh four-manager public-installation run.
+The owner moved branded Chrome, Edge, Firefox, Safari, real iOS Safari, and real
+Android Chrome checks to one batched prelaunch review after all launch templates
+are complete. Manual accessibility, visual, browser/device, and licence approval
+remain explicit owner-controlled launch actions; Hanging Gifts therefore remains
+`draft`. Production-host CSP, header, artifact-promotion, and rollback proof
+remains Stage 6 work, and the owner has withdrawn Hostinger while the replacement
+static host is being selected.
 
 ### Stage 5 exit gate
 
@@ -756,6 +822,11 @@ Completed on 2026-07-26 on the cumulative `codex/stage-4-quality-system` branch.
 - Minimum sandbox, CSP, Permissions Policy, and protocol are documented with browser evidence.
 - Hanging Gifts passes every environment-independent publication gate.
 - Any remaining blockers are explicitly limited to Stage 6 host/deployment proof or owner-controlled launch actions.
+
+Stage 5 passed its exit gate on 2026-07-28. Every environment-independent gate
+is complete. The remaining incomplete publication evidence is limited to the
+recorded owner-controlled prelaunch review and Stage 6 proof against the selected
+production host; it is not reported as passed and does not authorize publication.
 
 ---
 

@@ -133,7 +133,7 @@ The complete visual and interactive boundary installed for one Form Template and
 _Avoid_: Form fields detached from their designed page, hidden preview-only section, mandatory full-page layout
 
 **Catalog Teaser**:
-A lazy, non-interactive live view rendered from a Form Template's isolated static preview route inside a catalog card. It begins at the opening viewport and may run a template-specific preview-only sequence, such as playing the entrance and automatically advancing to a representative form view, without accepting visitor input. It provides visual motion and identity without loading every complete preview at initial page load.
+A lazy, non-interactive live view rendered from a Form Template's isolated preview origin inside a catalog card. It begins at the opening viewport and may run a template-specific preview-only sequence, such as playing the entrance and automatically advancing to a representative form view, without accepting visitor input. Candidates activate within a 600px vertical margin, no more than three previews remain mounted, off-screen visits unmount, and returning candidates remount. If observation is unavailable, the semantic card and local fallback remain without a live preview.
 _Avoid_: Static-only catalog, 20 eager iframes, interactive miniature form
 
 **Preview Parity**:
@@ -306,6 +306,10 @@ _Avoid_: Unlisted blanket “official visual identity,” accidental MIT logo gr
 
 **Build Origin**:
 The validated absolute origin of the current build, supplied through `FORMMUSE_SITE_URL` and interpreted with `FORMMUSE_DEPLOY_ENV`. It is local in development, temporary in previews, and the verified permanent HTTPS domain in production.
+
+**Preview Origin:** The separately validated, non-indexable origin used only for
+static Template Preview execution. `FORMMUSE_PREVIEW_URL` must differ from the
+Build Origin; its final hostname is selected and proven during Stage 6.
 _Avoid_: Hardcoded hostname, temporary canonical domain
 
 **Initial Values**:

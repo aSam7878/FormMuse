@@ -2,6 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { CatalogTeaser } from "../../components/catalog/catalog-teaser";
+import { PREVIEW_PERMISSIONS_ALLOW } from "../../lib/formmuse/preview-security";
 import {
   parsePreviewMode,
   teaserPreviewSource,
@@ -14,6 +15,7 @@ const teaser = {
   description: "A cinematic contact-page template.",
   templatePath: "/templates/hanging-gifts-contact",
   previewPath: "/preview/hanging-gifts-contact",
+  previewOrigin: "https://preview.formmuse.test",
 } as const;
 
 describe("Catalog Teaser prototype", () => {
@@ -38,20 +40,30 @@ describe("Catalog Teaser prototype", () => {
     expect(frame).not.toBeNull();
     expect(frame).toHaveAttribute(
       "src",
-      "/preview/hanging-gifts-contact?mode=teaser",
+      "https://preview.formmuse.test/preview/hanging-gifts-contact?mode=teaser",
     );
     expect(frame).toHaveAttribute("aria-hidden", "true");
     expect(frame).toHaveAttribute("tabindex", "-1");
     expect(frame).toHaveClass("pointer-events-none");
     expect(frame).toHaveAttribute("scrolling", "no");
+    expect(frame).toHaveAttribute(
+      "sandbox",
+      "allow-forms allow-same-origin allow-scripts",
+    );
+    expect(frame).toHaveAttribute("allow", PREVIEW_PERMISSIONS_ALLOW);
   });
 
   it("accepts only the exact teaser mode", () => {
     expect(parsePreviewMode("?mode=teaser")).toBe("teaser");
     expect(parsePreviewMode("?mode=interactive")).toBe("interactive");
     expect(parsePreviewMode("?mode=TEASER")).toBe("interactive");
-    expect(teaserPreviewSource("/preview/example?outcome=success")).toBe(
-      "/preview/example?outcome=success&mode=teaser",
+    expect(
+      teaserPreviewSource(
+        "/preview/example?outcome=success",
+        "https://preview.formmuse.test",
+      ),
+    ).toBe(
+      "https://preview.formmuse.test/preview/example?outcome=success&mode=teaser",
     );
   });
 });

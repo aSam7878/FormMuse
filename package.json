@@ -43,6 +43,7 @@
     "quality:installation-public": "node --import tsx scripts/verify-public-installation.mts",
     "quality:publication-report": "node --import tsx scripts/generate-publication-report.mts",
     "quality:publication-report:ci": "node --import tsx scripts/generate-publication-report.mts --allow-draft-failures",
+    "quality:performance-baseline": "FORMMUSE_DEPLOY_ENV=development FORMMUSE_SITE_URL=http://127.0.0.1:3100 FORMMUSE_PREVIEW_URL=http://127.0.0.1:3101 pnpm quality:static-export && FORMMUSE_SITE_URL=http://127.0.0.1:3100 node --import tsx scripts/measure-performance-baseline.mts",
     "quality:registry-validate": "vitest run tests/unit/registry-schemas.test.ts tests/unit/registry-build.test.ts",
     "quality:static-export": "pnpm guides:build && pnpm static-data:fixture && pnpm build",
     "quality:generated-diff": "git diff --exit-code -- .",

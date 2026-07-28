@@ -23,6 +23,7 @@ The following official release tags and commits were verified from their upstrea
 | `actions/setup-node`               | `v7.0.0`  | `820762786026740c76f36085b0efc47a31fe5020` |
 | `actions/dependency-review-action` | `v5.0.0`  | `a1d282b36b6f3519aa1f3fc636f609c47dddb294` |
 | `github/codeql-action`             | `v4.37.3` | `e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81` |
+| `oven-sh/setup-bun`                | `v2.2.0`  | `0c5077e51419868618aeaa5fe8019c62421857d6` |
 
 ## Owner-only repository settings
 

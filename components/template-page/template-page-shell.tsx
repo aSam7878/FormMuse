@@ -20,6 +20,7 @@ type TemplatePageShellProps = Readonly<{
   template: TemplatePageModel;
   installation: TemplateInstallationModel;
   presentation: TemplatePresentationModel;
+  previewOrigin: string;
 }>;
 
 function DetailCard({
@@ -70,6 +71,7 @@ export function TemplatePageShell({
   template,
   installation,
   presentation,
+  previewOrigin,
 }: TemplatePageShellProps) {
   return (
     <main
@@ -213,6 +215,7 @@ export function TemplatePageShell({
         <div className="mt-16">
           <TemplatePrimaryTabs
             previewPath={template.previewPath}
+            previewOrigin={previewOrigin}
             files={installation.files}
           />
         </div>

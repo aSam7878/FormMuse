@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "policyVersion": 1,
+  "approvedOn": "2026-07-28",
+  "evidence": "docs/quality/performance/hanging-gifts-contact.md",
+  "laboratoryOnly": true,
+  "budgets": {
+    "siteShell": {
+      "totalResponseBytesMax": 1400000,
+      "javascriptBytesMax": 950000
+    },
+    "fullPreview": {
+      "totalResponseBytesMax": 1850000,
+      "javascriptBytesMax": 1400000,
+      "imageBytesMax": 185000,
+      "incrementalJavascriptBytesMax": 835000,
+      "desktopLongTasksAtLeast50msMax": 0,
+      "mobileLongTasksAtLeast50msMax": 2,
+      "mobileLongestTaskMsMax": 100,
+      "mobileLongTaskTotalMsMax": 160,
+      "desktopHeapBytesMax": 12000000,
+      "mobileHeapBytesMax": 36000000
+    },
+    "catalogTeasers": {
+      "simultaneouslyMountedMax": 3,
+      "activationRootMargin": "600px 0px",
+      "observerFallback": "inactive",
+      "offscreenVisitedBehavior": "unmount",
+      "reactivationBehavior": "remount",
+      "protocolExtension": "none",
+      "oneActiveHeapBytesMax": 10000000,
+      "twentyInactivePreviewJavascriptBytesMax": 0,
+      "twentyInactiveTotalResponseBytesMax": 120000,
+      "threeActiveTotalResponseBytesMax": 5500000,
+      "threeActiveJavascriptBytesMax": 4200000,
+      "threeActiveHeapBytesMax": 15000000
+    }
+  },
+  "changeControl": {
+    "freshRunsRequired": 3,
+    "requiresRationale": true,
+    "requiresOwnerApproval": true
+  },
+  "coreWebVitals": {
+    "newLcpBudget": false,
+    "policy": "Retain the existing Lighthouse gate and collect field Core Web Vitals after launch."
+  },
+  "basis": {
+    "siteShell": "A bounded ceiling for future catalog and template-page shell growth; the inactive 20-slot harness measured 106135 bytes without preview JavaScript.",
+    "fullPreview": "Approximately 10-13% headroom over the 1639637-byte total, 1271439-byte JavaScript, and 167944-byte image medians.",
+    "incrementalPreviewJavascript": "Approximately 10% headroom over the 757004-byte measured contribution.",
+    "desktopLongTasks": "The accepted desktop baseline observed no task at or above 50 ms.",
+    "mobileLongTasks": "The accepted mobile profile observed one or two long tasks, with the longest between 84 and 92 ms.",
+    "heap": "Headroom above the 9.31 MB desktop median, 20.81-30.68 MB mobile range, and measured teaser populations.",
+    "catalogTeasers": "Twenty inactive slots loaded no preview JavaScript; three nearby active previews stayed below the approved byte and heap ceilings; eight retained previews exceeded the acceptable lifecycle shape."
+  }
+}

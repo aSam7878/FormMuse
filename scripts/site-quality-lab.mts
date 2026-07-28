@@ -9,11 +9,13 @@ import {
 import { loadAuthoredRegistry } from "../lib/formmuse/registry-build";
 import { validateFormMuseRegistryBoundary } from "../lib/formmuse/registry-schemas";
 
-const previewOrigin = "https://preview.formmuse.example";
+const previewBuildOrigin = "https://preview.formmuse.example";
+const previewBuildTemplateOrigin = "https://templates.preview.formmuse.example";
 
 export type SiteQualityBuild = Readonly<{
   environment: SiteQualityEnvironment;
   origin: string;
+  previewOrigin: string;
 }>;
 
 function pnpmCli(): string {
@@ -55,19 +57,31 @@ export function publishedTemplateCount(): number {
 export function siteQualityBuilds(
   publishedTemplates: number,
   productionOrigin = process.env.FORMMUSE_SITE_URL,
+  productionPreviewOrigin = process.env.FORMMUSE_PREVIEW_URL,
 ): SiteQualityBuild[] {
   const builds: SiteQualityBuild[] = [
-    { environment: "preview", origin: previewOrigin },
+    {
+      environment: "preview",
+      origin: previewBuildOrigin,
+      previewOrigin: previewBuildTemplateOrigin,
+    },
   ];
 
   if (publishedTemplates === 0) return builds;
-  if (!productionOrigin) {
+  if (!productionOrigin || !productionPreviewOrigin) {
     throw new Error(
-      "Published templates require the owner-verified FORMMUSE_SITE_URL for the production Lighthouse and Linkinator audit.",
+      "Published templates require owner-verified FORMMUSE_SITE_URL and FORMMUSE_PREVIEW_URL values for production Lighthouse and Linkinator audits.",
     );
   }
 
-  return [...builds, { environment: "production", origin: productionOrigin }];
+  return [
+    ...builds,
+    {
+      environment: "production",
+      origin: productionOrigin,
+      previewOrigin: productionPreviewOrigin,
+    },
+  ];
 }
 
 function findIndexFiles(directory: string): string[] {
@@ -94,6 +108,7 @@ export function qualityEnvironment(build: SiteQualityBuild): NodeJS.ProcessEnv {
     ...process.env,
     FORMMUSE_DEPLOY_ENV: build.environment,
     FORMMUSE_SITE_URL: build.origin,
+    FORMMUSE_PREVIEW_URL: build.previewOrigin,
   };
 }
 

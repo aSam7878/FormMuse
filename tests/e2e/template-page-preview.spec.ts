@@ -9,6 +9,7 @@ import {
 const templatePath = "/templates/hanging-gifts-contact/";
 const previewPath = "/preview/hanging-gifts-contact/";
 const previewTitle = "Interactive Hanging Gifts template preview";
+const previewOrigin = "http://127.0.0.1:3101";
 
 declare global {
   interface Window {
@@ -53,6 +54,20 @@ test("keeps the Template Page controls and iframe preview connected", async ({
   page,
 }) => {
   await page.goto(templatePath);
+  await expect(page.getByTitle(previewTitle)).toHaveAttribute(
+    "sandbox",
+    "allow-forms allow-same-origin allow-scripts",
+  );
+  await expect(page.getByTitle(previewTitle)).toHaveAttribute(
+    "src",
+    new RegExp(`^${previewOrigin}/preview/hanging-gifts-contact`),
+  );
+  expect(
+    await page.getByTitle(previewTitle).evaluate((frame) => {
+      const iframe = frame as HTMLIFrameElement;
+      return iframe.contentDocument === null;
+    }),
+  ).toBe(true);
   await waitForPreview(page);
 
   const viewport = page.locator("[data-preview-viewport]");
@@ -72,6 +87,31 @@ test("keeps the Template Page controls and iframe preview connected", async ({
   ).toBeVisible();
   await page.keyboard.press("ArrowLeft");
   await waitForPreview(page);
+});
+
+test("delivers denial-first preview security headers", async ({ request }) => {
+  const response = await request.get(`${previewOrigin}${previewPath}`);
+  expect(response.ok()).toBe(true);
+  const headers = response.headers();
+  expect(headers["content-security-policy"]).toContain("default-src 'none'");
+  expect(headers["content-security-policy"]).toContain("connect-src 'none'");
+  expect(headers["content-security-policy"]).toContain("form-action 'none'");
+  expect(headers["content-security-policy"]).toContain("frame-src 'none'");
+  expect(headers["content-security-policy"]).toContain("worker-src 'none'");
+  expect(headers["content-security-policy"]).toContain(
+    "sandbox allow-forms allow-same-origin allow-scripts",
+  );
+  expect(headers["content-security-policy"]).toContain(
+    "frame-ancestors http://127.0.0.1:3100",
+  );
+  expect(headers["permissions-policy"]).toContain("camera=()");
+  expect(headers["permissions-policy"]).toContain("microphone=()");
+  expect(headers["permissions-policy"]).toContain("payment=()");
+  expect(headers["referrer-policy"]).toBe("no-referrer");
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+
+  const nonPreview = await request.get(`${previewOrigin}/templates/`);
+  expect(nonPreview.status()).toBe(404);
 });
 
 test("keeps Replay stateful and makes Reset a full preview remount", async ({
@@ -154,6 +194,14 @@ test("keeps post-idle iframe activity local, ephemeral, and navigation-free", as
   await page.goto(templatePath);
   const frame = await waitForPreview(page);
   await page.waitForLoadState("networkidle");
+  const parentBefore = await page.evaluate(() => {
+    document.documentElement.dataset.previewIsolation = "unchanged";
+    return {
+      title: document.title,
+      url: window.location.href,
+      marker: document.documentElement.dataset.previewIsolation,
+    };
+  });
   const before = await previewContent(page);
   const initialState = await before.evaluate(async () => ({
     cacheKeys: await caches.keys(),
@@ -198,10 +246,15 @@ test("keeps post-idle iframe activity local, ephemeral, and navigation-free", as
   expect(initialState.tracker.beforeUnload).toBe(0);
   expect(finalState).toEqual(initialState);
   expect(
-    laterRequests.filter(
-      (url) =>
-        new URL(url).origin !== page.url().match(/^https?:\/\/[^/]+/)?.[0],
-    ),
+    await page.evaluate(() => ({
+      title: document.title,
+      url: window.location.href,
+      marker: document.documentElement.dataset.previewIsolation,
+    })),
+  ).toEqual(parentBefore);
+  const allowedOrigins = new Set([new URL(page.url()).origin, previewOrigin]);
+  expect(
+    laterRequests.filter((url) => !allowedOrigins.has(new URL(url).origin)),
   ).toEqual([]);
   const expectedPreviewPath = new URL(previewPath, page.url()).pathname.replace(
     /\/$/,
@@ -234,7 +287,7 @@ test("navigates the current static routes without page or console errors", async
     .click();
   await expect(page).toHaveURL(new RegExp(`${templatePath}$`));
   await waitForPreview(page);
-  await page.goto(previewPath);
+  await page.goto(`${previewOrigin}${previewPath}`);
   await expect(
     page.getByRole("heading", { name: "Let's Talk Gifting." }),
   ).toBeVisible();

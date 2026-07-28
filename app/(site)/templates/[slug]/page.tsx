@@ -5,6 +5,7 @@ import { TemplatePageShell } from "@/components/template-page/template-page-shel
 import { createTemplateInstallationModel } from "@/lib/formmuse/template-installation";
 import { createTemplatePageModel } from "@/lib/formmuse/template-page";
 import { createTemplatePresentationModel } from "@/lib/formmuse/template-presentation";
+import { resolvePreviewOrigin } from "@/lib/formmuse/preview-origin";
 import {
   findTemplatePageRoute,
   templateCanonicalUrl,
@@ -56,6 +57,7 @@ export default async function TemplatePage({ params }: TemplatePageProps) {
       template={template}
       installation={installation}
       presentation={createTemplatePresentationModel(template, installation)}
+      previewOrigin={resolvePreviewOrigin().origin}
     />
   );
 }

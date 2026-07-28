@@ -9,3 +9,17 @@ FormMuse will first test scripts without same-origin privileges and will not cas
 The required Preview Protocol covers readiness, Reset, and Replay only. Every message validates the expected window, origin whenever meaningful, protocol version, per-frame channel, and exact schema. It never carries visitor values, submitted content, HTML, selectors, URLs, executable code, arbitrary commands, credentials, or analytics data. Full previews use fixed viewport dimensions and internal scrolling, so no height synchronization message is required. Pause/resume may be added only if measured catalog performance proves that lazy mounting and off-screen unmounting are insufficient.
 
 The vertical slice must publish repository-side evidence of final iframe flags, CSP, Permissions Policy, message schema, browser behavior, static-host behavior, and reasons for every permission before this configuration becomes shared preview infrastructure.
+
+The Stage 5 vertical slice supplied the fallback evidence on 2026-07-28. An
+opaque scripted frame loaded the application but Chromium and Firefox rejected
+its local fonts because their origin was `null`. The owner selected a distinct
+preview origin rather than granting same-origin privilege on the FormMuse site
+origin. The resulting sandbox is `allow-forms allow-same-origin allow-scripts`:
+same-origin refers only to the separate preview host, and `allow-forms` is the
+minimum additional capability required for simulated submission across the
+supported engines. Production and preview builds fail unless the configured
+preview origin is HTTPS and distinct from the site origin.
+
+The denial-first CSP does not grant `unsafe-eval`. The Preview Protocol uses
+Zod's `jitless` configuration so its schema validation does not attempt a
+`Function` capability probe under Firefox's CSP enforcement.
